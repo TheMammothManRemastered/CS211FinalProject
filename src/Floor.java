@@ -166,19 +166,20 @@ class RoomMakingCrawler {
         //otherwise, the fun begins
 
         // select which move to do. the least weighty move is most likely to be chosen
-        // if another crawler exists in the same direction of the move, the move is less likely to be chosen
         CrawlerMove determinedMove = null;
+        int maxBound = 0;
         for (CrawlerMove move : possibleMovementVectors) {
-            int offset = 0;
-            if (move.getDirection() == controller.getDirectionOfClosestCrawler(this)) {
-                offset = 5;
-            }
-            if ((rng.nextInt(move.getWeight() + 1)) == move.getWeight() + offset) {
-                determinedMove = move;
-                break;
+            maxBound = Math.max(move.getWeight(), maxBound);
+        }
+        while (determinedMove == null) {
+            int rolledValue = rng.nextInt(maxBound+1);
+            for (CrawlerMove move : possibleMovementVectors) {
+                if (move.getWeight() == rolledValue) {
+                    determinedMove = move;
+                    break;
+                }
             }
         }
-        if (determinedMove == null) determinedMove = possibleMovementVectors[possibleMovementVectors.length - 1];
 
         // finally, execute the move and return success
         move(determinedMove.getDirection());
@@ -243,7 +244,7 @@ class RoomCrawlerController {
         this.numOfDesiredRooms = numOfRooms;
         this.numOfCurrentRooms = 0;
         for (int i = 0; i < numOfCrawlers; i++) {
-            crawlers.add(new RoomMakingCrawler(this, gridSize / 2, gridSize / 2, numOfRooms+30, i));
+            crawlers.add(new RoomMakingCrawler(this, gridSize / 2, gridSize / 2, numOfRooms*6, i));
         }
     }
 
@@ -291,30 +292,7 @@ class RoomCrawlerController {
         }
     }
 
-    /**
-     * Gets the direction of the closest crawler.
-     * If there is only one crawler, or the original crawler is under another, the method will return Direction.CENTER.
-     */
-    public Direction getDirectionOfClosestCrawler(RoomMakingCrawler originalCrawler) {
-        for (RoomMakingCrawler currentCrawler : crawlers) {
-            if (currentCrawler == originalCrawler) {
-                continue;
-            }
-            // if positive, south
-            // if negative, north
-            int vertDistance = currentCrawler.getCurrentRow() - originalCrawler.getCurrentRow();
-            // if positive, east
-            // if negative, west
-            int horDistance = currentCrawler.getCurrentColumn() - originalCrawler.getCurrentColumn();
 
-            if (Math.abs(vertDistance) < Math.abs(horDistance)) {
-                return (vertDistance > 0) ? Direction.SOUTH : Direction.NORTH;
-            } else {
-                return (horDistance > 0) ? Direction.EAST : Direction.WEST;
-            }
-        }
-        return Direction.CENTER;
-    }
 
     /**
      * @param crawler   The crawler doing the moving.
