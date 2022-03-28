@@ -6,6 +6,7 @@ package FloorGeneration;
 //TODO: from there, points and edges can be converted to rooms and hallways
 
 import java.awt.*;
+import java.awt.geom.Point2D;
 import java.util.Arrays;
 
 public class FloorGenerator {
@@ -24,16 +25,7 @@ public class FloorGenerator {
     */
 
     public static void main(String[] args) {
-        Polygon polygon = new Polygon();
-        polygon.addPoint(0,1);
-        polygon.addPoint(3,4);
-        polygon.addPoint(2,3);
-        System.out.println(Arrays.toString(polygon.xpoints));
-        System.out.println(Arrays.toString(polygon.ypoints));
-        System.out.println(polygon.npoints);
-        // a polygon internally has x coordinates, y coordinates in separate arrays
-        // n points variable contains how many points the polygon actually has
-        // the x and y arrays may be larger than n points, this is probably for optimizaion
-        // only the first n points elements in these arrays are actual points in the polygon
+        Point2D.Double point = new Point2D.Double(2.0, 1.0);
+        DelaunayTriangulation.triangulate(point);
     }
 }
