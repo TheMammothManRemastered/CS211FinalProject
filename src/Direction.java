@@ -5,12 +5,12 @@ public enum Direction {
     WEST (0,-1),
     CENTER (0,0);
 
-    public final int verticalMovement;
-    public final int horizontalMovement;
+    public final int verticalOffset;
+    public final int horizontalOffset;
 
-    Direction(int verticalMovement, int horizontalMovement) {
-        this.verticalMovement = verticalMovement;
-        this.horizontalMovement = horizontalMovement;
+    Direction(int verticalOffset, int horizontalOffset) {
+        this.verticalOffset = verticalOffset;
+        this.horizontalOffset = horizontalOffset;
     }
 
     /**
@@ -18,5 +18,15 @@ public enum Direction {
      */
     public static Direction[] allButCenter() {
         return new Direction[] {Direction.NORTH,Direction.SOUTH,Direction.EAST,Direction.WEST};
+    }
+
+    public Direction opposite() {
+        return switch (this) {
+            case NORTH -> SOUTH;
+            case SOUTH -> NORTH;
+            case EAST -> WEST;
+            case WEST -> EAST;
+            case CENTER -> CENTER;
+        };
     }
 }
