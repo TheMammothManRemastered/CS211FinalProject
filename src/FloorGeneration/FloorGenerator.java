@@ -5,9 +5,9 @@ package FloorGeneration;
 //TODO: from that mesh, use prim's algorithm to generate a MST.
 //TODO: from there, points and edges can be converted to rooms and hallways
 
-import java.awt.*;
 import java.awt.geom.Point2D;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Random;
 
 public class FloorGenerator {
     /*
@@ -25,7 +25,71 @@ public class FloorGenerator {
     */
 
     public static void main(String[] args) {
-        Point2D.Double point = new Point2D.Double(2.0, 1.0);
-        DelaunayTriangulation.triangulate(point);
+        final int numPoints = 10;
+        Random rng = new Random();
+        ArrayList<Point2D.Double> points = new ArrayList<Point2D.Double>();
+        for (int i = 0; i < numPoints; i++) {
+            double x = rng.nextInt(21)-10;
+            while (x == 0) {
+                x = rng.nextInt(21)-10;
+            }
+            double y = rng.nextInt(21)-10;
+            while (y == 0) {
+                y = rng.nextInt(21)-10;
+            }
+            points.add(new Point2D.Double(x,y));
+        }
+        try {
+            /*
+            DelaunayTriangulation.triangulate(
+                    new Point2D.Double(-2.0, -3.0),
+                    new Point2D.Double(0.0, -2.0),
+                    new Point2D.Double(-2.0, -1.0),
+                    new Point2D.Double(2.0, 1.0),
+                    new Point2D.Double(-3.0, 2.0),
+                    new Point2D.Double(-1.0, 3.0),
+                    new Point2D.Double(1.0, 3.0),
+                    new Point2D.Double(0,-8),
+                    new Point2D.Double(4.0, 4.0),
+                    new Point2D.Double(5.0, -8.0),
+                    new Point2D.Double(-8,0),
+                    new Point2D.Double(3.0, 10.0),
+                    new Point2D.Double(-0.5, 1.0),
+                    new Point2D.Double(-0.7, 2.0),
+                    new Point2D.Double(0,-1),
+                    new Point2D.Double(0,-4),
+                    new Point2D.Double(0,-6),
+                    new Point2D.Double(-2,0),
+                    new Point2D.Double(-5,0)
+            );
+            */
+
+
+            Point2D.Double[] pointsArray = new Point2D.Double[points.size()];
+            for (int i = 0; i < pointsArray.length; i++) {
+                pointsArray[i] = points.get(i);
+            }
+            DelaunayTriangulation.triangulate(pointsArray);
+
+
+        } catch (OriginInTriangulationInputException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private static void sortPoints(ArrayList<Point2D.Double> arr) {
+        int n = arr.size();
+        for (int i = 1; i < n; ++i) {
+            double key = arr.get(i).x;
+            double y = arr.get(i).y;
+            int j = i - 1;
+
+            while (j >= 0 && arr.get(j).x > key) {
+                arr.set(j + 1, arr.get(j));
+                j = j - 1;
+            }
+            arr.set(j + 1, new Point2D.Double(key, y));
+        }
     }
 }
