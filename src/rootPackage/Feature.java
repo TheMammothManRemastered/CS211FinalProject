@@ -1,3 +1,5 @@
+package rootPackage;
+
 /**
  * Parent interface for features one might find in a Room.
  */

@@ -1,4 +1,4 @@
-package FloorGeneration;
+package rootPackage.FloorGeneration.Layout;
 
 //TODO: totally overhauling floor generation from drunk walker method
 //TODO: current idea: spawn random points, make them into a mesh somehow (delaunay triangulation?)
@@ -40,8 +40,8 @@ public class FloorGenerator {
             points.add(new Point2D.Double(x,y));
         }
         try {
-            /*
-            DelaunayTriangulation.triangulate(
+
+            DelaunayTriangulation del = new DelaunayTriangulation(
                     new Point2D.Double(-2.0, -3.0),
                     new Point2D.Double(0.0, -2.0),
                     new Point2D.Double(-2.0, -1.0),
@@ -62,17 +62,12 @@ public class FloorGenerator {
                     new Point2D.Double(-2,0),
                     new Point2D.Double(-5,0)
             );
-            */
+
+            del.triangulate();
 
 
-            Point2D.Double[] pointsArray = new Point2D.Double[points.size()];
-            for (int i = 0; i < pointsArray.length; i++) {
-                pointsArray[i] = points.get(i);
-            }
-            DelaunayTriangulation.triangulate(pointsArray);
 
-
-        } catch (OriginInTriangulationInputException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

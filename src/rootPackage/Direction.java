@@ -1,3 +1,5 @@
+package rootPackage;
+
 public enum Direction {
     NORTH (-1,0),
     SOUTH (1,0),

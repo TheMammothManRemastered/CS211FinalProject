@@ -1,3 +1,5 @@
+package rootPackage;
+
 /**
  * Enum containing possible locations for room features
  */

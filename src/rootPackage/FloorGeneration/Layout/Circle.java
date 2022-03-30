@@ -1,4 +1,4 @@
-package FloorGeneration;
+package rootPackage.FloorGeneration.Layout;
 
 import java.awt.geom.Point2D;
 

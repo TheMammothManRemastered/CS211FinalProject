@@ -1,3 +1,5 @@
+package rootPackage;
+
 public enum DrawPriority {
     WALLS,
     CRACKS,

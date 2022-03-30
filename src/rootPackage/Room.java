@@ -1,3 +1,5 @@
+package rootPackage;
+
 /**
  * The Room interface, parent interface of all room types.
  */

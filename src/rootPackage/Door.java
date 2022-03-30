@@ -1,4 +1,4 @@
-
+package rootPackage;
 
 public class Door implements Feature {
 

@@ -1,3 +1,5 @@
+package rootPackage;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
