@@ -2,35 +2,23 @@ package rootPackage.FloorGeneration.Layout;
 
 import java.awt.geom.Point2D;
 
-class MyPoint2D extends Point2D.Double implements Comparable<MyPoint2D>{
+/**
+ * This class is an exact clone of the Point2D.Double class.
+ * @version 2.0
+ * @author William Owens
+ */
+public class MyPoint2D extends Point2D.Double{
 
-    private long binNumber;
+    public MyPoint2D(Point2D input) {
+        super(input.getX(), input.getY());
+    }
 
     public MyPoint2D(double x, double y) {
         super(x, y);
     }
 
-    public MyPoint2D(double x, double y, long binNumber) {
-        super(x, y);
-        this.binNumber = binNumber;
-    }
-
-    public long getBinNumber() {
-        return binNumber;
-    }
-
-    public void setBinNumber(long binNumber) {
-        this.binNumber = binNumber;
-    }
-
     @Override
-    public int compareTo(MyPoint2D o) {
-        if (this.binNumber > o.binNumber) {
-            return 1;
-        }
-        else if (this.binNumber < o.binNumber) {
-            return -1;
-        }
-        return 0;
+    public String toString() {
+        return super.toString();
     }
 }
