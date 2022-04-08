@@ -13,7 +13,7 @@ import java.util.*;
  */
 
 //TODO: this works well and correctly, but it doesn't implement the bin sort stage. this is probably fine, but change that if there is time
-public class DelaunayTriangulation {
+class DelaunayTriangulation {
 
     private Point2D[] inputPoints;
 
@@ -24,30 +24,6 @@ public class DelaunayTriangulation {
     private double xMin;
     private double yMin;
     private double deltaMax;
-
-    public static void main(String[] args) {
-
-        // okay test time :)
-        Random rng = new Random(44);
-
-        final int POINT_CLOUD_SIZE = 20;
-        MyPoint2D[] pointCloud = new MyPoint2D[POINT_CLOUD_SIZE];
-        for (int i = 0; i < POINT_CLOUD_SIZE; i++) {
-            int randX = rng.nextInt(40)-20;
-            int randY = rng.nextInt(40)-20;
-            pointCloud[i] = new MyPoint2D(randX,randY);
-        }
-
-        DelaunayTriangulation dt = new DelaunayTriangulation(pointCloud);
-
-        ArrayList<Connection> map = dt.triangulate();
-
-        System.out.println("le map");
-        for (Connection con : map) {
-            System.out.println(con);
-        }
-
-    }
 
     /**
      * Constructor.
@@ -72,7 +48,7 @@ public class DelaunayTriangulation {
      * @return An array of the triangles making up the triangulation.
      * @see <a href="https://www.newcastle.edu.au/__data/assets/pdf_file/0017/22508/13_A-fast-algorithm-for-constructing-Delaunay-triangulations-in-the-plane.pdf">Sloan's paper on this algorithm</a>
      */
-    public ArrayList<Connection> triangulate() {
+    public ArrayList[] triangulate() {
         // https://www.newcastle.edu.au/__data/assets/pdf_file/0017/22508/13_A-fast-algorithm-for-constructing-Delaunay-triangulations-in-the-plane.pdf
         // 1 (optional): scale the point inputs to be within 0,0 and 1,y.
         //      this improves precision
@@ -112,6 +88,7 @@ public class DelaunayTriangulation {
         this.normalizePoints();
 
         // step 2: bin sort the input
+        // done after step 3, who needs ordered steps anyway?
 
         // step 3: create the super triangle
         for (int i = 0; i < 3; i++) {
@@ -126,9 +103,48 @@ public class DelaunayTriangulation {
         this.points[numPoints + 2] = new MyPoint2D(0, 100);
         numPoints+=3;
 
+        MyPoint2D[] pointsDebugDuplicate = Arrays.copyOf(points,points.length-3);
+        ArrayList<MyPoint2D> pointsDebugList = new ArrayList<>(List.of(pointsDebugDuplicate));
+        Collections.sort(pointsDebugList);
+        //TODO: all of this is debug/for demonstration, not this bit tho this is basically the bin sort lol
+        for (int i = 0; i < pointsDebugList.size(); i++) {
+            this.points[i] = pointsDebugList.get(i);
+        }
+        FloorLayoutGenerator.delaunayStagesSb.append("Normalizing input\n");
+        for (int i = 0; i < pointsDebugList.size(); i++) {
+            MyPoint2D point = pointsDebugList.get(i);
+            FloorLayoutGenerator.delaunayStagesSb.append(("p_{%d}=").formatted(i));
+            FloorLayoutGenerator.delaunayStagesSb.append(point.toString());
+            FloorLayoutGenerator.delaunayStagesSb.append("\n");
+        }
+        FloorLayoutGenerator.delaunayStagesSb.append(("p_{%s}=").formatted("s1"));
+        FloorLayoutGenerator.delaunayStagesSb.append(points[numPoints-3]);
+        FloorLayoutGenerator.delaunayStagesSb.append("\n");
+        FloorLayoutGenerator.delaunayStagesSb.append(("p_{%s}=").formatted("s2"));
+        FloorLayoutGenerator.delaunayStagesSb.append(points[numPoints-3+1]);
+        FloorLayoutGenerator.delaunayStagesSb.append("\n");
+        FloorLayoutGenerator.delaunayStagesSb.append(("p_{%s}=").formatted("s3"));
+        FloorLayoutGenerator.delaunayStagesSb.append(points[numPoints-3+2]);
+        FloorLayoutGenerator.delaunayStagesSb.append("\n");
+        FloorLayoutGenerator.delaunayStagesSb.append("\n");
+
         // steps 4-8: this is where the fun begins!
         int numTriangles = 1;
         for (int pointIndex = 0; pointIndex < numPoints - 3; pointIndex++) {
+
+            FloorLayoutGenerator.delaunayStagesSb.append("Delaunay triangulation in progress - current state of triangles: \n");
+            for (int i = 0; i < verticesOfTriangles.length; i++) {
+                int[] trianglePoints = verticesOfTriangles[i];
+                MyPoint2D point1 = points[trianglePoints[0]];
+                MyPoint2D point2 = points[trianglePoints[1]];
+                MyPoint2D point3 = points[trianglePoints[2]];
+                if (point1.equals(point2)) {
+                    continue;
+                }
+                FloorLayoutGenerator.delaunayStagesSb.append("\\operatorname{polygon}\\left(\\left(%f,%f\\right),\\left(%f,%f\\right),\\left(%f,%f\\right)\\right)%n".formatted(point1.x,point1.y,point2.x,point2.y,point3.x,point3.y));
+            }
+            FloorLayoutGenerator.delaunayStagesSb.append("\n");
+
             int indexOfLastTriangleCreated = numTriangles - 1;
             // find triangle containing this point
             indexOfLastTriangleCreated = findTriangleContainingPoint(points[pointIndex], indexOfLastTriangleCreated);
@@ -312,6 +328,21 @@ public class DelaunayTriangulation {
                         triangleStack.add(triangleR);
                     }
                 }
+
+
+                FloorLayoutGenerator.delaunayStagesSb.append("Delaunay triangulation in progress - current state of triangles: \n");
+                for (int i = 0; i < verticesOfTriangles.length; i++) {
+                    int[] trianglePoints = verticesOfTriangles[i];
+                    MyPoint2D point1 = points[trianglePoints[0]];
+                    MyPoint2D point2 = points[trianglePoints[1]];
+                    MyPoint2D point3 = points[trianglePoints[2]];
+                    if (point1.equals(point2)) {
+                        continue;
+                    }
+                    FloorLayoutGenerator.delaunayStagesSb.append("\\operatorname{polygon}\\left(\\left(%f,%f\\right),\\left(%f,%f\\right),\\left(%f,%f\\right)\\right)%n".formatted(point1.x,point1.y,point2.x,point2.y,point3.x,point3.y));
+                }
+                FloorLayoutGenerator.delaunayStagesSb.append("\n");
+
             }
 
         }
@@ -343,13 +374,32 @@ public class DelaunayTriangulation {
         numPoints -= 3;
         deNormalizePoints();
 
+        //TODO: debug code for desmos, delete this when it is no longer needed
+        FloorLayoutGenerator.delaunayStagesSb.append("Final Delaunay Triangulation\n");
+        for (int i = 0; i < finalVerticesOfTriangles.length; i++) {
+
+            MyPoint2D point1 = points[finalVerticesOfTriangles[i][0]];
+            MyPoint2D point2 = points[finalVerticesOfTriangles[i][1]];
+            MyPoint2D point3 = points[finalVerticesOfTriangles[i][2]];
+            FloorLayoutGenerator.delaunayStagesSb.append("\\operatorname{polygon}\\left(\\left(%f,%f\\right),\\left(%f,%f\\right),\\left(%f,%f\\right)\\right)%n".formatted(point1.x,point1.y,point2.x,point2.y,point3.x,point3.y));
+        }
+        FloorLayoutGenerator.delaunayStagesSb.append("\n");
+
         // algorithm completed, translate into a usable output and return
         return parseTriangulation(finalVerticesOfTriangles);
     }
 
-    private ArrayList<Connection> parseTriangulation(int[][] trianglePoints) {
+    /**
+     * Helper for translating the output of triangulation into something useful.
+     * Returns an array of two arraylists. The first one contains all the points in the triangulation.
+     * The second contains all the connections in the triangulation.
+     */
+    private ArrayList[] parseTriangulation(int[][] trianglePoints) {
+
+        ArrayList[] output = new ArrayList[2];
 
         ArrayList<Connection> connections = new ArrayList<>();
+        ArrayList<MyPoint2D> outputPoints = new ArrayList<>();
 
         for (int[] triangle : trianglePoints) {
 
@@ -357,24 +407,37 @@ public class DelaunayTriangulation {
             MyPoint2D point2 = points[triangle[1]];
             MyPoint2D point3 = points[triangle[2]];
 
-            connections.add(new Connection(point1,point2));
-            connections.add(new Connection(point2,point3));
-            connections.add(new Connection(point3,point1));
+            outputPoints.add(point1);
+            outputPoints.add(point2);
+            outputPoints.add(point3);
 
+            connections.add(new Connection(point1,point2));
+            connections.add(new Connection(point2,point1));
+            connections.add(new Connection(point2,point3));
+            connections.add(new Connection(point3,point2));
+            connections.add(new Connection(point3,point1));
+            connections.add(new Connection(point1,point3));
         }
 
-        ArrayList<Connection> seen = new ArrayList<>();
+        ArrayList<Connection> connectionsSeen = new ArrayList<>();
+        ArrayList<MyPoint2D> pointsSeen = new ArrayList<>();
 
         for (Connection con : connections) {
-            if (!(seen.contains(con))) {
-                seen.add(con);
+            if (!(connectionsSeen.contains(con))) {
+                connectionsSeen.add(con);
             }
         }
 
-        return seen;
+        for (MyPoint2D point : outputPoints) {
+            if (!(pointsSeen.contains(point))) {
+                pointsSeen.add(point);
+            }
+        }
 
+        output[0] = pointsSeen;
+        output[1] = connectionsSeen;
+        return output;
     }
-
 
     /**
      * Iterates through triangles and finds one that contains the given point.

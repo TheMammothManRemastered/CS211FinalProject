@@ -1,27 +1,37 @@
 package rootPackage.FloorGeneration.Layout;
 
+import rootPackage.FloatEquivalence;
+
+import java.awt.geom.Point2D;
+
 /**
  * A class representing a connection between two points.
  *
  * @author William Owens
  * @version 1.0
  */
-public class Connection{
+public class Connection implements Comparable<Connection>{
 
-    private MyPoint2D point1;
-    private MyPoint2D point2;
+    private MyPoint2D origin;
+    private MyPoint2D destination;
+    private double weight;
 
-    public Connection(MyPoint2D point1, MyPoint2D point2){
-        this.point1 = point1;
-        this.point2 = point2;
+    public Connection(MyPoint2D origin, MyPoint2D destination){
+        this.origin = origin;
+        this.destination = destination;
+        this.weight = Point2D.distance(origin.x,origin.y,destination.x,destination.y);
     }
 
-    public MyPoint2D getPoint1() {
-        return point1;
+    public MyPoint2D getOrigin() {
+        return origin;
     }
 
-    public MyPoint2D getPoint2() {
-        return point2;
+    public MyPoint2D getDestination() {
+        return destination;
+    }
+
+    public double getWeight() {
+        return weight;
     }
 
     @Override
@@ -30,7 +40,7 @@ public class Connection{
             return false;
         }
         Connection other = (Connection) o;
-        if ((this.point1.equals(other.point1) || this.point1.equals(other.point2)) && (this.point2.equals(other.point1) || this.point2.equals(other.point2))) {
+        if ((this.origin.equals(other.origin)) && (this.destination.equals(other.destination)) && FloatEquivalence.floatEquivalence(this.weight, other.weight)) {
             return true;
         }
         return false;
@@ -41,6 +51,15 @@ public class Connection{
      */
     @Override
     public String toString() {
-        return "\\operatorname{polygon}\\left(\\left(%f,%f\\right),\\left(%f,%f\\right)\\right)".formatted(point1.x,point1.y,point2.x,point2.y);
+        return "\\operatorname{polygon}\\left(\\left(%f,%f\\right),\\left(%f,%f\\right)\\right)".formatted(origin.x, origin.y, destination.x, destination.y);
+    }
+
+    @Override
+    public int compareTo(Connection o) {
+        if (this.equals(o)) {
+            return 0;
+        }
+
+        return (this.weight > o.weight) ? 1 : -1;
     }
 }
