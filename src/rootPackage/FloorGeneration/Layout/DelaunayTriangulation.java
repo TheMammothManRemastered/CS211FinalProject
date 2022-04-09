@@ -330,6 +330,7 @@ class DelaunayTriangulation {
                 }
 
 
+                /*
                 FloorLayoutGenerator.delaunayStagesSb.append("Delaunay triangulation in progress - current state of triangles: \n");
                 for (int i = 0; i < verticesOfTriangles.length; i++) {
                     int[] trianglePoints = verticesOfTriangles[i];
@@ -343,6 +344,8 @@ class DelaunayTriangulation {
                 }
                 FloorLayoutGenerator.delaunayStagesSb.append("\n");
 
+
+                 */
             }
 
         }

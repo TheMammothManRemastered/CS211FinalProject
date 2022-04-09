@@ -44,6 +44,10 @@ public class AdjacencyMatrix {
         return nodesList.indexOf(node);
     }
 
+    public int getSize() {
+        return matrix.length;
+    }
+
     /**
      * Returns an array of connections
      * @param index
@@ -51,6 +55,14 @@ public class AdjacencyMatrix {
      */
     public double[] getNodeConnections(int index) {
         return matrix[index];
+    }
+
+    public int getCountOfNodeConnections(int index) {
+        int count = 0;
+        for (double d : matrix[index]) {
+            if (d > 0) count++;
+        }
+        return count;
     }
 
     /**
