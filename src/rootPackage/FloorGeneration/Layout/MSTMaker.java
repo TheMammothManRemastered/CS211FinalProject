@@ -15,7 +15,7 @@ import java.util.*;
  * @author William Owens
  * @version 1.0
  */
-class MSTMaker {
+public class MSTMaker {
 
     private int numNodes;
     private AdjacencyMatrix graph;

@@ -35,7 +35,7 @@ public class FloorLayoutGenerator {
         Random rng = new Random(44);
         Point2D.Double[] inputs = new Point2D.Double[10];
         for (int i = 0; i < 10; i++) {
-            Point2D.Double point = new Point2D.Double(rng.nextInt(20) + 1, rng.nextInt(20) + 1);
+            Point2D.Double point = new Point2D.Double(rng.nextInt(10) + 1, rng.nextInt(10) + 1);
             boolean exist = false;
             for (Point2D.Double pointInArray : inputs) {
                 if (point.equals(pointInArray)) {

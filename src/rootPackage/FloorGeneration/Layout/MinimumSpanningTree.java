@@ -9,7 +9,7 @@ import java.util.Arrays;
  * @author William Owens
  * @version 1.0
  */
-class MinimumSpanningTree {
+public class MinimumSpanningTree {
 
     private Connection[] connections;
     private MSTEdge[] edges;

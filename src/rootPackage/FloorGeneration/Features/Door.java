@@ -1,6 +1,7 @@
 package rootPackage.FloorGeneration.Features;
 
 import rootPackage.Direction;
+import rootPackage.FloorGeneration.Layout.MyPoint2D;
 import rootPackage.FloorGeneration.Room;
 import rootPackage.Player;
 
@@ -27,6 +28,28 @@ public class Door extends Feature{
     public Door(String[] names, String locationInRoom) {
         super(names, locationInRoom);
         locked = false;
+    }
+
+    public MyPoint2D getCoordinates() {
+        MyPoint2D point2D = new MyPoint2D(getAssociatedRoom().getCoordinates());
+        Direction dir = this.getDirection();
+        switch (dir) {
+            case NORTH -> {
+                point2D.y-=0.25;
+            }
+            case SOUTH -> {
+                point2D.y+=0.25;
+            }
+            case EAST -> {
+                point2D.x+=0.25;
+            }
+            case WEST -> {
+                point2D.x-=0.25;
+            }
+            default -> {
+            }
+        }
+        return point2D;
     }
 
     public Door getOtherSide() {

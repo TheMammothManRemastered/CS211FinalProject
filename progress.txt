@@ -7,16 +7,19 @@ The status of the game's four main systems are outlined below.
 		Random coordinates on a 2D grid are selected; these will eventually be rooms.
 		These coordinates are all interconnected into a mesh through a process called Delaunay Triangulation.
 		A minimum spanning tree is created using the triangulated mesh; the edges of this tree will eventually be hallways.
-{We are here}-> Some edges from the original triangulation are randomly selected and added back in to make the level feel less linear.
-		All the points on the grid are set up as empty rooms, and the edges are all made into hallways and doors connecting the rooms.
-		Essential features are added to certain rooms (an exit for the level, a spawn point for the player, etc.)
+		Some edges from the original triangulation are randomly selected and added back in to make the level feel less linear.
+{We are here}->	All the points on the grid are set up as empty rooms, and the edges are all made into hallways and doors connecting the rooms.
+{Partly done}->	Essential features are added to certain rooms (an exit for the level, a spawn point for the player, etc.)
 		Non-essential features are added to all rooms (treasure chests, enemies, decorations, etc.)
 	Done, the level is generated and the player can begin to explore.
 
 	A visualization of an example level generation in desmos can be found at the following link:
 	https://www.desmos.com/calculator/xsmfwfetuv
-	
-	Currently, level generation is about 2/3ds of the way done.
+
+	A demo of a floor (generated using the same seed as the one on desmos) is included in the git repo in the floorGeneration branch under the name "mapDemo.zip".
+	The demo must be compiled using at least jdk 15. Further instructions are included in a readme file inside the zip.
+
+	Currently, level generation is about 3/4ths of the way done, maybe 2/3ds .
 	By far the hardest aspects of this system were figuring out Delaunay Triangulation and creating minimum spanning trees.
 	These two steps, however, are totally finished.
 	The rest of level generation is not as complex, and should be finished very soon.
@@ -28,7 +31,7 @@ The status of the game's four main systems are outlined below.
 	This is one of the opponent's goals, certainly, but it should be able to do other things as well, like run away if it thinks the player is too strong to fight, or use a special ability to power itself up before it attacks.
 	On the other side, the player's possible actions are all but fully implemented.
 
-	The combat system is currently being worked on very heavily, and is our group's current main priority along with level generation.
+	The combat system is is our group's current main priority.
 
 3) user input and text interface:
 	The user interfaces with the game via a text interface similar to that seen in classic adventure games like Colossal Cave Adventure and Zork.
@@ -53,7 +56,7 @@ The status of the game's four main systems are outlined below.
 	
 	Systems like this exist in games, older ones especially, and it is likely that resources on how they work also exist. We will attempt to find such resources and study them, if possible.
 	This interface won't be trivial to create, but it likely will not be as complicated as the battle system or level generation.	
-	Once level generation is completed to a stage where the player can properly traverse and interact with a floor, work on this interface can begin.
+	Work on the interface has not yet begun, but, since level generation has progressed to a sufficient state, work can begin soon.
 
 4) graphics:
 	This game's graphics are not especially complicated.
@@ -84,5 +87,5 @@ System 2 is somewhere between a third and halfway finished. The behaviour of the
 A timeline on systems 3 and 4 cannot be accurately estimated at present, as they both depend on systems 1 and 2 to be finished.
 My (William's) current priority is on the level generation system. It's very close to done as is, and getting it finished ASAP would be very useful going forward, especially for developing System 3.
 Jovin's current priority is on the battle system. Once level generation is finished, I will also be shifting focus to this system. 
-	
+
 	

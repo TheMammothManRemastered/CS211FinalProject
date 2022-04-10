@@ -2,22 +2,62 @@ package rootPackage.FloorGeneration;
 
 import rootPackage.Direction;
 import rootPackage.FloorGeneration.Features.Door;
-import rootPackage.FloorGeneration.Layout.Connection;
-import rootPackage.FloorGeneration.Layout.FloorLayout;
-import rootPackage.FloorGeneration.Layout.ProtoRoom;
+import rootPackage.FloorGeneration.Layout.*;
 
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class FloorGenerator {
 
     private FloorLayout layout;
+
+    public static void main(String[] args) {
+        FloorGenerator fg = new FloorGenerator();
+        Floor floor = fg.generateFloor();
+    }
+
+    public FloorGenerator() {
+        layout = null;
+    }
 
     public FloorGenerator(FloorLayout layout) {
         this.layout = layout;
     }
 
     public Floor generateFloor() {
+
+        // generate the layout
+        if (this.layout == null) {
+            // seeded demonstration of level gen (10 points between (1,1) and (10,10), seed 44)
+            Random rng = new Random(44);
+            Point2D.Double[] inputs = new Point2D.Double[10];
+            for (int i = 0; i < 10; i++) {
+                Point2D.Double point = new Point2D.Double(rng.nextInt(10) + 1, rng.nextInt(10) + 1);
+                boolean exist = false;
+                for (Point2D.Double pointInArray : inputs) {
+                    if (point.equals(pointInArray)) {
+                        exist = true;
+                    }
+                }
+                if (!exist) {
+                    inputs[i] = point;
+                    continue;
+                }
+                i--;
+
+            }
+            DelaunayTriangulation del = new DelaunayTriangulation(inputs);
+            ArrayList[] triangulation = del.triangulate(); // triangulate the inputs
+
+            MSTMaker mst = new MSTMaker(triangulation);
+            MinimumSpanningTree minimumSpanningTree = mst.generateMST();
+
+            FloorLayoutGenerator flg = new FloorLayoutGenerator(minimumSpanningTree);
+
+            this.layout = flg.generateFloor();
+        }
 
         // fill the floor with all the relevant rooms
         ArrayList<Room> rooms = new ArrayList<>();
@@ -61,10 +101,17 @@ public class FloorGenerator {
                 room.getFeatures().add(thisSideDoor);
                 rooms.get(otherRoomIndex).getFeatures().add(otherSideDoor);
             }
+
         }
 
+        // set one of the rooms to be the spawnpoint
+        //TODO: again, pretty sure all random should be standardized, make sure that's the case later along
+        Random rng = new Random(44);
+        int spawnIndex = rng.nextInt(rooms.size());
+        rooms.get(spawnIndex).setSpawnRoom(true);
 
-        return new Floor();
+        return new Floor(rooms);
     }
+
 
 }

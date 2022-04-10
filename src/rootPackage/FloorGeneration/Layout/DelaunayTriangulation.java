@@ -13,7 +13,7 @@ import java.util.*;
  */
 
 //TODO: this works well and correctly, but it doesn't implement the bin sort stage. this is probably fine, but change that if there is time
-class DelaunayTriangulation {
+public class DelaunayTriangulation {
 
     private Point2D[] inputPoints;
 

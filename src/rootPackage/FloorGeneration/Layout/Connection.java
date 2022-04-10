@@ -2,7 +2,9 @@ package rootPackage.FloorGeneration.Layout;
 
 import rootPackage.Direction;
 import rootPackage.FloatEquivalence;
+import rootPackage.Main;
 
+import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 
 /**
@@ -71,6 +73,25 @@ public class Connection implements Comparable<Connection>{
         System.out.println(conVert);
         System.out.println(conHor);
 
+    }
+
+    public Line2D[] generateTriangleLines() {
+        final int PIXELS_PER_CARTESIAN_POINT = Main.PIXELS_PER_CARTESIAN_POINT;
+        if (FloatEquivalence.floatEquivalence(this.getRelativeDegrees(),0) || FloatEquivalence.floatEquivalence(this.getRelativeDegrees(),180) || FloatEquivalence.floatEquivalence(Math.abs(this.getRelativeDegrees()),90)) {
+            Line2D.Double line2D = new Line2D.Double(origin.x*PIXELS_PER_CARTESIAN_POINT,origin.y*PIXELS_PER_CARTESIAN_POINT,destination.x*PIXELS_PER_CARTESIAN_POINT,destination.y*PIXELS_PER_CARTESIAN_POINT);
+            return new Line2D[] {line2D};
+        }
+        Connection conVert = new Connection(
+                origin,
+                new MyPoint2D(origin.x,destination.y)
+        );
+        Connection conHor = new Connection(
+                new MyPoint2D(origin.x, destination.y),
+                destination
+        );
+        Line2D.Double lineVert = new Line2D.Double(conVert.origin.x*PIXELS_PER_CARTESIAN_POINT,conVert.origin.y*PIXELS_PER_CARTESIAN_POINT,conVert.destination.x*PIXELS_PER_CARTESIAN_POINT,conVert.destination.y*PIXELS_PER_CARTESIAN_POINT);
+        Line2D.Double lineHor = new Line2D.Double(conHor.origin.x*PIXELS_PER_CARTESIAN_POINT,conHor.origin.y*PIXELS_PER_CARTESIAN_POINT,conHor.destination.x*PIXELS_PER_CARTESIAN_POINT,conHor.destination.y*PIXELS_PER_CARTESIAN_POINT);
+        return new Line2D[] {lineVert, lineHor};
     }
 
     @Override
