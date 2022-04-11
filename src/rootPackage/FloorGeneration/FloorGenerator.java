@@ -9,14 +9,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * The floor generator class is responsible for generating the Floor objects for each level.
+ *
+ * @author William Owens
+ * @version 1.2
+ */
 public class FloorGenerator {
 
     private FloorLayout layout;
-
-    public static void main(String[] args) {
-        FloorGenerator fg = new FloorGenerator();
-        Floor floor = fg.generateFloor();
-    }
 
     public FloorGenerator() {
         layout = null;
@@ -26,6 +27,10 @@ public class FloorGenerator {
         this.layout = layout;
     }
 
+    /**
+     * Generates the floor. If there is no layout set already (which will usually be the case) one will be generated here.
+     * @return
+     */
     public Floor generateFloor() {
 
         // generate the layout
@@ -48,6 +53,8 @@ public class FloorGenerator {
                 i--;
 
             }
+
+
             DelaunayTriangulation del = new DelaunayTriangulation(inputs);
             ArrayList[] triangulation = del.triangulate(); // triangulate the inputs
 

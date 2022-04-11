@@ -14,7 +14,7 @@ The status of the game's four main systems are outlined below.
 	Done, the level is generated and the player can begin to explore.
 
 	A visualization of an example level generation in desmos can be found at the following link:
-	https://www.desmos.com/calculator/xsmfwfetuv
+	https://www.desmos.com/calculator/hkvjxq8za8
 
 	A demo of a floor (generated using the same seed as the one on desmos) is included in the git repo in the floorGeneration branch under the name "mapDemo.zip".
 	The demo must be compiled using at least jdk 15. Further instructions are included in a readme file inside the zip.

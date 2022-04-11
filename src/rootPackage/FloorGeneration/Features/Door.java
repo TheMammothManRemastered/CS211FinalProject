@@ -5,29 +5,35 @@ import rootPackage.FloorGeneration.Layout.MyPoint2D;
 import rootPackage.FloorGeneration.Room;
 import rootPackage.Player;
 
+/**
+ * Doors are one of, if not the, most important features. They are what enables players to move from room to room.
+ *
+ * @author William Owens
+ * @version 3.0
+ */
 public class Door extends Feature{
 
+    // names for a door. should anyone else be reading this and know some other words for door, hit me up lol
     private static final String[] names = new String[] {"door","doorway","portal","gate","entryway","exit"};
 
     private boolean locked;
     private Door otherSide;
 
+    /**
+     * Constructor.
+     * @param locationInRoom A string representing the location of the door in the room. should be in the form "wall{direction}" (with the {direction} being replaced by a direction in all caps)
+     */
+    //TODO: change this so capitalization doesn't matter
     public Door(String locationInRoom, Room associatedRoom) {
         super(names, locationInRoom, associatedRoom);
     }
 
+    /**
+     * Constructor.
+     * @param locationInRoom A string representing the location of the door in the room. should be in the form "wall{direction}" (with the {direction} being replaced by a direction in all caps)
+     */
     public Door(String locationInRoom) {
         super(names, locationInRoom);
-    }
-
-    public Door(String[] names, String locationInRoom, Room associatedRoom) {
-        super(names, locationInRoom, associatedRoom);
-        locked = false;
-    }
-
-    public Door(String[] names, String locationInRoom) {
-        super(names, locationInRoom);
-        locked = false;
     }
 
     public MyPoint2D getCoordinates() {
@@ -60,6 +66,9 @@ public class Door extends Feature{
         this.otherSide = otherSide;
     }
 
+    /**
+     * Get the wall on which this door lies.
+     */
     public Direction getDirection() {
         String dirString = getLocationInRoom().substring(4);
         switch (dirString) {
@@ -87,6 +96,9 @@ public class Door extends Feature{
         this.locked = locked;
     }
 
+    /**
+     * Unlock method to unlock both this door, and the other side of it.
+     */
     public void unlock() {
         this.locked = false;
         otherSide.setLocked(false);

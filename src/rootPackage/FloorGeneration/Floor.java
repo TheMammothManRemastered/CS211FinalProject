@@ -2,6 +2,12 @@ package rootPackage.FloorGeneration;
 
 import java.util.ArrayList;
 
+/**
+ * Represents a floor. Currently only holds rooms.
+ *
+ * @author William Owens
+ * @version 1.0
+ */
 public class Floor {
 
     private ArrayList<Room> rooms;

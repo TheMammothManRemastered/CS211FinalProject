@@ -21,6 +21,10 @@ public class Room {
     private boolean isDeadEnd;
     private boolean spawnRoom;
 
+    /**
+     * Construct the room from a protoRoom.
+     * @param protoRoom
+     */
     public Room(ProtoRoom protoRoom) {
         this.coordinates = protoRoom.getCoordinates();
         this.features = new ArrayList<>();

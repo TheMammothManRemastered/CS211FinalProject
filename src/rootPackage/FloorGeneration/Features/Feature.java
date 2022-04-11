@@ -4,7 +4,10 @@ import rootPackage.FloorGeneration.Room;
 import rootPackage.Player;
 
 /**
- * Interface of all Features one may find in a room.
+ * Parent abstract class of all Features one may find in a room.
+ *
+ * @author William Owens
+ * @version 3.0
  */
 public abstract class Feature {
 
