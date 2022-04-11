@@ -15,49 +15,40 @@ import java.util.*;
  * @author William Owens
  * @version 1.0
  */
-class MSTMaker {
-
-    //TODO: debug. delete this and put its internals in floor generator or something for testing
-    public static void main(String[] args) {
-
-        /*
-        MyPoint2D[] points = new MyPoint2D[10];
-
-        MyPoint2D point0 = new MyPoint2D(7,7);
-        MyPoint2D point1 = new MyPoint2D(2,4);
-        MyPoint2D point2 = new MyPoint2D(5,1);
-        MyPoint2D point3 = new MyPoint2D(8,5);
-        MyPoint2D point4 = new MyPoint2D(3,6);
-        MyPoint2D point5 = new MyPoint2D(3,9);
-        MyPoint2D point6 = new MyPoint2D(1,1);
-        MyPoint2D point7 = new MyPoint2D(0,0);
-        MyPoint2D point8 = new MyPoint2D(5,9);
-        MyPoint2D point9 = new MyPoint2D(0,7);
-
-        points[0] = point0;
-        points[1] = point1;
-        points[2] = point2;
-        points[3] = point3;
-        points[4] = point4;
-        points[5] = point5;
-        points[6] = point6;
-        points[7] = point7;
-        points[8] = point8;
-        points[9] = point9;
-
-        AdjacencyMatrix matrix = new AdjacencyMatrix(points);
-        System.out.println(matrix.getNode(4));
-        matrix.addConnection(4,0,44);
-        System.out.println(matrix.getConnectionWeight(4,0));
-        matrix.addConnection(4,0,0.0);
-        matrix.addConnection(point4,point0,44);
-        System.out.println(matrix.getConnectionWeight(4,0));
-        */
-
-    }
+public class MSTMaker {
 
     private int numNodes;
     private AdjacencyMatrix graph;
+
+    public static void main(String[] args) {
+        // seeded demonstration of level gen (10 points between (1,1) and (10,10), seed 44)
+        Random rng = new Random(44);
+        Point2D.Double[] inputs = new Point2D.Double[10];
+        for (int i = 0; i < 10; i++) {
+            Point2D.Double point = new Point2D.Double(rng.nextInt(10) + 1, rng.nextInt(10) + 1);
+            boolean exist = false;
+            for (Point2D.Double pointInArray : inputs) {
+                if (point.equals(pointInArray)) {
+                    exist = true;
+                }
+            }
+            if (!exist) {
+                inputs[i] = point;
+                continue;
+            }
+            i--;
+
+        }
+        DelaunayTriangulation del = new DelaunayTriangulation(inputs);
+        ArrayList[] triangulation = del.triangulate(); // triangulate the inputs
+        MSTMaker mst = new MSTMaker(triangulation);
+        MinimumSpanningTree minimumSpanningTree = mst.generateMST();
+
+        MyPoint2D point1 = new MyPoint2D(0,0);
+        MyPoint2D point2 = new MyPoint2D(-0.07,-0.77);
+        Connection con = new Connection(point1,point2);
+        System.out.println(con.getRelativeDegrees());
+    }
 
     /**
      * Constructor. Sets up this MSTMaker with a given triangulation.
@@ -95,7 +86,7 @@ class MSTMaker {
      *
      * @see <a href="https://youtu.be/jsmMtJpPnhU">Video on MSTs and Prim's Algorithm by YouTube user WilliamFiset</a>
      */
-    public ArrayList<Connection> generateMST() {
+    public MinimumSpanningTree generateMST() {
         ArrayList<MSTEdge> priorityQueue = new ArrayList<>();
         ArrayList<MSTEdge> minimumSpanningTree = new ArrayList<>();
         boolean[] visited = new boolean[numNodes];
@@ -141,12 +132,14 @@ class MSTMaker {
             output.add(new Connection(origin,destination));
         }
 
-        return output;
+        MinimumSpanningTree MST = new MinimumSpanningTree(output.toArray(new Connection[output.size()]), minimumSpanningTree.toArray(new MSTEdge[minimumSpanningTree.size()]), graph);
+
+        return MST;
     }
 }
 
 /**
- * Helper class for MST generation.
+ * Class representing a connection between nodes of an adjacency matrix.
  * Very similar to a Connection, but stores data in a form more convenient for this class' logic.
  *
  * @author William Owens

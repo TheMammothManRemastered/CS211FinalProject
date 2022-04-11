@@ -31,4 +31,26 @@ public enum Direction {
             case CENTER -> CENTER;
         };
     }
+
+    public static Direction degreesToDirection(double angle) {
+        // -45 to 45 is north
+        // 45 to 135 is east
+        // 135 to 180 and -135 to -180 is south
+        // -45 to -135 is west
+        if (-45 <= angle && angle < 45) {
+            return NORTH;
+        }
+        if (45 <= angle && angle < 135) {
+            return EAST;
+        }
+        if ((135 <= angle && angle <= 180) || (-180 <= angle && angle <= -135)) {
+            return SOUTH;
+        }
+        if (-135 < angle && angle < -45) {
+            return WEST;
+        }
+        return CENTER;
+    }
+
+
 }

@@ -6,7 +6,9 @@ import java.awt.geom.Point2D;
 
 /**
  * This class is an exact clone of the Point2D.Double class, save for its toString, which outputs the point in the form that desmos uses.
- * @version 2.0
+ * Also, this one is comparable.
+ *
+ * @version 2.5
  * @author William Owens
  */
 public class MyPoint2D extends Point2D.Double implements Comparable<MyPoint2D>{

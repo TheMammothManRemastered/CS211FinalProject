@@ -1,0 +1,91 @@
+Progress of the project thus far:
+
+The status of the game's four main systems are outlined below.
+1) levels and level generation:
+	Levels in this game will consist of multiple rooms connected together by hallways.
+	On a technical level, creating these levels happens in the following order:
+		Random coordinates on a 2D grid are selected; these will eventually be rooms.
+		These coordinates are all interconnected into a mesh through a process called Delaunay Triangulation.
+		A minimum spanning tree is created using the triangulated mesh; the edges of this tree will eventually be hallways.
+		Some edges from the original triangulation are randomly selected and added back in to make the level feel less linear.
+{We are here}->	All the points on the grid are set up as empty rooms, and the edges are all made into hallways and doors connecting the rooms.
+{Partly done}->	Essential features are added to certain rooms (an exit for the level, a spawn point for the player, etc.)
+		Non-essential features are added to all rooms (treasure chests, enemies, decorations, etc.)
+	Done, the level is generated and the player can begin to explore.
+
+	A visualization of an example level generation in desmos can be found at the following link:
+	https://www.desmos.com/calculator/hkvjxq8za8
+
+	A demo of a floor (generated using the same seed as the one on desmos) is included in the git repo in the floorGeneration branch under the name "mapDemo.zip".
+	The demo must be compiled using at least jdk 15. Further instructions are included in a readme file inside the zip.
+
+	Currently, level generation is about 3/4ths of the way done, maybe 2/3ds .
+	By far the hardest aspects of this system were figuring out Delaunay Triangulation and creating minimum spanning trees.
+	These two steps, however, are totally finished.
+	The rest of level generation is not as complex, and should be finished very soon.
+
+2) the combat system:
+	The combat system in this game is turn-based, pitting the player against a single, computer-controlled opponent.
+	This system has a prototype already in existance, and is currently being modified to accomodate more dynamic opponents.
+	Currently, the opponent does not do anything other than attack the player.
+	This is one of the opponent's goals, certainly, but it should be able to do other things as well, like run away if it thinks the player is too strong to fight, or use a special ability to power itself up before it attacks.
+	On the other side, the player's possible actions are all but fully implemented.
+
+	The combat system is is our group's current main priority.
+
+3) user input and text interface:
+	The user interfaces with the game via a text interface similar to that seen in classic adventure games like Colossal Cave Adventure and Zork.
+	The interface will read something like "You enter the room. A skeleton lies on the floor with a golden key in its hand. To your north is a locked door. What will you do?"
+	Then, the player will input what they would like to do, such as "Inspect skeleton" or "Look at door" or "Open door"
+	The player's input will be processed by the game, the interface will then tell the player the outcome of whatever they just did.
+	This cycle repeats until the player exits the level or dies trying.
+	The player's inputs will be processed in a few ways, an outline of which is below:
+		The player inputs a command. As an example, "Examine the skeleton"
+		That command string is scanned for an action, words like "inspect", "examine", "look at" or "interact with"
+		If no action can be found (ie. the player just typed "skeleton" or something), the interface will tell the player that their input wasn't understood
+		If an action is found, "examine" in this case, it will be acted upon.
+		The action will tell the interface if it needs any additional parameters from the user.
+		If it does, the command will be examined again for whatever parameters are needed.
+		For instance, the "examine" action requires a target object, "the skeleton" in this example.
+		The room will be searched for features that have "skeleton" as a name, and, if any match, they will be given to the "examine" action as the target parameter.
+		From here, the action can be performed and calculated, and its result can be given back to the user.
+		In this case, it will give the description attached to this particular skeleton ("The skeleton grins at you from the floor, seemingly watching you from its empty eye sockets. In its right hand is a large key made from solid gold.")
+		Now, the player is prompted for another action, and the cycle repeats itself.
+		If the player did not provide any additional parameters for an action, or the parameters are not valid for whatever reason, the user will be told and asked for input again.
+		ie. "What in the room are you examining?" if they provided no parameters, or "Try as you might, you cannot see a nuclear reactor in this room" if an invalid parameter was found, "nuclear reactor" in this case
+	
+	Systems like this exist in games, older ones especially, and it is likely that resources on how they work also exist. We will attempt to find such resources and study them, if possible.
+	This interface won't be trivial to create, but it likely will not be as complicated as the battle system or level generation.	
+	Work on the interface has not yet begun, but, since level generation has progressed to a sufficient state, work can begin soon.
+
+4) graphics:
+	This game's graphics are not especially complicated.
+	Above the text interface, a window will display the thing the player is currently looking at.
+	If they have just entered a room, the window will display that room. If they are looking at a statue, it will display the statue. If they are in a fight, it will display whatever they are fighting.
+	The contents of the window will be drawn based on a few things in a certain priority:
+		if the player is looking at a room, first the walls of a room will be drawn.
+		then, features in the room will be drawn over the walls one by one. First moss on the wall, then a door, then a rug, then a statue, etc.
+		eventually, everything in the room will be visible, and then the window will be updated to show the player
+		this process of drawing anything visible to the player one layer at a time will be used for most all situations
+
+		the one exception to this process is when the player looks at their map
+		every feature a room can possibly have will have an associated image, called a sprite, that can be drawn whenever that feature is present
+		sprites will never change, they are predictable
+		the map, however, is not very easily predictable
+		since levels are generated procedurally, the positioning of rooms and hallways will require more complex solutions to be drawn on the screen.
+	
+	the graphics for this game are simple, will probably not take very long to implement, and are not essential for the core gameplay to function
+	this is one of our group's lowest priorities, a few basic sprites exist for testing purposes, but nothing too complex has been done on this front
+
+To summarize:
+The game is currently proceeding at a good pace.
+Systems 1 and 2 are currently in development.
+System 3 is not currently being worked on, but will be as soon as systems 1 and 2 are more complete.
+System 4 is not currently being worked on, but will be as soon as systems 1, 2 and 3 are all but finished.
+System 1 is pretty close to finished; I estimate that it will be done in a week at most.
+System 2 is somewhere between a third and halfway finished. The behaviour of the opponent will take time and effort to complete, and I estimate that this will take a week at the least.
+A timeline on systems 3 and 4 cannot be accurately estimated at present, as they both depend on systems 1 and 2 to be finished.
+My (William's) current priority is on the level generation system. It's very close to done as is, and getting it finished ASAP would be very useful going forward, especially for developing System 3.
+Jovin's current priority is on the battle system. Once level generation is finished, I will also be shifting focus to this system. 
+
+	

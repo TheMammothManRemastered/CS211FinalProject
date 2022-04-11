@@ -13,7 +13,7 @@ import java.util.*;
  */
 
 //TODO: this works well and correctly, but it doesn't implement the bin sort stage. this is probably fine, but change that if there is time
-class DelaunayTriangulation {
+public class DelaunayTriangulation {
 
     private Point2D[] inputPoints;
 
@@ -330,6 +330,7 @@ class DelaunayTriangulation {
                 }
 
 
+                /*
                 FloorLayoutGenerator.delaunayStagesSb.append("Delaunay triangulation in progress - current state of triangles: \n");
                 for (int i = 0; i < verticesOfTriangles.length; i++) {
                     int[] trianglePoints = verticesOfTriangles[i];
@@ -343,6 +344,8 @@ class DelaunayTriangulation {
                 }
                 FloorLayoutGenerator.delaunayStagesSb.append("\n");
 
+
+                 */
             }
 
         }
