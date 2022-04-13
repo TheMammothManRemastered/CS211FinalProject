@@ -1,19 +1,14 @@
 package rootPackage;
 
-import rootPackage.FloorGeneration.Features.Door;
+import rootPackage.FloorGeneration.Features.Feature;
 import rootPackage.FloorGeneration.Floor;
-import rootPackage.FloorGeneration.FloorGenerator;
-import rootPackage.FloorGeneration.Layout.MyPoint2D;
 import rootPackage.FloorGeneration.Room;
+import rootPackage.Graphics.MainWindow;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -26,102 +21,97 @@ import java.util.Scanner;
  */
 public class Main extends JPanel {
 
-	public static final int PIXELS_PER_CARTESIAN_POINT = 60;
+    public static final int PIXELS_PER_CARTESIAN_POINT = 60;
 
-	private static Floor floor;
+    private static Floor floor;
 
-	private BufferedImage compass;
-	private Room spawnLocation;
-	private Player player;
+    private BufferedImage compass;
+    private Room spawnLocation;
+    private Player player;
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
 
-		// generate the floor
-		FloorGenerator fg = new FloorGenerator();
-		floor = fg.generateFloor();
+        MainWindow mainWindow = new MainWindow();
+    }
 
-		// instance of this class
-		Main man = new Main();
+    /**
+     * Run this off of an instance of this class to start the demo.
+     *
+     * @throws Exception If something goes wrong with getting a door (which can't actually happen in this context)
+     */
+    public void start() throws Exception {
+        // set up a scanner to take player input.
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("welcome to the map demo. type a cardinal direction to select which way to go. type 'exit' to exit.");
 
-		// set up window properties
-		JFrame frame = new JFrame("floor layout testing");
-		frame.add(man);
-		frame.setSize(800,800);
-		frame.setVisible(true);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // tells the program to shut when the window is closed (I think)
+        // main loop, terminates when the player types "exit"
+        while (true) {
+            String input = scanner.nextLine();
+            switch (input.toLowerCase()) {
+                case "north" -> {
+                    if (!(player.getCurrentRoom().hasDoorInDirection(Direction.NORTH))) {
+                        System.out.println("no room to the north");
+                        break;
+                    }
+                    // horrid one-liner, sets player's current room to the one in the specified direction
+                    player.setCurrentRoom(player.getCurrentRoom().getDoorInDirection(Direction.NORTH).getOtherSide().getAssociatedRoom());
+                }
+                case "south" -> {
+                    if (!(player.getCurrentRoom().hasDoorInDirection(Direction.SOUTH))) {
+                        System.out.println("no room to the south");
+                        break;
+                    }
+                    // horrid one-liner, sets player's current room to the one in the specified direction
+                    player.setCurrentRoom(player.getCurrentRoom().getDoorInDirection(Direction.SOUTH).getOtherSide().getAssociatedRoom());
+                }
+                case "east" -> {
+                    if (!(player.getCurrentRoom().hasDoorInDirection(Direction.EAST))) {
+                        System.out.println("no room to the east");
+                        break;
+                    }
+                    // horrid one-liner, sets player's current room to the one in the specified direction
+                    player.setCurrentRoom(player.getCurrentRoom().getDoorInDirection(Direction.EAST).getOtherSide().getAssociatedRoom());
+                }
+                case "west" -> {
+                    if (!(player.getCurrentRoom().hasDoorInDirection(Direction.WEST))) {
+                        System.out.println("no room to the west");
+                        break;
+                    }
+                    // horrid one-liner, sets player's current room to the one in the specified direction
+                    player.setCurrentRoom(player.getCurrentRoom().getDoorInDirection(Direction.WEST).getOtherSide().getAssociatedRoom());
+                }
+                case "exit" -> {
+                    System.out.println("exiting...");
+                    return;
+                }
+                case "examine" -> {
+                    Room currentRoom = player.getCurrentRoom();
+                    System.out.println(currentRoom.getRoomDescription());
+                    ArrayList<Feature> features = currentRoom.getFeatures();
+                    for (Feature feature : features) {
+                        feature.onExamine(player);
+                    }
+                }
+                default -> {
+                    System.out.println("input unrecognized, not processed");
+                }
+            }
+            // re-paint every time a new input is given
+            this.paint(this.getGraphics());
+            System.out.println("type a cardinal direction to select which way to go. type 'exit' to exit.");
+        }
+    }
 
-		try {
-			man.start();
-			System.exit(1);
-		} catch (Exception exception) { // this exception can't occur in this context, but i need this to compile so here it is
-			exception.printStackTrace();
-		}
-	}
+    /**
+     * Constructor.
+     * Puts the player in the correct spawn room.
+     */
+    public Main() {
 
-	/**
-	 * Run this off of an instance of this class to start the demo.
-	 * @throws Exception If something goes wrong with getting a door (which can't actually happen in this context)
-	 */
-	public void start() throws Exception {
-		// set up a scanner to take player input.
-		Scanner scanner = new Scanner(System.in);
-		System.out.println("welcome to the map demo. type a cardinal direction to select which way to go. type 'exit' to exit.");
 
-		// main loop, terminates when the player types "exit"
-		while (true) {
-			String input = scanner.nextLine();
-			switch (input.toLowerCase()) {
-				case "north" -> {
-					if (! (player.getCurrentRoom().hasDoorInDirection(Direction.NORTH))) {
-						System.out.println("no room to the north");
-						break;
-					}
-					// horrid one-liner, sets player's current room to the one in the specified direction
-					player.setCurrentRoom(player.getCurrentRoom().getDoorInDirection(Direction.NORTH).getOtherSide().getAssociatedRoom());
-				}
-				case "south" -> {
-					if (! (player.getCurrentRoom().hasDoorInDirection(Direction.SOUTH))) {
-						System.out.println("no room to the south");
-						break;
-					}
-					// horrid one-liner, sets player's current room to the one in the specified direction
-					player.setCurrentRoom(player.getCurrentRoom().getDoorInDirection(Direction.SOUTH).getOtherSide().getAssociatedRoom());
-				}
-				case "east" -> {
-					if (! (player.getCurrentRoom().hasDoorInDirection(Direction.EAST))) {
-						System.out.println("no room to the east");
-						break;
-					}
-					// horrid one-liner, sets player's current room to the one in the specified direction
-					player.setCurrentRoom(player.getCurrentRoom().getDoorInDirection(Direction.EAST).getOtherSide().getAssociatedRoom());
-				}
-				case "west" -> {
-					if (! (player.getCurrentRoom().hasDoorInDirection(Direction.WEST))) {
-						System.out.println("no room to the west");
-						break;
-					}
-					// horrid one-liner, sets player's current room to the one in the specified direction
-					player.setCurrentRoom(player.getCurrentRoom().getDoorInDirection(Direction.WEST).getOtherSide().getAssociatedRoom());
-				}
-				case "exit" -> {
-					System.out.println("exiting...");
-					return;
-				}
-				default -> {
-					System.out.println("input is not a cardinal direction, not processed");
-				}
-			}
-			// re-paint every time a new input is given
-			this.paint(this.getGraphics());
-			System.out.println("type a cardinal direction to select which way to go. type 'exit' to exit.");
-		}
-	}
+		/*
 
-	/**
-	 * Constructor.
-	 * Puts the player in the correct spawn room.
-	 */
-	public Main() {
+
 		for (Room room : floor.getRooms()) {
 			if (room.isSpawnRoom()) {
 				spawnLocation = room;
@@ -133,22 +123,29 @@ public class Main extends JPanel {
 		} catch (IOException exception) {
 			exception.printStackTrace();
 		}
-	}
 
-	/**
-	 * Override of the paint method, is responsible for telling the graphics in the window what to draw and where.
-	 * @param g
-	 */
-	@Override
-	public void paint(Graphics g) {
-		// convert to graphics2d because that can draw shapes, lines specifically
-		Graphics2D g2d = (Graphics2D) g;
+		 */
+    }
 
-		// set color sets the color for drawing things to the screen, but it isn't retroactive.
-		// fill the screen with black
-		g2d.setColor(Color.BLACK);
-		Rectangle2D.Double fill = new Rectangle2D.Double(0,0,800,800);
-		g2d.fill(fill);
+    /**
+     * Override of the paint method, is responsible for telling the graphics in the window what to draw and where.
+     *
+     * @param g
+     */
+    @Override
+    public void paint(Graphics g) {
+        // convert to graphics2d because that can draw shapes, lines specifically
+        Graphics2D g2d = (Graphics2D) g;
+
+        // set color sets the color for drawing things to the screen, but it isn't retroactive.
+        // fill the screen with black
+        g2d.setColor(Color.BLACK);
+        Rectangle2D.Double fill = new Rectangle2D.Double(0, 0, 854, 480);
+        g2d.fill(fill);
+
+
+		/*
+
 
 		// draw the singular greatest compass png ever created
 		g2d.drawImage(compass,0,0,null);
@@ -244,6 +241,8 @@ public class Main extends JPanel {
 		g2d.setColor(Color.BLUE);
 		g2d.fill(playerMarker);
 
-	}
+
+		 */
+    }
 
 }

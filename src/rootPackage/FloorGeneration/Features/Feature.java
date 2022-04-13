@@ -14,6 +14,7 @@ public abstract class Feature {
     private String[] names;
     private String locationInRoom;
     private Room associatedRoom;
+    private String description;
 
     public Feature(String[] names, String locationInRoom) {
         this.names = names;
@@ -40,6 +41,14 @@ public abstract class Feature {
 
     public String getLocationInRoom() {
         return locationInRoom;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public boolean nameContains(String input) {

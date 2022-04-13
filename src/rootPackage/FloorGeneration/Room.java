@@ -6,6 +6,7 @@ import rootPackage.FloorGeneration.Features.Feature;
 import rootPackage.FloorGeneration.Layout.MyPoint2D;
 import rootPackage.FloorGeneration.Layout.ProtoRoom;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -20,6 +21,7 @@ public class Room {
     private ArrayList<Feature> features;
     private boolean isDeadEnd;
     private boolean spawnRoom;
+    private String roomDescription;
 
     /**
      * Construct the room from a protoRoom.
@@ -30,6 +32,7 @@ public class Room {
         this.features = new ArrayList<>();
         this.isDeadEnd = false;
         this.spawnRoom = false;
+        this.roomDescription = null;
     }
 
     public boolean isSpawnRoom() {
@@ -94,6 +97,13 @@ public class Room {
             }
         }
         return output;
+    }
+
+    public String getRoomDescription() {
+        //TODO: generate the room's proper description for the first time if the field is null
+        // otherwise, use the field value
+
+        return "man, this is a room. like, what a total bummer.";
     }
 
     @Override

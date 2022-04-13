@@ -111,7 +111,7 @@ public class Door extends Feature{
         if (locked) {
             System.out.print("locked ");
         }
-        System.out.print("door.");
+        System.out.println("door.");
     }
 
     @Override
