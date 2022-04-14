@@ -1,0 +1,29 @@
+the "name" value is the name of the enemy
+the "description" value is the enemy's description
+the "tags" array contains multiple strings representing various aspects of this enemy
+    useful if the player has, say, a weapon that does double damage against beasts
+the "health" value is the starting HP of the enemy
+the "baseAttack" value is the starting attack stat of the enemy
+the "baseAbsorption" value is the starting damage resistance of the enemy
+the "intelligence" value is the level of AI the enemy will use
+    the higher the number, the "smarter" the AI is
+    for level 1, the enemy is a moron. it knows nothing about the player. it will just randomly pick one of the moves it knows each turn
+    for level 2, the enemy is unintelligent. it knows nothing about the player. it will always try to do damage to the player each turn
+    for level 3, the enemy is competent. it knows its current status effects, and how much damage it will take if the player performs a base attack.
+        if it sees the player's weapon does more than 1/2 of its health in one attack, it will prioritize either raising its defense or escaping the battle
+        otherwise, it will try to do damage to the player each turn
+    for level 4, the enemy is intelligent.
+        it knows its current status effects, the player's current status effects, and how much damage it will take if the player attacks in their current state
+        if it sees the player's weapon does more than 1/2 of its health in one attack, it will prioritize escaping the battle
+        if it sees the player's weapon does more than 1/3 of its health in one attack, it will prioritize raising its defense and lowering the player's damage
+        if it has the ability to afflict the player with a harmful status effect, and the player currently has no harmful status effects, it will prioritize inflicting such an effect
+        if it has the ability to give itself a positive status effect, and it currently has no positive status effects, it will prioritize giving itself such an effect
+        otherwise, it will try to do damage to the player each turn
+    sometimes, the enemy has special priorities and specific moves it will want to use every so often (ie. a boss will use a super powerful attack, but only every 3 turns)
+    in such cases, the enemy's json will specify the name of that AI class rather than just a number
+the "priority" value is the 'speed' of the enemy during battle. whoever has higher priority gets to do their action first
+the "possibleMoves" array contains the possible moves an enemy can take during battle
+    these moves are stored in the moves folder under the same names
+the "moveDescriptions" array contains the console feedback for the moves an enemy can take
+    these descriptions are in the same index as their related move
+    upon a move being selected, the corresponding description is passed into an ActionContainer along with, eventually, the move's data

@@ -13,6 +13,8 @@ import rootPackage.Player;
  */
 public class Door extends Feature{
 
+    //TODO: refactor to implement Unlockable
+
     // names for a door. should anyone else be reading this and know some other words for door, hit me up lol
     private static final String[] names = new String[] {"door","doorway","portal","gate","entryway","exit"};
 

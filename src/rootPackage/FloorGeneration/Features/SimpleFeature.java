@@ -43,7 +43,7 @@ public class SimpleFeature extends Feature {
     public static SimpleFeature randomSimpleFeature(String locationInRoom) {
         JSONParser jsonParser = new JSONParser();
         try {
-            FileReader reader = new FileReader("simpleFeatures.json");
+            FileReader reader = new FileReader("json/simpleFeatures.json");
 
             // parse the wider json file
             JSONObject json = (JSONObject) jsonParser.parse(reader);

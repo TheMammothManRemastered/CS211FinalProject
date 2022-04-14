@@ -22,7 +22,7 @@ import java.util.Scanner;
 public class Main extends JPanel {
 
     public static final int PIXELS_PER_CARTESIAN_POINT = 60;
-
+    public static MainWindow mainWindow;
     private static Floor floor;
 
     private BufferedImage compass;
@@ -31,7 +31,7 @@ public class Main extends JPanel {
 
     public static void main(String[] args) {
 
-        MainWindow mainWindow = new MainWindow();
+        mainWindow = new MainWindow();
     }
 
     /**
