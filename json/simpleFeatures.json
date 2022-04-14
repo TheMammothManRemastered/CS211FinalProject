@@ -1,0 +1,54 @@
+{
+  "simpleFeatures": [
+    {
+      "names": [
+        "Rug",
+        "Carpet",
+        "Floormat",
+        "Mat"
+      ],
+      "possibleLocations": [
+        "floor"
+      ],
+      "description": "A large rug that covers most of the floor. It actually feels pretty good to walk on.",
+      "onInteract": "Try as you might, you cannot get the rug off of the floor. Unfortunate, you'd have liked to have taken it with you."
+    },
+    {
+      "names": [
+        "Torch",
+        "Sconce"
+      ],
+      "possibleLocations": [
+        "wallANY"
+      ],
+      "description": "An iron fitting holds this flickering torch to the wall.",
+      "onInteract": "The torch is firmly secured to the wall; you cannot budge it."
+    },
+    {
+      "names": [
+        "Cobweb",
+        "Spiderweb",
+        "Web",
+        "Webbing"
+      ],
+      "possibleLocations": [
+        "cornerANY"
+      ],
+      "description": "A dusty web. Probably shouldn't touch it.",
+      "onInteract": "As you reach for the web, a fat, hairy spider skitters out and stares right at you! Maybe backing out of this is the wisest choice..."
+    },
+    {
+      "names": [
+        "Chain",
+        "Shackle",
+        "Chains",
+        "Shackles"
+      ],
+      "possibleLocations": [
+        "ceilingANY"
+      ],
+      "description": "An iron chain and cuffs hanging from the ceiling. Nobody is occupying the cuffs at this time.",
+      "onInteract": "Rattling the chains does nothing at all."
+    }
+  ]
+}

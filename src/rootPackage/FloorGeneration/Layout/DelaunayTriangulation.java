@@ -15,12 +15,12 @@ import java.util.*;
 //TODO: this works well and correctly, but it doesn't implement the bin sort stage. this is probably fine, but change that if there is time
 public class DelaunayTriangulation {
 
-    private Point2D[] inputPoints;
+    private final Point2D[] inputPoints;
+    private final MyPoint2D[] points;
+    private final int[][] verticesOfTriangles;
+    private final int[][] adjTriangles;
 
     private int numPoints;
-    private MyPoint2D[] points;
-    private int[][] verticesOfTriangles;
-    private int[][] adjTriangles;
     private double xMin;
     private double yMin;
     private double deltaMax;
@@ -31,8 +31,7 @@ public class DelaunayTriangulation {
      * @param inputPoints The point cloud this DelaunayTriangulation will work with.
      */
     public DelaunayTriangulation(Point2D... inputPoints) {
-        // make sure this object doesn't mess with any other function's arrays
-        this.inputPoints = Arrays.copyOf(inputPoints, inputPoints.length);
+        this.inputPoints = inputPoints;
 
         this.numPoints = inputPoints.length;
 
@@ -48,7 +47,7 @@ public class DelaunayTriangulation {
      * @return An array of the triangles making up the triangulation.
      * @see <a href="https://www.newcastle.edu.au/__data/assets/pdf_file/0017/22508/13_A-fast-algorithm-for-constructing-Delaunay-triangulations-in-the-plane.pdf">Sloan's paper on this algorithm</a>
      */
-    public ArrayList[] triangulate() {
+    public Triangulation triangulate() {
         // https://www.newcastle.edu.au/__data/assets/pdf_file/0017/22508/13_A-fast-algorithm-for-constructing-Delaunay-triangulations-in-the-plane.pdf
         // 1 (optional): scale the point inputs to be within 0,0 and 1,y.
         //      this improves precision
@@ -87,124 +86,21 @@ public class DelaunayTriangulation {
         }
         this.normalizePoints();
 
-        // step 2: bin sort the input
-        // done after step 3, who needs ordered steps anyway?
-
-        // step 3: create the super triangle
-        for (int i = 0; i < 3; i++) {
-            this.verticesOfTriangles[0][i] = numPoints + i;
-        }
-        for (int i = 0; i < 3; i++) {
-            this.adjTriangles[0][i] = -1;
-        }
-        // super triangle is stored in the last 3 indices of x and y points
-        this.points[numPoints] = new MyPoint2D(-100, -100);
-        this.points[numPoints + 1] = new MyPoint2D(100, -100);
-        this.points[numPoints + 2] = new MyPoint2D(0, 100);
-        numPoints+=3;
-
-        MyPoint2D[] pointsDebugDuplicate = Arrays.copyOf(points,points.length-3);
-        ArrayList<MyPoint2D> pointsDebugList = new ArrayList<>(List.of(pointsDebugDuplicate));
-        Collections.sort(pointsDebugList);
-        //TODO: all of this is debug/for demonstration, not this bit tho this is basically the bin sort lol
-        for (int i = 0; i < pointsDebugList.size(); i++) {
-            this.points[i] = pointsDebugList.get(i);
-        }
-        FloorLayoutGenerator.delaunayStagesSb.append("Normalizing input\n");
-        for (int i = 0; i < pointsDebugList.size(); i++) {
-            MyPoint2D point = pointsDebugList.get(i);
-            FloorLayoutGenerator.delaunayStagesSb.append(("p_{%d}=").formatted(i));
-            FloorLayoutGenerator.delaunayStagesSb.append(point.toString());
-            FloorLayoutGenerator.delaunayStagesSb.append("\n");
-        }
-        FloorLayoutGenerator.delaunayStagesSb.append(("p_{%s}=").formatted("s1"));
-        FloorLayoutGenerator.delaunayStagesSb.append(points[numPoints-3]);
-        FloorLayoutGenerator.delaunayStagesSb.append("\n");
-        FloorLayoutGenerator.delaunayStagesSb.append(("p_{%s}=").formatted("s2"));
-        FloorLayoutGenerator.delaunayStagesSb.append(points[numPoints-3+1]);
-        FloorLayoutGenerator.delaunayStagesSb.append("\n");
-        FloorLayoutGenerator.delaunayStagesSb.append(("p_{%s}=").formatted("s3"));
-        FloorLayoutGenerator.delaunayStagesSb.append(points[numPoints-3+2]);
-        FloorLayoutGenerator.delaunayStagesSb.append("\n");
-        FloorLayoutGenerator.delaunayStagesSb.append("\n");
+        // step 3: create the super triangle (skipping bin sort, it's unnecessary for functionality. might add it later if there's time)
+        createSuperTriangle();
 
         // steps 4-8: this is where the fun begins!
         int numTriangles = 1;
+        int indexOfLastTriangleCreated = 0; // the super triangle is the first created, and is in the first index of triangles
+
         for (int pointIndex = 0; pointIndex < numPoints - 3; pointIndex++) {
 
-            FloorLayoutGenerator.delaunayStagesSb.append("Delaunay triangulation in progress - current state of triangles: \n");
-            for (int i = 0; i < verticesOfTriangles.length; i++) {
-                int[] trianglePoints = verticesOfTriangles[i];
-                MyPoint2D point1 = points[trianglePoints[0]];
-                MyPoint2D point2 = points[trianglePoints[1]];
-                MyPoint2D point3 = points[trianglePoints[2]];
-                if (point1.equals(point2)) {
-                    continue;
-                }
-                FloorLayoutGenerator.delaunayStagesSb.append("\\operatorname{polygon}\\left(\\left(%f,%f\\right),\\left(%f,%f\\right),\\left(%f,%f\\right)\\right)%n".formatted(point1.x,point1.y,point2.x,point2.y,point3.x,point3.y));
-            }
-            FloorLayoutGenerator.delaunayStagesSb.append("\n");
-
-            int indexOfLastTriangleCreated = numTriangles - 1;
-            // find triangle containing this point
+            // find triangle containing current point
             indexOfLastTriangleCreated = findTriangleContainingPoint(points[pointIndex], indexOfLastTriangleCreated);
+            // if a triangle is found that contains the current point (which will always be the case), its index is stored in indexOfLastTriangleCreated
             numTriangles += 2;
             // delete this triangle, replace with two new ones
-            // the two new triangles
-            verticesOfTriangles[numTriangles - 2][0] = pointIndex;
-            verticesOfTriangles[numTriangles - 2][1] = verticesOfTriangles[indexOfLastTriangleCreated][1];
-            verticesOfTriangles[numTriangles - 2][2] = verticesOfTriangles[indexOfLastTriangleCreated][2];
-            verticesOfTriangles[numTriangles - 1][0] = pointIndex;
-            verticesOfTriangles[numTriangles - 1][1] = verticesOfTriangles[indexOfLastTriangleCreated][2];
-            verticesOfTriangles[numTriangles - 1][2] = verticesOfTriangles[indexOfLastTriangleCreated][0];
-            // original triangle gets replaced later
-            // update adjacencies
-            // first, adjacencies of the triangles that were once around the one we just edited
-            int adjacency1 = adjTriangles[indexOfLastTriangleCreated][0];
-            int adjacency2 = adjTriangles[indexOfLastTriangleCreated][1];
-            int adjacency3 = adjTriangles[indexOfLastTriangleCreated][2];
-            // if any of these are -1, meaning there is no adjacency on that side, fine
-            // that won't have changed, but it might have otherwise
-            if (adjacency1 >= 0) {
-                for (int m = 0; m < 3; m++) {
-                    if (adjTriangles[adjacency1][m] == indexOfLastTriangleCreated) {
-                        adjTriangles[adjacency1][m] = indexOfLastTriangleCreated; // redundant, here for clarity
-                        break;
-                    }
-                }
-            }
-            if (adjacency2 >= 0) {
-                for (int m = 0; m < 3; m++) {
-                    if (adjTriangles[adjacency2][m] == indexOfLastTriangleCreated) {
-                        adjTriangles[adjacency2][m] = numTriangles - 2;
-                        break;
-                    }
-                }
-            }
-            if (adjacency3 >= 0) {
-                for (int m = 0; m < 3; m++) {
-                    if (adjTriangles[adjacency3][m] == indexOfLastTriangleCreated) {
-                        adjTriangles[adjacency3][m] = numTriangles - 1;
-                        break;
-                    }
-                }
-            }
-            // next, set up adjacencies of the newly made triangles
-            adjTriangles[numTriangles - 2][0] = indexOfLastTriangleCreated;
-            adjTriangles[numTriangles - 2][1] = adjTriangles[indexOfLastTriangleCreated][1];
-            adjTriangles[numTriangles - 2][2] = numTriangles - 1;
-            adjTriangles[numTriangles - 1][0] = numTriangles - 2;
-            adjTriangles[numTriangles - 1][1] = adjTriangles[indexOfLastTriangleCreated][2];
-            adjTriangles[numTriangles - 1][2] = indexOfLastTriangleCreated;
-            // now we update the old first triangle, it's no longer needed
-            // vertices
-            verticesOfTriangles[indexOfLastTriangleCreated][2] = verticesOfTriangles[indexOfLastTriangleCreated][1];
-            verticesOfTriangles[indexOfLastTriangleCreated][1] = verticesOfTriangles[indexOfLastTriangleCreated][0];
-            verticesOfTriangles[indexOfLastTriangleCreated][0] = pointIndex;
-            // adjacencies
-            adjTriangles[indexOfLastTriangleCreated][1] = adjTriangles[indexOfLastTriangleCreated][0];
-            adjTriangles[indexOfLastTriangleCreated][2] = numTriangles - 2;
-            adjTriangles[indexOfLastTriangleCreated][0] = numTriangles - 1;
+            splitTriangle(numTriangles, indexOfLastTriangleCreated, pointIndex);
             // new triangles are set up
             // the delaunay condition on these triangles is most likely not met, now is the time to fix that
             // put all the triangles that contain the current point into a LIFO stack, if they have an adjacency on the point's opposing edge
@@ -247,8 +143,6 @@ public class DelaunayTriangulation {
                 // circumcircle check for P in triangle R (v1,v2,v3)
                 double cosA = ((vertex1.x - vertex3.x) * (vertex2.x - vertex3.x) + (vertex1.y - vertex3.y) * (vertex2.y - vertex3.y));
                 double cosB = ((vertex2.x - P.x) * (vertex1.x - P.x) + (vertex2.y - P.y) * (vertex1.y - P.y));
-                double sinA = ((vertex1.x - vertex3.x) * (vertex2.y - vertex3.y) - (vertex1.y - vertex3.y) * (vertex2.x - vertex3.x));
-                double sinB = ((vertex2.x - P.x) * (vertex1.y - P.y) - (vertex2.y - P.y) * (vertex1.x - P.x));
 
                 // horrible, terrible, awfully long conditional
                 boolean circumcircleContains = (((cosA < 0) && (cosB < 0)) || ((-cosA * ((vertex2.x - P.x) * (vertex1.y - P.y) - (vertex2.y - P.y) * (vertex1.x - P.x))) >
@@ -299,9 +193,11 @@ public class DelaunayTriangulation {
                         if (verticesOfTriangles[triangleR][0] != pointIndex) {
                             int temp1 = verticesOfTriangles[triangleR][0];
                             int temp2 = adjTriangles[triangleR][0];
+                            // vertices
                             verticesOfTriangles[triangleR][0] = verticesOfTriangles[triangleR][1];
                             verticesOfTriangles[triangleR][1] = verticesOfTriangles[triangleR][2];
                             verticesOfTriangles[triangleR][2] = temp1;
+                            // adjacencies
                             adjTriangles[triangleR][0] = adjTriangles[triangleR][1];
                             adjTriangles[triangleR][1] = adjTriangles[triangleR][2];
                             adjTriangles[triangleR][2] = temp2;
@@ -351,6 +247,27 @@ public class DelaunayTriangulation {
         }
 
         // step 9: kill anything related to the supertriangle
+        int[][] finalVerticesOfTriangles = removeSuperTriangleFromPointsSet(numTriangles);
+
+        // step 10: reverse the mapping of points to the area near (0,0)
+        numPoints -= 3;
+        deNormalizePoints();
+
+        //TODO: debug code for desmos, delete this when it is no longer needed
+        FloorLayoutGenerator.delaunayStagesSb.append("Final Delaunay Triangulation\n");
+        for (int[] finalVerticesOfTriangle : finalVerticesOfTriangles) {
+            MyPoint2D point1 = points[finalVerticesOfTriangle[0]];
+            MyPoint2D point2 = points[finalVerticesOfTriangle[1]];
+            MyPoint2D point3 = points[finalVerticesOfTriangle[2]];
+            FloorLayoutGenerator.delaunayStagesSb.append("\\operatorname{polygon}\\left(\\left(%f,%f\\right),\\left(%f,%f\\right),\\left(%f,%f\\right)\\right)%n".formatted(point1.x, point1.y, point2.x, point2.y, point3.x, point3.y));
+        }
+        FloorLayoutGenerator.delaunayStagesSb.append("\n");
+
+        // algorithm completed, translate into a usable output and return
+        return parseTriangulation(finalVerticesOfTriangles);
+    }
+
+    private int[][] removeSuperTriangleFromPointsSet(int numTriangles) {
         int numDeadTriangles = 0;
         int[] deadTriangles = new int[numTriangles]; // 0 if triangle is alive, 1 if it's dead
         for (int i = 0; i < numTriangles; i++) {
@@ -361,7 +278,7 @@ public class DelaunayTriangulation {
                 numDeadTriangles++;
             }
         }
-        int numTrianglesFinal = numTriangles-numDeadTriangles;
+        int numTrianglesFinal = numTriangles - numDeadTriangles;
 
         int[][] finalVerticesOfTriangles = new int[numTrianglesFinal * 3][3];
         int index = 0;
@@ -369,27 +286,92 @@ public class DelaunayTriangulation {
             if (!(deadTriangles[i] == 1)) {
                 finalVerticesOfTriangles[index][0] = verticesOfTriangles[i][0];
                 finalVerticesOfTriangles[index][1] = verticesOfTriangles[i][1];
-                finalVerticesOfTriangles[index++][2] = verticesOfTriangles[i][2];
+                finalVerticesOfTriangles[index][2] = verticesOfTriangles[i][2];
+                index++;
             }
         }
+        return finalVerticesOfTriangles;
+    }
 
-        // step 10: reverse the mapping of points to the area near (0,0)
-        numPoints -= 3;
-        deNormalizePoints();
+    /**
+     * Splits a given triangle into 3, dealing with adjacencies and the like
+     * @param splitPoint the point about which the triangle is split
+     */
+    private void splitTriangle(int numTriangles, int indexOfSplitTriangle, int splitPoint) {
+        // the two new triangles
+        verticesOfTriangles[numTriangles - 2][0] = splitPoint;
+        verticesOfTriangles[numTriangles - 2][1] = verticesOfTriangles[indexOfSplitTriangle][1];
+        verticesOfTriangles[numTriangles - 2][2] = verticesOfTriangles[indexOfSplitTriangle][2];
+        verticesOfTriangles[numTriangles - 1][0] = splitPoint;
+        verticesOfTriangles[numTriangles - 1][1] = verticesOfTriangles[indexOfSplitTriangle][2];
+        verticesOfTriangles[numTriangles - 1][2] = verticesOfTriangles[indexOfSplitTriangle][0];
+        // original triangle gets replaced later
+        // update adjacencies
+        // first, adjacencies of the triangles that were once around the one we just edited
+        // adjacency 1 won't change from this operation
+        int adjacency2 = adjTriangles[indexOfSplitTriangle][1];
+        int adjacency3 = adjTriangles[indexOfSplitTriangle][2];
+        updateSurroundingTriangleAdjacencies(numTriangles, indexOfSplitTriangle, adjacency2, 2);
+        updateSurroundingTriangleAdjacencies(numTriangles, indexOfSplitTriangle, adjacency3, 1);
+        // next, set up adjacencies of the newly made triangles
+        setUpSplitTriangleAdjacencies(numTriangles, indexOfSplitTriangle);
+        // now we update the old first triangle, it's no longer up to date
+        // vertices
+        verticesOfTriangles[indexOfSplitTriangle][2] = verticesOfTriangles[indexOfSplitTriangle][1];
+        verticesOfTriangles[indexOfSplitTriangle][1] = verticesOfTriangles[indexOfSplitTriangle][0];
+        verticesOfTriangles[indexOfSplitTriangle][0] = splitPoint;
+        // adjacencies
+        adjTriangles[indexOfSplitTriangle][1] = adjTriangles[indexOfSplitTriangle][0];
+        adjTriangles[indexOfSplitTriangle][2] = numTriangles - 2;
+        adjTriangles[indexOfSplitTriangle][0] = numTriangles - 1;
+    }
 
-        //TODO: debug code for desmos, delete this when it is no longer needed
-        FloorLayoutGenerator.delaunayStagesSb.append("Final Delaunay Triangulation\n");
-        for (int i = 0; i < finalVerticesOfTriangles.length; i++) {
-
-            MyPoint2D point1 = points[finalVerticesOfTriangles[i][0]];
-            MyPoint2D point2 = points[finalVerticesOfTriangles[i][1]];
-            MyPoint2D point3 = points[finalVerticesOfTriangles[i][2]];
-            FloorLayoutGenerator.delaunayStagesSb.append("\\operatorname{polygon}\\left(\\left(%f,%f\\right),\\left(%f,%f\\right),\\left(%f,%f\\right)\\right)%n".formatted(point1.x,point1.y,point2.x,point2.y,point3.x,point3.y));
+    /**
+     * Updates the adjacencies of a given triangle that was just split into multiple
+     * @param numTriangles the current value of numTriangles //TODO: make this global
+     * @param indexOfSplitTriangle the index of the triangle that was recently split
+     * @param adjacency the index of the triangle that needs its adjacencies updated
+     * @param offset an offset used in calculating which triangle this one is now next to (2 for adjacency 2, 1 for adjacency 3)
+     */
+    private void updateSurroundingTriangleAdjacencies(int numTriangles, int indexOfSplitTriangle, int adjacency, int offset) {
+        // if it's -1, then there was no triangle next to it anyway. there certainly won't be one now.
+        if (adjacency >= 0) {
+            for (int m = 0; m < 3; m++) {
+                if (adjTriangles[adjacency][m] == indexOfSplitTriangle) {
+                    adjTriangles[adjacency][m] = numTriangles - offset;
+                    break;
+                }
+            }
         }
-        FloorLayoutGenerator.delaunayStagesSb.append("\n");
+    }
 
-        // algorithm completed, translate into a usable output and return
-        return parseTriangulation(finalVerticesOfTriangles);
+    /**
+     * Sets up the triangle adjacencies for a triangle that was split
+     */
+    private void setUpSplitTriangleAdjacencies(int numTriangles, int indexOfSplitTriangle) {
+        adjTriangles[numTriangles - 2][0] = indexOfSplitTriangle;
+        adjTriangles[numTriangles - 2][1] = adjTriangles[indexOfSplitTriangle][1];
+        adjTriangles[numTriangles - 2][2] = numTriangles - 1;
+        adjTriangles[numTriangles - 1][0] = numTriangles - 2;
+        adjTriangles[numTriangles - 1][1] = adjTriangles[indexOfSplitTriangle][2];
+        adjTriangles[numTriangles - 1][2] = indexOfSplitTriangle;
+    }
+
+    /**
+     * Sets up the super triangle's data. (big triangle at (-100,-100) (100,-100) and (0,100))
+     */
+    private void createSuperTriangle() {
+        for (int i = 0; i < 3; i++) {
+            this.verticesOfTriangles[0][i] = numPoints + i;
+        }
+        for (int i = 0; i < 3; i++) {
+            this.adjTriangles[0][i] = -1;
+        }
+        // super triangle is stored in the last 3 indices of x and y points
+        this.points[numPoints] = new MyPoint2D(-100, -100);
+        this.points[numPoints + 1] = new MyPoint2D(100, -100);
+        this.points[numPoints + 2] = new MyPoint2D(0, 100);
+        numPoints += 3;
     }
 
     /**
@@ -397,49 +379,49 @@ public class DelaunayTriangulation {
      * Returns an array of two arraylists. The first one contains all the points in the triangulation.
      * The second contains all the connections in the triangulation.
      */
-    private ArrayList[] parseTriangulation(int[][] trianglePoints) {
-
-        ArrayList[] output = new ArrayList[2];
+    private Triangulation parseTriangulation(int[][] trianglePoints) {
 
         ArrayList<Connection> connections = new ArrayList<>();
         ArrayList<MyPoint2D> outputPoints = new ArrayList<>();
 
+        // for each triangle, add its points and its edges (in both directions) to the output
         for (int[] triangle : trianglePoints) {
-
-            MyPoint2D point1 = points[triangle[0]];
-            MyPoint2D point2 = points[triangle[1]];
-            MyPoint2D point3 = points[triangle[2]];
-
-            outputPoints.add(point1);
-            outputPoints.add(point2);
-            outputPoints.add(point3);
-
-            connections.add(new Connection(point1,point2));
-            connections.add(new Connection(point2,point1));
-            connections.add(new Connection(point2,point3));
-            connections.add(new Connection(point3,point2));
-            connections.add(new Connection(point3,point1));
-            connections.add(new Connection(point1,point3));
+            outputPoints.addAll(List.of(new MyPoint2D[]{points[triangle[0]], points[triangle[1]], points[triangle[2]]}));
+            connections.addAll(List.of(generateTwoWayConnectionsFromTriangle(new MyPoint2D[]{points[triangle[0]], points[triangle[1]], points[triangle[2]]})));
         }
 
-        ArrayList<Connection> connectionsSeen = new ArrayList<>();
-        ArrayList<MyPoint2D> pointsSeen = new ArrayList<>();
+        return new Triangulation(outputPoints, connections);
+    }
 
-        for (Connection con : connections) {
-            if (!(connectionsSeen.contains(con))) {
-                connectionsSeen.add(con);
-            }
+    /**
+     * Generates six connections representing the edges of a triangle using the vertices of said triangle.
+     * Since connections are 1 directional, each side of the triangle is represented as two overlapping connections facing in opposite directions.
+     *
+     * @param inputPoints An array of three points representing a triangle. The array MUST be of size 3.
+     * @return An array of six connections.
+     */
+    private Connection[] generateTwoWayConnectionsFromTriangle(MyPoint2D[] inputPoints) {
+        Connection[] output = new Connection[6];
+        for (int i = 0; i < 6; i += 2) {
+            System.out.println("i " + i);
+            System.out.println("i+2 " + ((i + 2) / 2.0));
+            Connection[] twoWayEdge = generateTwoWayConnection(
+                    inputPoints[i / 2],
+                    inputPoints[(i + 2 == 6) ? 0 : ((i + 2) / 2)]
+            );
+            output[i] = twoWayEdge[0];
+            output[i + 1] = twoWayEdge[1];
         }
-
-        for (MyPoint2D point : outputPoints) {
-            if (!(pointsSeen.contains(point))) {
-                pointsSeen.add(point);
-            }
-        }
-
-        output[0] = pointsSeen;
-        output[1] = connectionsSeen;
         return output;
+    }
+
+    /**
+     * Generates two overlapping connections facing in opposite directions using two points
+     */
+    private Connection[] generateTwoWayConnection(MyPoint2D origin, MyPoint2D destination) {
+        Connection c1 = new Connection(origin, destination);
+        Connection c2 = new Connection(destination, origin);
+        return new Connection[]{c1, c2};
     }
 
     /**
@@ -464,7 +446,7 @@ public class DelaunayTriangulation {
                 // the point we're looking for and the first point of the side we're looking at
                 double[] sideVector = new double[3];
                 double[] pointVector = new double[3];
-                double crossProduct = 0;
+                double crossProduct;
                 MyPoint2D sidePoint1 = points[currentTriangleVertices[sideNum]];
                 MyPoint2D sidePoint2 = points[currentTriangleVertices[(sideNum + 1 == 3) ? 0 : sideNum + 1]];
                 sideVector[0] = sidePoint2.x - sidePoint1.x;
@@ -519,7 +501,7 @@ public class DelaunayTriangulation {
         }
         deltaMax = Math.max(xMax - xMin, yMax - yMin);
         // xPoints and yPoints are the same length
-        for (int i = 0; i < points.length-3; i++) {
+        for (int i = 0; i < points.length - 3; i++) {
             MyPoint2D point = points[i];
             point.x = (point.x - xMin) / deltaMax;
             point.y = (point.y - yMin) / deltaMax;

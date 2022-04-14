@@ -5,5 +5,10 @@ Bain.java
 src/*.class
 CS211Final.iml
 /exampleOfPointOrder.png
-/testo.zip
-/pics.zip
+testo.zip
+pics.zip
+img/test_viewport_image_2.png
+img/battle_logic_diagram.png
+next steps.txt
+src/META-INF
+src/META-INF/*

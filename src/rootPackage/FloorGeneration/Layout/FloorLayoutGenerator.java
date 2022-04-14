@@ -50,12 +50,14 @@ public class FloorLayoutGenerator {
 
         }
         DelaunayTriangulation del = new DelaunayTriangulation(inputs);
-        ArrayList[] triangulation = del.triangulate(); // triangulate the inputs
+        Triangulation triangulation = del.triangulate(); // triangulate the inputs
+        ArrayList<MyPoint2D> pointsOfTriangulation = triangulation.getPoints();
+        ArrayList<Connection> connectionsOfTriangulation = triangulation.getConnections();
         StringBuilder sb = new StringBuilder();
         sb.append("Input points (numbered)\n");
-        for (int i = 0; i < triangulation[0].size(); i++) {
+        for (int i = 0; i < pointsOfTriangulation.size(); i++) {
             sb.append(("p_{%d}=").formatted(i));
-            sb.append(triangulation[0].get(i).toString());
+            sb.append(pointsOfTriangulation.get(i).toString());
             sb.append("\n");
         }
         sb.append("\nDelaunay Triangulation\n");
@@ -118,6 +120,27 @@ public class FloorLayoutGenerator {
 
             // this loop attaches connected rooms to the current room from the correct door direction
             for (int i = 0; i < angles.length; i++) {
+                //TODO: This is catastrophically bad, don't do this. Someone needs to fix this!
+                // this code "works", but I think a light breeze would easily break it.
+                // the point of this is to establish which side of the room a hallway will go out from, and to which side it leads in the other room
+                // remake:
+                //      determine angles of every connection branching from the original room
+                //      convert all of them to directions
+                //      if all of them work out to begin with (no duplicate directions), no further processing need be done
+                //      if there are duplicates, the fun begins
+                //      get a list of every door the room needs
+                //      get a list of every direction the room has already used and add them to a blacklist
+                //      for each door, generate a priority of directions it can be on.
+                //          first, change the angle of the hallway connection into a polar point 1 unit away from the room's centerpoint
+                //          then, generate connections between this new point and each open point in the room (ie. if the north is open, that point would be (room.x, room.y + offset))
+                //          sort these connections (lowest weight first).
+                //          convert the connections back into directions, and then we have a priority list
+                //      now, for each door, select the first available direction in its priority list that is not present in the blacklist
+                //      take that direction, add it to the blacklist.
+                //      for the room the door connects to on the other side, do a similar priority direction check for that room's open sides
+                //      create a door from the selected direction to the other room's highest priority direction
+                //      repeat for every door in the queue
+                //      repeat for every room
                 double angle = angles[i];
                 ProtoRoom connectedRoom = connectedRooms[i];
                 Direction dir = Direction.degreesToDirection(angle);
@@ -130,11 +153,6 @@ public class FloorLayoutGenerator {
                     // this catch block executes if there is already a room connected to the door this room wants to use
                     // if this is the case, there is likely another direction open that can handle the connection
                     // this block uses the other direction, should that be the case
-                    if (room.getCoordinates().equals(new MyPoint2D(47,41))) {
-                        System.out.println("we're on that one point");
-                        System.out.println(dir);
-                        System.out.println(angle);
-                    }
                     boolean b = dir.equals(Direction.NORTH) || dir.equals(Direction.SOUTH);
                     boolean c = dir.equals(Direction.WEST) || dir.equals(Direction.EAST);
                     if (angle > 0) {

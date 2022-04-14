@@ -40,7 +40,7 @@ public class MSTMaker {
 
         }
         DelaunayTriangulation del = new DelaunayTriangulation(inputs);
-        ArrayList[] triangulation = del.triangulate(); // triangulate the inputs
+        Triangulation triangulation = del.triangulate(); // triangulate the inputs
         MSTMaker mst = new MSTMaker(triangulation);
         MinimumSpanningTree minimumSpanningTree = mst.generateMST();
 
@@ -54,19 +54,22 @@ public class MSTMaker {
      * Constructor. Sets up this MSTMaker with a given triangulation.
      * @param delaunayTriangulation The output of a DelaunayTriangulation's .triangulate() method.
      */
-    public MSTMaker(ArrayList[] delaunayTriangulation) {
+    public MSTMaker(Triangulation delaunayTriangulation) {
+        ArrayList<MyPoint2D> pointsOfTriangulation = delaunayTriangulation.getPoints();
+        ArrayList<Connection> connectionssOfTriangulation = delaunayTriangulation.getConnections();
+
         // set up num nodes and the empty adjacency matrix
-        this.numNodes = delaunayTriangulation[0].size();
+        this.numNodes = pointsOfTriangulation.size();
         MyPoint2D[] nodes = new MyPoint2D[numNodes];
         for (int i = 0; i < numNodes; i++) {
-            nodes[i] = (MyPoint2D) delaunayTriangulation[0].get(i);
+            nodes[i] = (MyPoint2D) pointsOfTriangulation.get(i);
         }
         this.graph = new AdjacencyMatrix(nodes);
 
         // propagate the adjacency matrix
-        Connection[] connections = new Connection[delaunayTriangulation[1].size()];
+        Connection[] connections = new Connection[connectionssOfTriangulation.size()];
         for (int i = 0; i < connections.length; i++) {
-            connections[i] = (Connection) delaunayTriangulation[1].get(i);
+            connections[i] = (Connection) connectionssOfTriangulation.get(i);
         }
         for (Connection connection : connections) {
             graph.addConnection(connection.getOrigin(), connection.getDestination(), connection.getWeight());
