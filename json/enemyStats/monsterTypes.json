@@ -1,0 +1,12 @@
+{
+  "1" : {
+    "beast": [
+      "wolf.json",
+      "bear.json",
+      "placeholderBeast.json"
+    ],
+    "humanoid": [
+      "minotaur.json"
+    ]
+  }
+}

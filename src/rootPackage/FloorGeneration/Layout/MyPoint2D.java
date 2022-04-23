@@ -29,8 +29,8 @@ public class MyPoint2D extends Point2D.Double implements Comparable<MyPoint2D>{
     @Override
     public int compareTo(MyPoint2D o) {
         // lower y first, then lower x
-        if (FloatEquivalence.floatEquivalence(this.y, o.y)) {
-            if (FloatEquivalence.floatEquivalence(this.x, o.x)) {
+        if (FloatEquivalence.equals(this.y, o.y)) {
+            if (FloatEquivalence.equals(this.x, o.x)) {
                 return 0;
             }
             else if (o.x < this.x) {
