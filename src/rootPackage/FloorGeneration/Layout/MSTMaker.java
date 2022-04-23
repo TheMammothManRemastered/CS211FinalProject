@@ -174,7 +174,7 @@ class MSTEdge implements Comparable<MSTEdge>{
 
     @Override
     public int compareTo(MSTEdge o) {
-        if (FloatEquivalence.floatEquivalence(o.weight,this.weight)) {
+        if (FloatEquivalence.equals(o.weight,this.weight)) {
             return 0;
         }
         else if (o.weight>this.weight) {

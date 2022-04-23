@@ -1,0 +1,20 @@
+{
+  "name": "Bear",
+  "description": "A large brown bear, very much ready to maul you with its powerful claws.",
+  "tags": [
+    "beast"
+  ],
+  "health": 140,
+  "baseAttack": 30,
+  "baseAbsorption": 0.2,
+  "intelligence": 1,
+  "priority": 2,
+  "possibleMoves": [
+    "attack",
+    "raiseAttack"
+  ],
+  "moveDescriptions": [
+    "The bear snarls and swipes at you with its mighty paws!",
+    "The bear roars and rakes its claws across the flagstones, sharpening them in preparation to tear you apart!"
+  ]
+}

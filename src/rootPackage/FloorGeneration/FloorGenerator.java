@@ -23,10 +23,6 @@ public class FloorGenerator {
         layout = null;
     }
 
-    public FloorGenerator(FloorLayout layout) {
-        this.layout = layout;
-    }
-
     //TODO: make generateFloor take a parameter defining the things the floor has to have (ie. at least 2 dead ends, at least x features, all that. basically the floor's theme)
     /**
      * Generates the floor. If there is no layout set already (which will usually be the case) one will be generated here.
@@ -35,11 +31,10 @@ public class FloorGenerator {
 
         // generate the layout
         if (this.layout == null) {
-            // seeded demonstration of level gen (10 points between (1,1) and (10,10), seed 44)
-            Random rng = new Random(44);
+            //TODO: this is currently very seeded and hardcoded
             Point2D.Double[] inputs = new Point2D.Double[10];
             for (int i = 0; i < 10; i++) {
-                Point2D.Double point = new Point2D.Double(rng.nextInt(10) + 1, rng.nextInt(10) + 1);
+                Point2D.Double point = new Point2D.Double(FloorGenerationRNG.rng.nextInt(10) + 1, FloorGenerationRNG.rng.nextInt(10) + 1);
                 boolean exist = false;
                 for (Point2D.Double pointInArray : inputs) {
                     if (point.equals(pointInArray)) {

@@ -4,6 +4,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.json.simple.parser.ParseException;
+import rootPackage.FloorGeneration.FloorGenerationRNG;
 import rootPackage.FloorGeneration.Room;
 import rootPackage.Player;
 
@@ -51,8 +52,7 @@ public class SimpleFeature extends Feature {
 
             // get one of the entries at random
             int numSimpleFeatures = simpleFeaturesJson.size();
-            Random rng = new Random(44); //TODO: standardize all RNG
-            JSONObject selectedFeature = (JSONObject) simpleFeaturesJson.get(rng.nextInt(numSimpleFeatures));
+            JSONObject selectedFeature = (JSONObject) simpleFeaturesJson.get(FloorGenerationRNG.rng.nextInt(numSimpleFeatures));
 
             JSONArray namesjson = (JSONArray) selectedFeature.get("names");
             String[] names = new String[namesjson.size()];
@@ -64,9 +64,7 @@ public class SimpleFeature extends Feature {
             String description = (String) selectedFeature.get("description");
             String onInteract = (String) selectedFeature.get("onInteract");
 
-            SimpleFeature sf = new SimpleFeature(names, locationInRoom, description, onInteract);
-
-            return sf;
+            return new SimpleFeature(names, locationInRoom, description, onInteract);
 
         } catch (FileNotFoundException exception) {
             System.out.println("fatal - simpleFeatures.json could not be found!");
@@ -92,8 +90,7 @@ public class SimpleFeature extends Feature {
 
             // get one of the entries at random
             int numSimpleFeatures = simpleFeaturesJson.size();
-            Random rng = new Random(); //TODO: standardize all RNG
-            JSONObject selectedFeature = (JSONObject) simpleFeaturesJson.get(rng.nextInt(numSimpleFeatures));
+            JSONObject selectedFeature = (JSONObject) simpleFeaturesJson.get(FloorGenerationRNG.rng.nextInt(numSimpleFeatures));
 
             String[] names = (String[]) selectedFeature.get("names");
             String description = (String) selectedFeature.get("description");

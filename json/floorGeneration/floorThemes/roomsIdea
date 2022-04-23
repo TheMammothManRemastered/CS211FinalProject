@@ -1,0 +1,38 @@
+this is just ideas for special rooms and features
+
+needed every floor:
+    boss/exit room
+    miniboss/key room
+    treasure room
+
+everything else:
+    statue of a god or mythological feature:
+        locked room
+        big statue of a god inside with a plaque at the base
+        the plaque reads off some challenge
+            leave no stone unturned (a rock spawns somewhere in the floor and you have to examine it to pass the trial)
+            bathe in the blood of the hated foe (kill every humanoid on the floor, don't let any run away)
+            brave the voyage of Odysseus (a model ship in a bottle spawns somewhere on the floor, a relief of an island with a city is on the floor of another. bring the ship to the city)
+        do the challenge, you get some reward related to the task or god
+            blessing of athena (minor buff to all stats?)
+            crusher of skulls (stupidly large mace, high base damage, bonus damage against humanoids, lower speed bc it's heavy)
+            blessing of poseidon (small evasion chance, extra damage on odd numbered turns)
+    penance room:
+        room with an altar and a knife
+        if you try to pick up the knife, a voice intones that a sacrifice must be paid and you lose some health
+        the knife vanishes and you gain a random stat buff
+    daedalus' workshop:
+        a workshop filled with in-progress things
+        contains loot
+        if you're in the labyrinth, it contains a blueprint of the entire floor
+    futuristic room:
+        always locked
+        chronos' influence is strong in this room, stuff from the future and the past is here
+        there's a coffee maker, some japanese yen, a half-assembled ikea cabinet
+        cave paintings on the wall, a dead dinosaur
+        chance for some sort of future equipment on a table
+            an energy sword of some sort (negates armor, high damage)
+            a laser gun (chance for a critical hit, always goes first)
+            powered exosuit (lots of health up, gives you an energy shield ability (only so many times per battle, gives 95% damage absorption, lowers speed drastically, stuns the enemy if they use a melee attack on you while it's active, only lasts for a couple turns or until an enemy hits you)
+
+

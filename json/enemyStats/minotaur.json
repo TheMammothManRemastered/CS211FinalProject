@@ -3,7 +3,8 @@
   "description": "The Minotaur, a brutish, humanoid monster with the head of a bull. Clothed in nothing but a loincloth and the blood of many a slain foe, The Minotaur sees you as only one thing: an easy target!",
   "tags": [
     "beast",
-    "humanoid"
+    "humanoid",
+    "boss"
   ],
   "health": 250,
   "baseAttack": 55,

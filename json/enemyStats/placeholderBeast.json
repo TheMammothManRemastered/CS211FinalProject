@@ -1,0 +1,20 @@
+{
+  "name": "Placeholder Beast",
+  "description": "The legendary Placeholder Beast, known to have razed villages and whatever idk",
+  "tags": [
+    "beast"
+  ],
+  "health": 110,
+  "baseAttack": 30,
+  "baseAbsorption": 0.0,
+  "intelligence": 1,
+  "priority": 2,
+  "possibleMoves": [
+    "attack",
+    "pass"
+  ],
+  "moveDescriptions": [
+    "The placeholder beast does something real bad, and now you take damage",
+    "The placeholder beast browses the internet or whatever"
+  ]
+}

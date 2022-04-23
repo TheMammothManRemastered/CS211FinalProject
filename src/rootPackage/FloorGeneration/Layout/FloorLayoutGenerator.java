@@ -27,62 +27,6 @@ public class FloorLayoutGenerator {
     private int numDeadEnds;
 
     /**
-     * This class' main method exists for demonstrative purposes only, and should not be called under normal operation.
-     * @param args
-     */
-    public static void main(String[] args) {
-        // seeded demonstration of level gen (10 points between (1,1) and (10,10), seed 44)
-        Random rng = new Random(44);
-        Point2D.Double[] inputs = new Point2D.Double[10];
-        for (int i = 0; i < 10; i++) {
-            Point2D.Double point = new Point2D.Double(rng.nextInt(10) + 1, rng.nextInt(10) + 1);
-            boolean exist = false;
-            for (Point2D.Double pointInArray : inputs) {
-                if (point.equals(pointInArray)) {
-                    exist = true;
-                }
-            }
-            if (!exist) {
-                inputs[i] = point;
-                continue;
-            }
-            i--;
-
-        }
-        DelaunayTriangulation del = new DelaunayTriangulation(inputs);
-        Triangulation triangulation = del.triangulate(); // triangulate the inputs
-        ArrayList<MyPoint2D> pointsOfTriangulation = triangulation.getPoints();
-        ArrayList<Connection> connectionsOfTriangulation = triangulation.getConnections();
-        StringBuilder sb = new StringBuilder();
-        sb.append("Input points (numbered)\n");
-        for (int i = 0; i < pointsOfTriangulation.size(); i++) {
-            sb.append(("p_{%d}=").formatted(i));
-            sb.append(pointsOfTriangulation.get(i).toString());
-            sb.append("\n");
-        }
-        sb.append("\nDelaunay Triangulation\n");
-        sb.append(delaunayStagesSb.toString());
-        sb.append("\nMinimum Spanning Tree generation\n");
-        MSTMaker mst = new MSTMaker(triangulation);
-        MinimumSpanningTree minimumSpanningTree = mst.generateMST();
-        sb.append(MSTSb);
-
-        System.out.println(sb);
-
-        System.out.println("\n\n\n");
-
-        minimumSpanningTree.printMST();
-
-        System.out.println("\n\n\n\n");
-
-        FloorLayoutGenerator flg = new FloorLayoutGenerator(minimumSpanningTree);
-
-        FloorLayout layout = flg.generateFloor();
-        layout.printFloorDesmos();
-
-    }
-
-    /**
      * Constructor.
      */
     public FloorLayoutGenerator(MinimumSpanningTree mst) {

@@ -1,6 +1,5 @@
 package rootPackage.FloorGeneration.Layout;
 
-import rootPackage.Direction;
 import rootPackage.FloatEquivalence;
 import rootPackage.Main;
 
@@ -60,7 +59,7 @@ public class Connection implements Comparable<Connection> {
     }
 
     public void printTriangleSides() {
-        if (FloatEquivalence.floatEquivalence(this.getRelativeDegrees(), 0) || FloatEquivalence.floatEquivalence(this.getRelativeDegrees(), 180) || FloatEquivalence.floatEquivalence(Math.abs(this.getRelativeDegrees()), 90)) {
+        if (FloatEquivalence.equals(this.getRelativeDegrees(), 0) || FloatEquivalence.equals(this.getRelativeDegrees(), 180) || FloatEquivalence.equals(Math.abs(this.getRelativeDegrees()), 90)) {
             System.out.println(this.toString());
             return;
         }
@@ -79,7 +78,7 @@ public class Connection implements Comparable<Connection> {
 
     public Line2D[] generateTriangleLines() {
         final int PIXELS_PER_CARTESIAN_POINT = Main.PIXELS_PER_CARTESIAN_POINT;
-        if (FloatEquivalence.floatEquivalence(this.getRelativeDegrees(), 0) || FloatEquivalence.floatEquivalence(this.getRelativeDegrees(), 180) || FloatEquivalence.floatEquivalence(Math.abs(this.getRelativeDegrees()), 90)) {
+        if (FloatEquivalence.equals(this.getRelativeDegrees(), 0) || FloatEquivalence.equals(this.getRelativeDegrees(), 180) || FloatEquivalence.equals(Math.abs(this.getRelativeDegrees()), 90)) {
             Line2D.Double line2D = new Line2D.Double(origin.x * PIXELS_PER_CARTESIAN_POINT, origin.y * PIXELS_PER_CARTESIAN_POINT, destination.x * PIXELS_PER_CARTESIAN_POINT, destination.y * PIXELS_PER_CARTESIAN_POINT);
             return new Line2D[]{line2D};
         }
@@ -103,7 +102,7 @@ public class Connection implements Comparable<Connection> {
             return false;
         }
         Connection other = (Connection) o;
-        if ((this.origin.equals(other.origin)) && (this.destination.equals(other.destination)) && FloatEquivalence.floatEquivalence(this.weight, other.weight)) {
+        if ((this.origin.equals(other.origin)) && (this.destination.equals(other.destination)) && FloatEquivalence.equals(this.weight, other.weight)) {
             return true;
         }
         return false;
