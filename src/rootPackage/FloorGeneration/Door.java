@@ -1,24 +1,23 @@
-package rootPackage.FloorGeneration.Features;
+package rootPackage.FloorGeneration;
 
 import rootPackage.Direction;
 import rootPackage.FloorGeneration.Layout.MyPoint2D;
-import rootPackage.FloorGeneration.Room;
-import rootPackage.Player;
 
 /**
- * Doors are one of, if not the, most important features. They are what enables players to move from room to room.
+ * A door is part of a room. These are responsible for connecting rooms together.
  *
  * @author William Owens
  * @version 3.0
  */
-public class Door extends Feature{
-
-    //TODO: refactor to implement Unlockable
+public class Door {
 
     // names for a door. should anyone else be reading this and know some other words for door, hit me up lol
     private static final String[] names = new String[] {"door","doorway","portal","gate","entryway","exit"};
+    private String locationInRoom;
+    private Room associatedRoom;
+    private boolean locked;
 
-    private Door otherSide;
+    private rootPackage.FloorGeneration.Features.Door otherSide;
 
     /**
      * Constructor.
@@ -26,7 +25,9 @@ public class Door extends Feature{
      */
     //TODO: change this so capitalization doesn't matter
     public Door(String locationInRoom, Room associatedRoom) {
-        super(names, locationInRoom, associatedRoom);
+        this.locationInRoom = locationInRoom;
+        this.associatedRoom = associatedRoom;
+        locked = false;
     }
 
     /**
@@ -34,7 +35,9 @@ public class Door extends Feature{
      * @param locationInRoom A string representing the location of the door in the room. should be in the form "wall{direction}" (with the {direction} being replaced by a direction in all caps)
      */
     public Door(String locationInRoom) {
-        super(names, locationInRoom);
+        this.locationInRoom = locationInRoom;
+        this.associatedRoom = null;
+        locked = false;
     }
 
     public MyPoint2D getCoordinates() {
@@ -59,12 +62,28 @@ public class Door extends Feature{
         return point2D;
     }
 
-    public Door getOtherSide() {
+    public rootPackage.FloorGeneration.Features.Door getOtherSide() {
         return otherSide;
     }
 
-    public void setOtherSide(Door otherSide) {
+    public void setOtherSide(rootPackage.FloorGeneration.Features.Door otherSide) {
         this.otherSide = otherSide;
+    }
+
+    public void setLocationInRoom(String locationInRoom) {
+        this.locationInRoom = locationInRoom;
+    }
+
+    public void setAssociatedRoom(Room associatedRoom) {
+        this.associatedRoom = associatedRoom;
+    }
+
+    public String getLocationInRoom() {
+        return locationInRoom;
+    }
+
+    public Room getAssociatedRoom() {
+        return associatedRoom;
     }
 
     /**
@@ -89,10 +108,6 @@ public class Door extends Feature{
         return Direction.CENTER;
     }
 
-    public boolean tryUnlock(Feature keyBeingUsed) {
-        return false;
-    }
-
     public boolean isLocked() {
         return locked;
     }
@@ -103,19 +118,14 @@ public class Door extends Feature{
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Door) {
-            Door other = (Door)obj;
+        if (obj instanceof rootPackage.FloorGeneration.Features.Door) {
+            rootPackage.FloorGeneration.Features.Door other = (rootPackage.FloorGeneration.Features.Door)obj;
             return other.getAssociatedRoom().equals(this.getAssociatedRoom()) && other.getOtherSide().equals(this.getOtherSide());
         }
         return false;
     }
 
-    //TODO: temp until door refactor is done
-    boolean locked = false;
-    public Room getAssociatedRoom() {
-        return null;
-    }
-    public String getLocationInRoom() {
-        return null;
-    }
+
+
 }
+

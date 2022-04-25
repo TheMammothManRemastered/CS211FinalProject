@@ -1,12 +1,11 @@
 package rootPackage.FloorGeneration;
 
 import rootPackage.Direction;
-import rootPackage.FloorGeneration.Features.Door;
+import rootPackage.FloorGeneration.Door;
 import rootPackage.FloorGeneration.Features.Feature;
 import rootPackage.FloorGeneration.Layout.MyPoint2D;
 import rootPackage.FloorGeneration.Layout.ProtoRoom;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -16,6 +15,11 @@ import java.util.ArrayList;
  * @version 2.0
  */
 public class Room {
+
+    //TODO: refactor this so that features are handled using the tree-like structure
+    // instead of having a list of features here, have a reference to a feature representing the room
+    // for adding doors, have another list to contain them here; doors are special
+    // if features get added to the room here (which should only happen with doors), get the associated feature representing the room and add them to that
 
     private MyPoint2D coordinates;
     private ArrayList<Feature> features;
@@ -62,7 +66,7 @@ public class Room {
     public boolean hasDoorInDirection(Direction dir) {
         ArrayList<Door> doors = new ArrayList<>();
         for (Feature feature : features) {
-            if (feature.nameContains("door")) {
+            if (feature.namesContain("door")) {
                 doors.add((Door)feature);
             }
         }
@@ -77,7 +81,7 @@ public class Room {
     public Door getDoorInDirection(Direction dir) throws Exception {
         ArrayList<Door> doors = new ArrayList<>();
         for (Feature feature : features) {
-            if (feature.nameContains("door")) {
+            if (feature.namesContain("door")) {
                 doors.add((Door)feature);
             }
         }

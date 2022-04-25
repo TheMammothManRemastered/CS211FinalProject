@@ -7,29 +7,24 @@ public class EnemyFeature extends Feature implements Fightable{
     private final boolean aggressive;
     private final String statJSON;
 
-    public EnemyFeature(String[] names, String locationInRoom, boolean aggressive, String statJSON) {
-        super(names, locationInRoom);
+    public EnemyFeature(String[] names, String primaryName, String description, FeatureContainer container, boolean aggressive, String statJSON) {
+        super(names, primaryName, description, container);
         this.aggressive = aggressive;
         this.statJSON = statJSON;
     }
 
     @Override
-    public void onExamine(Player player) {
-
-    }
-
-    @Override
-    public void onInteract(Player player) {
-
+    public String toString() {
+        return "enemy name is %s".formatted(statJSON);
     }
 
     @Override
     public String getStatJSON() {
-        return statJSON;
+        return null;
     }
 
     @Override
     public boolean getAggressive() {
-        return aggressive;
+        return false;
     }
 }

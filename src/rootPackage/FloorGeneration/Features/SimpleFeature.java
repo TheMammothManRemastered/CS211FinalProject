@@ -118,7 +118,6 @@ public class SimpleFeature extends Feature {
         System.out.println(getDescription());
     }
 
-    @Override
     public void onInteract(Player player) {
         System.out.println(interactMessage);
     }

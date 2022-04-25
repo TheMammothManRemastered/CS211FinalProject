@@ -25,56 +25,61 @@ public abstract class Feature {
     // standardize verbs/actions, have subclasses for each feature ready to handle any possible action
     // features should implement some sort of Drawable interface if they can be drawn to the screen.
 
-    private String[] names;
-    private String locationInRoom;
-    private Room associatedRoom;
-    private String description;
+    private final String[] names;
+    private final String primaryName;
+    private final String description;
+    private FeatureContainer container;
 
-    public Feature(String[] names, String locationInRoom) {
+
+    //TODO: these are all debug until I finish refactoring doors
+    public Feature(String[] ar, String locinro, Room rom) {
+        names = null;
+        primaryName = null;
+        description = null;
+    }
+
+    public Feature(String[] locinro, String l) {
+        names = null;
+        primaryName = null;
+        description = null;
+    }
+
+    public boolean namesContain(String por) {
+        return false;
+    }
+
+    public void onExamine(Player player) {
+
+    }
+
+    public void setDescription(String in) {
+
+    }
+
+    public Feature(String[] names, String primaryName, String description, FeatureContainer container) {
         this.names = names;
-        this.locationInRoom = locationInRoom;
-    }
-
-    public Feature(String[] names, String locationInRoom, Room associatedRoom) {
-        this.names = names;
-        this.locationInRoom = locationInRoom;
-        this.associatedRoom = associatedRoom;
-    }
-
-    public Room getAssociatedRoom() {
-        return associatedRoom;
-    }
-
-    public void setAssociatedRoom(Room associatedRoom) {
-        this.associatedRoom = associatedRoom;
+        this.primaryName = primaryName;
+        this.description = description;
+        this.container = container;
     }
 
     public String[] getNames() {
         return names;
     }
 
-    public String getLocationInRoom() {
-        return locationInRoom;
+    public String getPrimaryName() {
+        return primaryName;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public FeatureContainer getContainer() {
+        return container;
     }
 
-    public boolean nameContains(String input) {
-        for (String st : names) {
-            if (input.equals(st)) return true;
-        }
-        return false;
+    public void setContainer(FeatureContainer container) {
+        this.container = container;
     }
-
-    public abstract void onExamine(Player player);
-
-    public abstract void onInteract(Player player);
-
-    //TODO: once graphics is implemented, add drawing relevant stuff to this
 }
