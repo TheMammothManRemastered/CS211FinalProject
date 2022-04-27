@@ -1,26 +1,28 @@
 package rootPackage.FloorGeneration;
 
+import rootPackage.FloorGeneration.Layout.RoomNode;
+
 import java.util.ArrayList;
 
 /**
  * Represents a floor. Currently only holds rooms.
  *
  * @author William Owens
- * @version 1.0
+ * @version 3.0
  */
 public class Floor {
 
-    private ArrayList<Room> rooms;
+    private ArrayList<RoomNode> rooms;
 
-    public Floor(ArrayList<Room> rooms) {
+    public Floor(ArrayList<RoomNode> rooms) {
         this.rooms = rooms;
     }
 
-    public ArrayList<Room> getRooms() {
+    public ArrayList<RoomNode> getRooms() {
         return rooms;
     }
 
-    public void setRooms(ArrayList<Room> rooms) {
+    public void setRooms(ArrayList<RoomNode> rooms) {
         this.rooms = rooms;
     }
 }

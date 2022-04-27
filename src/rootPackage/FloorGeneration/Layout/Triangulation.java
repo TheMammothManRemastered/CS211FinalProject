@@ -34,23 +34,8 @@ public class Triangulation {
     }
 
     private void removeDuplicates() {
-        for (MyPoint2D point : points) {
-            System.out.println(point);
-        }
-        System.out.println();
-        for (Connection point : connections) {
-            System.out.println(point);
-        }
-        System.out.println("\n\n\n\n");
         points = removeDuplicatesFromList(points);
         connections = removeDuplicatesFromList(connections);
-        for (MyPoint2D point : points) {
-            System.out.println(point);
-        }
-        System.out.println();
-        for (Connection point : connections) {
-            System.out.println(point);
-        }
     }
 
     private <T> ArrayList<T> removeDuplicatesFromList(ArrayList<T> input) {
@@ -61,5 +46,11 @@ public class Triangulation {
             }
         }
         return seen;
+    }
+
+    public void printTriangulation() {
+        for (Connection c : connections) {
+            System.out.println(c);
+        }
     }
 }

@@ -49,12 +49,29 @@ public class AdjacencyMatrix {
     }
 
     /**
+     * Returns an array of connections as a row of the adjacency matrix
+     * @param index
+     * @return
+     */
+    public double[] getNodeConnectionIndexes(int index) {
+        return matrix[index];
+    }
+
+    /**
      * Returns an array of connections
      * @param index
      * @return
      */
-    public double[] getNodeConnections(int index) {
-        return matrix[index];
+    public Connection[] getNodeConnections(int index) {
+        Connection[] output = new Connection[getCountOfNodeConnections(index)];
+        int outputIndex = 0;
+        for (int i = 0; i < this.getSize(); i++) {
+            if (matrix[index][i] > 0) {
+                output[outputIndex] = new Connection(getNode(index), getNode(i));
+                outputIndex++;
+            }
+        }
+        return output;
     }
 
     public int getCountOfNodeConnections(int index) {
@@ -96,6 +113,13 @@ public class AdjacencyMatrix {
         matrix[sourceIndex][destinationIndex] = weight;
     }
 
+    public void removeConnectionBothWays(Connection connection) {
+        List<MyPoint2D> nodesList = Arrays.asList(nodes);
+        int sourceIndex = nodesList.indexOf(connection.getOrigin());
+        int destinationIndex = nodesList.indexOf(connection.getDestination());
+        matrix[sourceIndex][destinationIndex] = connection.getWeight();
+        matrix[destinationIndex][sourceIndex] = connection.getWeight();
+    }
     /**
      * Gets the weight of a connection.
      * @param source Start node (must be in the matrix or an IndexOutOfBoundsException will be raised).

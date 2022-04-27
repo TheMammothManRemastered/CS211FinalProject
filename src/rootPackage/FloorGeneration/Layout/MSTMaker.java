@@ -44,10 +44,6 @@ public class MSTMaker {
         MSTMaker mst = new MSTMaker(triangulation);
         MinimumSpanningTree minimumSpanningTree = mst.generateMST();
 
-        MyPoint2D point1 = new MyPoint2D(0,0);
-        MyPoint2D point2 = new MyPoint2D(-0.07,-0.77);
-        Connection con = new Connection(point1,point2);
-        System.out.println(con.getRelativeDegrees());
     }
 
     /**
@@ -99,7 +95,7 @@ public class MSTMaker {
         do {
             // visit the current node, add its edges to the PQ (if they aren't already there)
             visited[currentNode] = true;
-            double[] connections = graph.getNodeConnections(currentNode);
+            double[] connections = graph.getNodeConnectionIndexes(currentNode);
             for (int i = 0; i < connections.length; i++) {
                 // if i is visited, skip this one
                 // if the connection does not point to anything, skip this one

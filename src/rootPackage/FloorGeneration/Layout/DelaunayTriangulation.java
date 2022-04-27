@@ -403,8 +403,6 @@ public class DelaunayTriangulation {
     private Connection[] generateTwoWayConnectionsFromTriangle(MyPoint2D[] inputPoints) {
         Connection[] output = new Connection[6];
         for (int i = 0; i < 6; i += 2) {
-            System.out.println("i " + i);
-            System.out.println("i+2 " + ((i + 2) / 2.0));
             Connection[] twoWayEdge = generateTwoWayConnection(
                     inputPoints[i / 2],
                     inputPoints[(i + 2 == 6) ? 0 : ((i + 2) / 2)]

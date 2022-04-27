@@ -24,6 +24,19 @@ public class Connection implements Comparable<Connection> {
         this.weight = Point2D.distance(origin.x, origin.y, destination.x, destination.y);
     }
 
+    public boolean contains(MyPoint2D p) {
+        return (p.equals(origin) || p.equals(destination));
+    }
+
+    public boolean containsAny(MyPoint2D[] ps) {
+        for (MyPoint2D p : ps) {
+            if (this.contains(p)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public MyPoint2D getOrigin() {
         return origin;
     }
@@ -95,10 +108,13 @@ public class Connection implements Comparable<Connection> {
         return new Line2D[]{lineVert, lineHor};
     }
 
+    public Connection opposite() {
+        return new Connection(destination, origin);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Connection)) {
-            System.out.println(this.toString() +"  not equal to  "+o.toString());
             return false;
         }
         Connection other = (Connection) o;

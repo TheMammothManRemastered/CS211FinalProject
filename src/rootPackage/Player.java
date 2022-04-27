@@ -1,6 +1,6 @@
 package rootPackage;
 
-import rootPackage.FloorGeneration.Room;
+import rootPackage.FloorGeneration.Layout.RoomNode;
 
 /**
  * Represents the player. Currently only holds the player's location.
@@ -10,17 +10,17 @@ import rootPackage.FloorGeneration.Room;
  */
 public class Player {
 
-    private Room currentRoom;
+    private RoomNode currentRoom;
 
-    public Player(Room currentRoom) {
+    public Player(RoomNode currentRoom) {
         this.currentRoom = currentRoom;
     }
 
-    public Room getCurrentRoom() {
+    public RoomNode getCurrentRoom() {
         return currentRoom;
     }
 
-    public void setCurrentRoom(Room currentRoom) {
+    public void setCurrentRoom(RoomNode currentRoom) {
         this.currentRoom = currentRoom;
     }
 }

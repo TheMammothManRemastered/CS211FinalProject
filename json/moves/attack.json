@@ -1,0 +1,11 @@
+{
+    "targetSelf" : false,
+    "intents" : [
+        {
+            "name" : "DealDamage",
+            "valueStat" : "attackStat",
+            "modifier" : "none"
+        }
+    ],
+    "uses" : 101
+}
