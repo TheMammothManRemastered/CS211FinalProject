@@ -28,6 +28,7 @@ public class ArmorFeature extends Feature {
                 if (armorFeatures.size() != 0) {
                     // the player has no armor equipped, proceed normally, otherwise it has to be doffed
                     for (Feature armor : armorFeatures) {
+                        Main.mainWindow.getConsoleWindow().addEntryToHistory("You doff your %s and place it carefully on the ground.".formatted(armor.getPrimaryName()));
                         ((ArmorFeature) armor).drop(playerAction);
                     }
                 }
