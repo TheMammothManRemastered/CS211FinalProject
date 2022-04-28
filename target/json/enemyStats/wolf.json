@@ -1,0 +1,20 @@
+{
+  "name": "Wolf",
+  "description": "A mangy wolf, slathering at the mouth with hunger in its eyes.",
+  "tags": [
+    "beast"
+  ],
+  "health": 100,
+  "baseAttack": 20,
+  "baseAbsorption": 0.0,
+  "intelligence": 1,
+  "priority": 3,
+  "possibleMoves": [
+    "attack",
+    "pass"
+  ],
+  "moveDescriptions": [
+    "The wolf barks and charges towards you, its fangs ready to taste of your flesh!",
+    "The wolf circles you, waiting for the ideal moment to strike..."
+  ]
+}
