@@ -5,10 +5,10 @@ public class PlayerActionAlias {
     public static PlayerAction aliasToAction(String alias) {
         PlayerAction action = null;
         switch (alias) {
-            case "take", "grab", "steal", "pick", "obtain" -> {
+            case "take", "grab", "steal", "pick", "obtain", "don" -> {
                 action = PlayerAction.PICKUP;
             }
-            case "leave", "drop", "discard", "remove", "put" -> {
+            case "leave", "drop", "discard", "remove", "put", "doff" -> {
                 action = PlayerAction.DROP;
             }
             case "look", "examine", "view", "check" -> {
@@ -20,7 +20,7 @@ public class PlayerActionAlias {
             case "interact", "use", "activate", "press", "open" -> {
                 action = PlayerAction.USE;
             }
-            case "attack", "engage", "kill", "charge" -> {
+            case "attack", "engage", "kill", "charge", "destroy", "decimate", "terminate", "eliminate", "stab", "shoot" -> {
                 action = PlayerAction.ATTACK;
             }
         }

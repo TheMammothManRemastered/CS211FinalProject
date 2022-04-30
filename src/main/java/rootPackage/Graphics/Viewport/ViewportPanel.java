@@ -3,7 +3,6 @@ package rootPackage.Graphics.Viewport;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -22,7 +21,6 @@ public class ViewportPanel extends JPanel {
     private BufferedImage combat;
 
     private ImageIcon icon;
-    private JLabel jLabel;
     private JScrollPane scrollPane;
 
     public ViewportPanel() {
@@ -43,7 +41,7 @@ public class ViewportPanel extends JPanel {
 
         // to make an image scrollable, make an ImageIcon, make a JLabel holding the icon, add that to a scrollpane
         icon = new ImageIcon("img" + System.getProperty("file.separator") + "test_viewport_image.png");
-        jLabel = new JLabel(icon);
+        JLabel jLabel = new JLabel(icon);
 
         // some logic should be done on this, make the scroll pane only visible when the image is large enough to justify it (ie. the map screen)
         scrollPane = new JScrollPane(jLabel);

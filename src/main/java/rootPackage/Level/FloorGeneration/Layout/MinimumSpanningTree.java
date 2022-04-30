@@ -27,8 +27,7 @@ public class MinimumSpanningTree {
         }
         this.mstGraph = new AdjacencyMatrix(points);
         MSTEdge[] mstEdges = this.edges;
-        for (int i = 0; i < mstEdges.length; i++) {
-            MSTEdge edge = mstEdges[i];
+        for (MSTEdge edge : mstEdges) {
             mstGraph.addConnection(edge.getStart(), edge.getEnd(), edge.getWeight());
             mstGraph.addConnection(edge.getEnd(), edge.getStart(), edge.getWeight());
         }
@@ -100,27 +99,6 @@ public class MinimumSpanningTree {
 
     public boolean containsConnection(Connection con) {
         return List.of(connections).contains(con);
-    }
-
-    public void addConnectionIfValid(Connection connectionToAdd) {
-        Connection[] connectionsBackup = new Connection[this.connections.length];
-
-        Connection[] connections = new Connection[this.connections.length+1];
-        connections[connections.length-1] = connectionToAdd;
-        for (int i = 0; i < this.connections.length; i++) {
-            connections[i] = this.connections[i];
-            connectionsBackup[i] = this.connections[i];
-        }
-
-        mstGraph.addConnection(connectionToAdd.getOrigin(), connectionToAdd.getDestination(), connectionToAdd.getWeight());
-        mstGraph.addConnection(connectionToAdd.getDestination(), connectionToAdd.getOrigin(), connectionToAdd.getWeight());
-
-        if (!isMSTValid()) {
-            this.connections = connectionsBackup;
-            mstGraph.removeConnectionBothWays(connectionToAdd);
-        }
-
-
     }
 
     public int getSize() {

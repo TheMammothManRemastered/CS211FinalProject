@@ -1,6 +1,6 @@
 package rootPackage;
 
-import rootPackage.Level.Features.Feature;
+import rootPackage.Level.Features.TopLevel.PlayerFeature;
 import rootPackage.Level.FloorGeneration.Layout.RoomNode;
 
 /**
@@ -12,13 +12,13 @@ import rootPackage.Level.FloorGeneration.Layout.RoomNode;
 public class Player {
 
     private RoomNode currentRoom;
-    private Feature playerAsFeature;
+    private PlayerFeature playerAsFeature;
 
-    public Feature getPlayerAsFeature() {
+    public PlayerFeature getPlayerAsFeature() {
         return playerAsFeature;
     }
 
-    public void setPlayerAsFeature(Feature playerAsFeature) {
+    public void setPlayerAsFeature(PlayerFeature playerAsFeature) {
         this.playerAsFeature = playerAsFeature;
     }
 

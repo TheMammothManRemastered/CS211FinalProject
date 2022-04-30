@@ -5,8 +5,8 @@ import rootPackage.Level.Features.Feature;
 /**
  * The RoomNode class represents a room on a map, along with the rooms it is connected to.
  * <p></p>
- * NOTE: This class is NOT to be confused with {@link rootPackage.Level.Features.Concrete.Room Room}!
- * If {@link rootPackage.Level.Features.Concrete.Room Room} is to the contents of an office room, then {@link RoomNode RoomNode} is to that room's number.
+ * NOTE: This class is NOT to be confused with {@link rootPackage.Level.Features.TopLevel.Room Room}!
+ * If {@link rootPackage.Level.Features.TopLevel.Room Room} is to the contents of an office room, then {@link RoomNode RoomNode} is to that room's number.
  *
  * @author William Owens
  * @version 3.0
@@ -54,8 +54,7 @@ public class RoomNode {
 
     public void printRoomAndConnections() {
         System.out.println(coordinates);
-        for (int i = 0; i < connectedRooms.length; i++) {
-            RoomNode room = connectedRooms[i];
+        for (RoomNode room : connectedRooms) {
             if (room == null) continue;
             System.out.println(new Connection(coordinates, room.coordinates));
         }

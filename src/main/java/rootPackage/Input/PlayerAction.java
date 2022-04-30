@@ -12,7 +12,7 @@ public enum PlayerAction {
     ATTACK,
     EQUIP;
 
-    private Player player;
+    private final Player player;
 
     PlayerAction() {
         this.player = Main.player;

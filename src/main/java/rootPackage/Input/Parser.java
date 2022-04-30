@@ -1,6 +1,7 @@
 package rootPackage.Input;
 
 import rootPackage.Level.Features.Feature;
+import rootPackage.Main;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,7 +10,7 @@ import java.util.Arrays;
  * Class responsible for parsing player input into a game command.
  * Uses purely static methods.
  *
- * @version 1.0
+ * @version 1.2
  * @author William Owens
  */
 public class Parser {
@@ -60,7 +61,9 @@ public class Parser {
             "attack",
             "engage",
             "kill",
-            "charge"
+            "charge",
+            "don",
+            "doff"
     ));
 
     public static PlayerAction getActionFromInput(String input) {
@@ -83,13 +86,14 @@ public class Parser {
         }
         StringBuilder sb = new StringBuilder();
         for (String s : words) {
+            if (s.isEmpty())
+                continue;
             sb.append(s);
+            sb.append(' ');
         }
 
-        //TODO: this
 
-        return null;
-
+        return Main.player.getCurrentRoom().getRoomAsFeature().getChildWithName(sb.toString());
     }
 
     private static boolean isFiller(String input) {

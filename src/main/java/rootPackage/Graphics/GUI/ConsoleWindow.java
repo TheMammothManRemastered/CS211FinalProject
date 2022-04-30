@@ -2,6 +2,8 @@ package rootPackage.Graphics.GUI;
 
 import rootPackage.Input.Parser;
 import rootPackage.Input.PlayerAction;
+import rootPackage.Level.Features.Feature;
+import rootPackage.Logic.GameManager;
 import rootPackage.Main;
 
 import javax.swing.*;
@@ -21,7 +23,6 @@ public class ConsoleWindow extends JPanel {
     private final int WIDTH = 1280;
     private final int INPUT_HEIGHT = 20;
 
-    // this area needs to be global, but the other ones do not
     private final JTextArea textHistory;
 
     public ConsoleWindow() {
@@ -38,6 +39,7 @@ public class ConsoleWindow extends JPanel {
         this.add(consoleLabel, BorderLayout.NORTH);
         this.add(scrollPane, BorderLayout.CENTER);
         this.add(textInput, BorderLayout.SOUTH);
+        //TODO: figure out how to give textInput focus (requestFocusInWindow() might be the way to go, but IDK how to use it)
     }
 
     private JLabel setupConsoleLabel() {
@@ -108,6 +110,10 @@ public class ConsoleWindow extends JPanel {
         }
     }
 
+    //TODO: not working, maybe add some sort of listener to the text area, when it changes scroll down to the bottom
+    public void scrollToBottom() {
+
+    }
 }
 
 /**
@@ -133,22 +139,21 @@ class OnEnterAction extends AbstractAction {
             return;
         }
         sendInputToHistory(inputString);
-        PlayerAction pa = Main.parser.getActionFromInput(inputString);
-        //TODO: send input to parser, send that to logic unit
-        if (pa == PlayerAction.ATTACK) {
-            Main.mainWindow.getViewportPanel().updateImage(null);
-            sendStringToHistory("You stab the purple guy with your halo sword. He dies instantly. You have done it, you've saved Reach.");
+        PlayerAction pa = Parser.getActionFromInput(inputString);
+        Feature feature = Parser.getObjectFromInput(inputString);
+        //TODO: refactor this and other logic stuff to GameManager, or some other logic manager (InputManager, maybe)
+        if (pa == null) {
+            Main.mainWindow.getConsoleWindow().addEntryToHistory("No recognized verb in this input. Did you spell everything correctly?");
+        } else if (feature == null) {
+            Main.mainWindow.getConsoleWindow().addEntryToHistory("Try as you might, you cannot see anything like that in this room...");
+        } else {
+            GameManager.executeAction(pa, feature);
         }
+        Main.mainWindow.getConsoleWindow().scrollToBottom();
     }
 
     private void sendInputToHistory(String inputString) {
         textHistory.append(">");
-        textHistory.append(inputString);
-        textHistory.append("\n");
-        textInput.setText("");
-    }
-
-    public void sendStringToHistory(String inputString) {
         textHistory.append(inputString);
         textHistory.append("\n");
         textInput.setText("");

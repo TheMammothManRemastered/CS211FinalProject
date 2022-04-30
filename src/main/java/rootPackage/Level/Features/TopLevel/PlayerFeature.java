@@ -1,4 +1,4 @@
-package rootPackage.Level.Features.Concrete;
+package rootPackage.Level.Features.TopLevel;
 
 import rootPackage.Input.PlayerAction;
 import rootPackage.Level.Features.Feature;

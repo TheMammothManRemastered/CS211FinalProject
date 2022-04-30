@@ -1,5 +1,8 @@
 package rootPackage;
 
+import rootPackage.Level.Features.Equipment.ArmorFeature;
+import rootPackage.Level.Features.TopLevel.PlayerFeature;
+import rootPackage.Level.Features.TopLevel.Room;
 import rootPackage.Level.Floor;
 import rootPackage.Level.FloorGeneration.Layout.RoomNode;
 import rootPackage.Graphics.MainWindow;
@@ -29,9 +32,14 @@ public class Main extends JPanel {
     private RoomNode spawnLocation;
 
     public static void main(String[] args) {
-        parser = new Parser();
         mainWindow = new MainWindow();
-        player = new Player(null);
+        RoomNode phRoomNode = new RoomNode();
+        phRoomNode.setRoomAsFeature(new Room("Room", new String[]{"man", "ass"}));
+        phRoomNode.getRoomAsFeature().addChild(new ArmorFeature("Lion Armor", new String[]{"armor"}));
+        player = new Player(phRoomNode);
+        player.setPlayerAsFeature(new PlayerFeature("You", new String[]{"player", "self", "you"}));
+        player.getPlayerAsFeature().updateCurrentRoom(player);
+        player.getPlayerAsFeature().addChild(new ArmorFeature("Diamond Armor", new String[]{"armor"}));
         mainWindow.getConsoleWindow().addEntryToHistory("You are Halo 3, an accurate and thrifty marksman from McDonalds. You are facing the notorious Man Behind The Slaughter, a horrid criminal from Freddy Fazbear's Pizza, a magical place for kids and grown-ups alike. What do you do?");
     }
 
@@ -41,8 +49,6 @@ public class Main extends JPanel {
 
     /**
      * Override of the paint method, is responsible for telling the graphics in the window what to draw and where.
-     *
-     * @param g
      */
     @Override
     public void paint(Graphics g) {

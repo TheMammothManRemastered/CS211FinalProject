@@ -12,7 +12,7 @@ import java.util.*;
  * @version 3.1
  */
 
-//TODO: this works well and correctly, but it doesn't implement the bin sort stage. this is probably fine, but change that if there is time
+//note: this works well and correctly, but it doesn't implement the bin sort stage. this is probably fine, but change that if there is time
 public class DelaunayTriangulation {
 
     private final Point2D[] inputPoints;
@@ -253,7 +253,14 @@ public class DelaunayTriangulation {
         numPoints -= 3;
         deNormalizePoints();
 
-        //TODO: debug code for desmos, delete this when it is no longer needed
+        // algorithm completed, translate into a usable output and return
+        return parseTriangulation(finalVerticesOfTriangles);
+    }
+
+    /**
+     * Prints the results of the triangulation as polygons to be entered into desmos.
+     */
+    private void printTriangulationForDesmos(int[][] finalVerticesOfTriangles) {
         FloorLayoutGenerator.delaunayStagesSb.append("Final Delaunay Triangulation\n");
         for (int[] finalVerticesOfTriangle : finalVerticesOfTriangles) {
             MyPoint2D point1 = points[finalVerticesOfTriangle[0]];
@@ -262,9 +269,6 @@ public class DelaunayTriangulation {
             FloorLayoutGenerator.delaunayStagesSb.append("\\operatorname{polygon}\\left(\\left(%f,%f\\right),\\left(%f,%f\\right),\\left(%f,%f\\right)\\right)%n".formatted(point1.x, point1.y, point2.x, point2.y, point3.x, point3.y));
         }
         FloorLayoutGenerator.delaunayStagesSb.append("\n");
-
-        // algorithm completed, translate into a usable output and return
-        return parseTriangulation(finalVerticesOfTriangles);
     }
 
     private int[][] removeSuperTriangleFromPointsSet(int numTriangles) {
@@ -328,7 +332,7 @@ public class DelaunayTriangulation {
 
     /**
      * Updates the adjacencies of a given triangle that was just split into multiple
-     * @param numTriangles the current value of numTriangles //TODO: make this global
+     * @param numTriangles the current value of numTriangles
      * @param indexOfSplitTriangle the index of the triangle that was recently split
      * @param adjacency the index of the triangle that needs its adjacencies updated
      * @param offset an offset used in calculating which triangle this one is now next to (2 for adjacency 2, 1 for adjacency 3)

@@ -11,7 +11,6 @@ import java.util.List;
  */
 public class AdjacencyMatrix {
 
-    private int numNodes;
     private double[][] matrix;
     private MyPoint2D[] nodes;
 
@@ -24,7 +23,7 @@ public class AdjacencyMatrix {
      * @see AdjacencyMatrix#addConnection(MyPoint2D, MyPoint2D, double) addConnection()
      */
     public AdjacencyMatrix(MyPoint2D... nodes) {
-        numNodes = nodes.length;
+        int numNodes = nodes.length;
         this.nodes = Arrays.copyOf(nodes, numNodes);
         matrix = new double[numNodes][numNodes];
     }
@@ -50,8 +49,6 @@ public class AdjacencyMatrix {
 
     /**
      * Returns an array of connections as a row of the adjacency matrix
-     * @param index
-     * @return
      */
     public double[] getNodeConnectionIndexes(int index) {
         return matrix[index];
@@ -59,8 +56,6 @@ public class AdjacencyMatrix {
 
     /**
      * Returns an array of connections
-     * @param index
-     * @return
      */
     public Connection[] getNodeConnections(int index) {
         Connection[] output = new Connection[getCountOfNodeConnections(index)];

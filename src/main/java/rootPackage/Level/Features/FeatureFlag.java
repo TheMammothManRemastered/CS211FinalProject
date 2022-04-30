@@ -1,14 +1,17 @@
 package rootPackage.Level.Features;
 
-//TODO: this might not be needed, idk
+/**
+ * Enum containing 'flags' that a {@link Feature Feature} might have.
+ *
+ * @author William Owens
+ * @version 1.0
+ */
 public enum FeatureFlag {
-    TAKEABLE,
-    DRAWABLE,
-    UNLOCKABLE,
-    EQUIPABLE,
+    EQUIPPABLE,
     ARMOR,
     SHIELD,
     WEAPON,
     ACCESSORY,
-    PLAYER
+    PLAYER,
+    INVISIBLE
 }

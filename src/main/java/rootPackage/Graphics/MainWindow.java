@@ -5,7 +5,6 @@ import rootPackage.Graphics.Viewport.ViewportPanel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.concurrent.Flow;
 
 /**
  * This class handles the main window for the game. On an upper level, this class basically is doing everything.
@@ -15,7 +14,7 @@ import java.util.concurrent.Flow;
  */
 public class MainWindow {
 
-    private JFrame window;
+    private final JFrame window;
     private ViewportPanel viewportPanel;
     private ConsoleWindow consoleWindow;
 

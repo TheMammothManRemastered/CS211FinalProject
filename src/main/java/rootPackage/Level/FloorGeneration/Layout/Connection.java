@@ -14,9 +14,9 @@ import java.awt.geom.Point2D;
  */
 public class Connection implements Comparable<Connection> {
 
-    private MyPoint2D origin;
-    private MyPoint2D destination;
-    private double weight;
+    private final MyPoint2D origin;
+    private final MyPoint2D destination;
+    private final double weight;
 
     public Connection(MyPoint2D origin, MyPoint2D destination) {
         this.origin = origin;
@@ -58,17 +58,6 @@ public class Connection implements Comparable<Connection> {
      */
     public double getRelativeDegrees() {
         return (Math.atan2(destination.x - origin.x, destination.y - origin.y) * 180 / Math.PI);
-    }
-
-    /**
-     * Returns the radian measurement of the angle between this connection's origin and destination.
-     * Directly above the origin is 0 radians, directly below is pi.
-     * Points to the right of the origin have positive angles, those to the left have negative.
-     *
-     * @return angle in radians.
-     */
-    public double getRelativeRadians() {
-        return (Math.atan2(destination.x - origin.x, destination.y - origin.y));
     }
 
     public void printTriangleSides() {
@@ -118,10 +107,7 @@ public class Connection implements Comparable<Connection> {
             return false;
         }
         Connection other = (Connection) o;
-        if ((this.origin.equals(other.origin)) && (this.destination.equals(other.destination)) && FloatEquivalence.equals(this.weight, other.weight)) {
-            return true;
-        }
-        return false;
+        return (this.origin.equals(other.origin)) && (this.destination.equals(other.destination)) && FloatEquivalence.equals(this.weight, other.weight);
     }
 
     /**

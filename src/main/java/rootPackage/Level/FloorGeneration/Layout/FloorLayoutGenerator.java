@@ -28,7 +28,6 @@ public class FloorLayoutGenerator {
     /**
      * The bulk of this class' logic. Returns an array of roomNodes, basically just the layout of the floor with no features
      * associated with any rooms, nor a spawn point set.
-     * @return
      */
     public RoomNode[] generateFloor() {
 

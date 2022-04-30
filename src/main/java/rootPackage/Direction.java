@@ -1,26 +1,19 @@
 package rootPackage;
 
+import rootPackage.Level.FloorGeneration.Layout.Connection;
+
 /**
  * An enum representing one of the four cardinal directions, as well as a CENTER direction, representing no direction at all.
  *
- * @version 2.3
+ * @version 2.4
  * @author William Owens
  */
 public enum Direction {
-    NORTH (-1,0),
-    SOUTH (1,0),
-    EAST (0,1),
-    WEST (0,-1),
-    CENTER (0,0);
-
-    public final int verticalOffset;
-    public final int horizontalOffset;
-
-    //TODO: I don't think these offsets are ever used anymore, they're fragments of the old drunk-walker room generation
-    Direction(int verticalOffset, int horizontalOffset) {
-        this.verticalOffset = verticalOffset;
-        this.horizontalOffset = horizontalOffset;
-    }
+    NORTH,
+    SOUTH,
+    EAST,
+    WEST,
+    CENTER;
 
     /**
      * Returns an array of all Directions, except for CENTER.
@@ -39,6 +32,9 @@ public enum Direction {
         };
     }
 
+    /**
+     * Converts the degree measurement outputted via {@link rootPackage.Level.FloorGeneration.Layout.Connection Connection}'s {@link Connection#getRelativeDegrees() getRelativeDegrees} method into a Direction.
+     */
     public static Direction degreesToDirection(double angle) {
         // -45 to 45 is north
         // 45 to 135 is east
