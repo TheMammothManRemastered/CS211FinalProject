@@ -1,0 +1,16 @@
+{
+  "name": "Attack Talisman",
+  "description" : "A talisman in the shape of a sword. It makes you feel aggressive.",
+  "statNotification" : "Your attack is increased by 20.",
+  "actionsGranted" :[
+
+  ],
+  "actionDescriptions" : [
+
+  ],
+  "type" : "accessory",
+  "effects" : [
+    "AttackTalismanEffect"
+  ],
+  "effectDescriptionForStatus" : "This talisman improves your attack by 20 points."
+}

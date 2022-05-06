@@ -1,11 +1,26 @@
 package rootPackage.Graphics.Viewport;
 
+import rootPackage.Direction;
+import rootPackage.Graphics.GUI.RenderLayer;
+import rootPackage.Level.Features.Feature;
+import rootPackage.Level.Features.FeatureFlag;
+import rootPackage.Level.Features.Features.Door;
+import rootPackage.Level.Features.TopLevel.Room;
+import rootPackage.Level.Floor;
+import rootPackage.Level.FloorGeneration.Layout.MyPoint2D;
+import rootPackage.Level.FloorGeneration.Layout.RoomNode;
+import rootPackage.Main;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.function.Consumer;
 
 /**
  * The ViewportPanel class is a JPanel container holding whatever graphical component is being displayed to the screen.
@@ -18,18 +33,12 @@ public class ViewportPanel extends JPanel {
     private final int WIDTH = 1280;
     private final int HEIGHT = 520;
 
-    private BufferedImage combat;
-
-    private ImageIcon icon;
     private JScrollPane scrollPane;
+    private JPanel canvas;
+    private ImageIcon icon;
 
     public ViewportPanel() {
         start();
-        try {
-            combat = ImageIO.read(new File("img" + System.getProperty("file.separator") + "test_viewport_image.png"));
-        } catch (IOException exception) {
-            exception.printStackTrace();
-        }
     }
 
     public void start() {
@@ -43,23 +52,63 @@ public class ViewportPanel extends JPanel {
         icon = new ImageIcon("img" + System.getProperty("file.separator") + "test_viewport_image.png");
         JLabel jLabel = new JLabel(icon);
 
-        // some logic should be done on this, make the scroll pane only visible when the image is large enough to justify it (ie. the map screen)
-        scrollPane = new JScrollPane(jLabel);
+        canvas = new JPanel();
+        canvas.setBackground(Color.BLACK);
+
+        scrollPane = new JScrollPane(canvas);
+        scrollPane.setPreferredSize(new Dimension(WIDTH, HEIGHT));
 
         this.add(scrollPane, BorderLayout.CENTER);
-
     }
 
-    public void updateImage(String imageName) {
+    public void drawImageOnCanvas(String imageName) {
         try {
-            combat = ImageIO.read(new File("img" + System.getProperty("file.separator") + "test_viewport_image_kill.png"));
-            icon.setImage(combat);
-            scrollPane.paint(scrollPane.getGraphics());
+            BufferedImage imageToDraw = ImageIO.read(new File("img" + System.getProperty("file.separator") + imageName));
+            this.canvas.getGraphics().drawImage(imageToDraw, 0, 0, null);
         } catch (IOException exception) {
-            exception.printStackTrace();
+            System.out.printf("Image not found! %s%n", imageName);
         }
     }
 
+    public void drawImageOnCanvas(Image image, int xOffset) {
+        this.canvas.getGraphics().drawImage(image, xOffset, 0, null);
+    }
 
+    public void clearCanvas() {
+        this.canvas.paint(this.canvas.getGraphics());
+        canvas.createImage(WIDTH, HEIGHT);
+    }
+
+    public void drawRoom(Feature room) {
+        ArrayList<Feature> features = new ArrayList<>(room.getChildren());
+        features.add(room);
+        ArrayList<Sprite> toDraw = new ArrayList<>();
+        for (int i = 0; i < features.size(); i++) {
+            Feature feature = features.get(i);
+            if (feature.getSprite().getRenderLayer() != RenderLayer.NOT_DRAWN) {
+                toDraw.add(feature.getSprite());
+            }
+            if (!features.containsAll(feature.getChildren())) {
+                features.addAll(feature.getChildren());
+            }
+        }
+        Collections.sort(toDraw);
+        for (Sprite s : toDraw) {
+            System.out.println(s.getImageName());
+        }
+        Consumer<Sprite> spriteConsumer = (Sprite sprite) -> {
+            Main.mainWindow.getViewportPanel().drawImageOnCanvas(sprite.getImageName());
+        };
+        toDraw.forEach(spriteConsumer);
+    }
+
+    public void drawFloorMap(Floor floor) {
+
+        //TODO: draw an image into the scrollpane and have it be usable, not sure how to do that just yet without things breaking, look into the cardLayout layout manager
+        this.canvas.setBackground(Color.BLACK);
+        this.canvas.getGraphics().clearRect(0,0,WIDTH, HEIGHT);
+        drawImageOnCanvas(floor.createFloorMap(), WIDTH/4);
+        drawImageOnCanvas("greatest_compass_ever_made.png");
+    }
 
 }

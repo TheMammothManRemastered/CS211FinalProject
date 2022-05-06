@@ -4,7 +4,7 @@ import java.awt.geom.Point2D;
 import java.util.*;
 
 /**
- * A class containing static methods to convert an array of unconnected points into a mesh of triangles.
+ * A class containing methods to convert an array of unconnected points into a mesh of triangles.
  * Uses a method known as Delaunay Triangulation, a triangulation method created by Boris Delaunay in 1934.
  * This particular implementation uses the algorithm described by S.W. Sloan in Advanced English Software, Volume 9, Number 1.
  *

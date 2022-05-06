@@ -1,5 +1,14 @@
 {
   "1" : [
     "laybrinth.json"
+  ],
+  "2" : [
+    "labyrinth2.json"
+  ],
+  "3" : [
+    "labyrinth3.json"
+  ],
+  "4" : [
+    "chronosFloor.json"
   ]
 }

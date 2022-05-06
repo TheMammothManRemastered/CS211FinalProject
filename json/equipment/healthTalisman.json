@@ -1,0 +1,16 @@
+{
+  "name": "Health Talisman",
+  "description" : "A talisman in the shape of a heart. It makes you feel healthy.",
+  "statNotification" : "Your maximum HP is increased by 70.",
+  "actionsGranted" :[
+
+  ],
+  "actionDescriptions" : [
+
+  ],
+  "type" : "accessory",
+  "effects" : [
+    "HealthTalismanEffect"
+  ],
+  "effectDescriptionForStatus" : "This talisman improves your maximum HP by 70 points."
+}

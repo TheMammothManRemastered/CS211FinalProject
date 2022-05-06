@@ -1,5 +1,6 @@
 package rootPackage;
 
+import rootPackage.Level.Features.Equipment.WeaponFeature;
 import rootPackage.Level.FloorGeneration.Layout.Connection;
 
 /**
@@ -53,6 +54,46 @@ public enum Direction {
             return WEST;
         }
         return CENTER;
+    }
+
+    public static Direction numToDirection(int i) {
+        switch (i) {
+            case 0 -> {
+                return NORTH;
+            }
+            case 1 -> {
+                return SOUTH;
+            }
+            case 2 -> {
+                return EAST;
+            }
+            case 3 -> {
+                return WEST;
+            }
+            default -> {
+                return CENTER;
+            }
+        }
+    }
+
+    public int[] toOffset() {
+        switch (this) {
+            case NORTH -> {
+                return new int[]{0, 1};
+            }
+            case WEST -> {
+                return new int[]{-1, 0};
+            }
+            case SOUTH -> {
+                return new int[]{0, -1};
+            }
+            case EAST -> {
+                return new int[]{1, 0};
+            }
+            default-> {
+                return new int[]{0, 0};
+            }
+        }
     }
 
 

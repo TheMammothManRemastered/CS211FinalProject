@@ -4,10 +4,9 @@ import rootPackage.Battle.Combatants.Combatant;
 import rootPackage.Battle.Intents.Intent;
 
 /**
- * A class representing a Status Effect, a modifier applied to a {@link Combatant Combatant} in battle.
+ * Don't know what the use is,
+ * This is never used
  *
- * @version 1.0
- * @author Jovin Antony-Maria
  */
 public class StatusEffects {
     private String name;
@@ -28,6 +27,8 @@ public class StatusEffects {
         this.intent = intent;
     }
 
+
+
     //Doing getter for everything jsut to be on safer side
     public String name(){
         return this.name;
@@ -38,6 +39,8 @@ public class StatusEffects {
     public Intent getIntent() {
         return intent;
     }
+
+
 
     //Setter methods
     public void setIntent(Intent intent) {
@@ -51,6 +54,8 @@ public class StatusEffects {
     }
 
 
+
+    //Don't know when this is used
     public boolean applyStatusEffect(Combatant target) {
         if (this.turnsRemaining > 0) {
             turnsRemaining--;

@@ -1,14 +1,20 @@
 package rootPackage.Graphics.GUI;
 
+import rootPackage.Battle.Intents.Intent;
+import rootPackage.Graphics.MainWindow;
 import rootPackage.Input.Parser;
 import rootPackage.Input.PlayerAction;
+import rootPackage.Level.Features.Equipment.*;
 import rootPackage.Level.Features.Feature;
+import rootPackage.Level.Features.FeatureFlag;
 import rootPackage.Logic.GameManager;
 import rootPackage.Main;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * The ConsoleWindow class is a JPanel container holding the 'console' system.
@@ -104,6 +110,9 @@ public class ConsoleWindow extends JPanel {
      * @param entryToAdd The string entry to add. A newline will be added if the input does not end with one.
      */
     public void addEntryToHistory(String entryToAdd) {
+        if (entryToAdd.isEmpty()) {
+            return;
+        }
         textHistory.append(entryToAdd);
         if (entryToAdd.charAt(entryToAdd.length() - 1) != '\n') {
             textHistory.append("\n");
@@ -113,6 +122,13 @@ public class ConsoleWindow extends JPanel {
     //TODO: not working, maybe add some sort of listener to the text area, when it changes scroll down to the bottom
     public void scrollToBottom() {
 
+    }
+
+    public boolean playerGivenBattleInput = false;
+
+    public void getPlayerInput(OnEnterAction onEnterAction, int chosenMove) {
+        onEnterAction.chosenAction = chosenMove;
+        playerGivenBattleInput = true;
     }
 }
 
@@ -124,8 +140,15 @@ public class ConsoleWindow extends JPanel {
  */
 class OnEnterAction extends AbstractAction {
 
+    private final String TUTORIAL = "(To play this game, simply type what you want to do into the input box below, and press the ENTER key. For instance, if you were in a room with a door to the north, you might try \"Move to the north\" or \"Travel north\".)" +
+            "(\nThere are also a few special commands that do not follow that verb-noun structure.)" +
+            "\n(\"Tutorial\" brings up this dialogue, in case you need a refresher.)" +
+            "\n(\"Map\" brings up a map of the floor.)" +
+            "\n(\"Status\" displays some information about yourself.)";
     private final JTextArea textHistory;
     private final JTextField textInput;
+
+    public int chosenAction;
 
     public OnEnterAction(JTextArea textHistory, JTextField textInput) {
         this.textHistory = textHistory;
@@ -133,18 +156,96 @@ class OnEnterAction extends AbstractAction {
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public synchronized void actionPerformed(ActionEvent e) {
+        if (Main.gameOver) {
+            return;
+        }
+        boolean battle = false;
         String inputString = e.getActionCommand();
+
         if (inputString.length() < 1) {
             return;
         }
+
         sendInputToHistory(inputString);
+
+        try {
+            int chosenMove = Integer.parseInt(inputString);
+            if (Main.currentBattle != null) {
+                    battle = true;
+                    Main.mainWindow.getConsoleWindow().getPlayerInput(this, chosenMove);
+                    Main.currentBattle.player.setChosenAction(chosenMove);
+                    Main.currentBattle.player.wakeUp();
+                    //TODO: all of the thread stuff is kind of a horrible mess, it works though. clean it all up at some point
+            }
+            else {
+                battle = false;
+            }
+
+        } catch (NumberFormatException exception) {
+            if (Main.currentBattle != null) {
+            Main.mainWindow.getConsoleWindow().addEntryToHistory("Nothing recognized in this input. Did you type everything correctly?");
+            return;
+            }
+        }
+
+        if (battle) {
+            Main.currentBattle.player.setChosenAction(chosenAction);
+            return;
+        }
+
+        if (inputString.toLowerCase().equals("tutorial")) {
+            Main.mainWindow.getConsoleWindow().addEntryToHistory(TUTORIAL);
+            return;
+        } else if (inputString.toLowerCase().equals("map")) {
+            Main.mainWindow.getViewportPanel().drawFloorMap(Main.currentFloor);
+            Main.mainWindow.getConsoleWindow().addEntryToHistory("Your player's position is represented by the cyan square.");
+            Main.mainWindow.getConsoleWindow().addEntryToHistory("Close the map with the \"close map\" command.");
+            return;
+        } else if (inputString.toLowerCase().equals("status")) {
+            Main.mainWindow.getConsoleWindow().addEntryToHistory("---Your Status---");
+            Main.player.printStatsToConsole();
+            ArrayList<Feature> equipmentFeatures = Main.player.getPlayerAsFeature().getChildren(FeatureFlag.EQUIPPABLE);
+            Main.mainWindow.getConsoleWindow().addEntryToHistory("Gold: %d".formatted(Main.player.getGold()));
+            for (Feature feature : equipmentFeatures) {
+                EquipmentFeature equipmentFeature = ((EquipmentFeature) feature);
+                if (equipmentFeature instanceof ArmorFeature) {
+                    Main.mainWindow.getConsoleWindow().addEntryToHistory("You wear the %s, granting you a base max HP of %d.".formatted(equipmentFeature.getPrimaryName(), (long) (equipmentFeature).getValue()));
+                } else if (equipmentFeature instanceof ShieldFeature) {
+                    Main.mainWindow.getConsoleWindow().addEntryToHistory("You bear the %s, granting you a base damage absorption of %.2f%%.".formatted(equipmentFeature.getPrimaryName(), (equipmentFeature).getValue() * 100));
+                } else if (equipmentFeature instanceof WeaponFeature) {
+                    Main.mainWindow.getConsoleWindow().addEntryToHistory("You wield the %s, granting you a base damage of %d.".formatted(equipmentFeature.getPrimaryName(), (long) equipmentFeature.getValue()));
+                }
+            }
+            for (Feature feature : equipmentFeatures) {
+                EquipmentFeature equipmentFeature = ((EquipmentFeature) feature);
+                if (equipmentFeature instanceof AccessoryFeature) {
+                    AccessoryFeature accessoryFeature = (AccessoryFeature) feature;
+                    Main.mainWindow.getConsoleWindow().addEntryToHistory("You posses the %s. %s".formatted(accessoryFeature.getPrimaryName(), accessoryFeature.getEffectDescriptionForStatus()));
+                }
+            }
+            for (Feature feature : Main.player.getPlayerAsFeature().getChildren()) {
+                if (feature instanceof EquipmentFeature) {
+                    continue;
+                }
+                Main.mainWindow.getConsoleWindow().addEntryToHistory("You have a %s.".formatted(feature.getPrimaryName()));
+            }
+            double elapsed = (System.nanoTime() - Main.timeStart) * 0.000000000017;
+            Main.mainWindow.getConsoleWindow().addEntryToHistory("You've been playing for about %.2f minutes.".formatted(elapsed));
+            return;
+        } else if (inputString.toLowerCase().equals("map close") || inputString.toLowerCase().equals("close map")) {
+            Main.mainWindow.getViewportPanel().drawRoom(Main.player.getCurrentRoom().getRoomAsFeature());
+            return;
+        }
+
         PlayerAction pa = Parser.getActionFromInput(inputString);
-        Feature feature = Parser.getObjectFromInput(inputString);
-        //TODO: refactor this and other logic stuff to GameManager, or some other logic manager (InputManager, maybe)
         if (pa == null) {
             Main.mainWindow.getConsoleWindow().addEntryToHistory("No recognized verb in this input. Did you spell everything correctly?");
-        } else if (feature == null) {
+            return;
+        }
+        Feature feature = Parser.getObjectFromInput(inputString);
+        //should probably refactor this and other logic stuff to GameManager, or some other logic manager (InputManager, maybe)
+        if (feature == null) {
             Main.mainWindow.getConsoleWindow().addEntryToHistory("Try as you might, you cannot see anything like that in this room...");
         } else {
             GameManager.executeAction(pa, feature);

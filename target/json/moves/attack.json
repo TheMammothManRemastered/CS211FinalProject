@@ -2,8 +2,9 @@
     "targetSelf" : false,
     "intents" : [
         {
-            "name" : "DealDamage",
+            "name" : "dealDamage",
             "valueStat" : "attackStat",
+            "targetStat" : "hpStat",
             "modifier" : "none"
         }
     ],

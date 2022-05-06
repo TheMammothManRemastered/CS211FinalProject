@@ -8,5 +8,31 @@
     "humanoid": [
 
     ]
-  }
+  },
+  "2" : {
+    "beast": [
+      "wolf.json",
+      "bear.json"
+    ],
+    "humanoid": [
+
+    ]
+  },
+  "3" : {
+    "beast": [
+      "wolf.json",
+      "bear.json"
+    ],
+    "humanoid": [
+
+    ]
+  },"4" : {
+  "beast": [
+    "wolf.json",
+    "bear.json"
+  ],
+  "humanoid": [
+
+  ]
+}
 }

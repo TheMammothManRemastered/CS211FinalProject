@@ -1,0 +1,14 @@
+{
+  "name": "Steel Sword",
+  "description" : "A well-crafted steel sword. Does 50 damage.",
+  "actionsGranted" : [
+    "attack",
+    "pass"
+  ],
+  "actionDescriptions" : [
+    "You take a swing with your steel sword!",
+    "You bide your time, waiting for a perfect opportunity to destroy your foe..."
+  ],
+  "type" : "weapon",
+  "value" : 50
+}

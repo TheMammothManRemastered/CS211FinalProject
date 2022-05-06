@@ -16,5 +16,8 @@
   "moveDescriptions": [
     "The wolf barks and charges towards you, its fangs ready to taste of your flesh!",
     "The wolf circles you, waiting for the ideal moment to strike..."
+  ],
+  "goldDrop" : 50,
+  "itemDrop" : [
   ]
 }

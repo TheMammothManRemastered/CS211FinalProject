@@ -4,7 +4,10 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import rootPackage.Level.Features.Enemy.Enemy;
 import rootPackage.Level.Features.Feature;
+import rootPackage.Level.FloorGeneration.Templates.RoomAlias;
+import rootPackage.Level.FloorGeneration.Templates.RoomTemplate;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -30,7 +33,7 @@ public class FloorThemeGenerator {
         try {
             // pick a theme at random
             String selectedThemeName = floorThemeNames[FloorGenerationRNG.rng.nextInt(floorThemeNames.length)];
-
+            System.out.println("selected " + selectedThemeName);
             // grab the theme's JSON file
             JSONObject selectedThemeJSON = null;
             try {
@@ -44,7 +47,7 @@ public class FloorThemeGenerator {
                 System.out.printf("fatal - json/floorGeneration/floorThemes/%s could not be parsed!%n", selectedThemeName);
                 System.exit(-1);
             }
-
+            System.out.println(selectedThemeJSON);
             // parse the selected theme into a FloorTheme object
             // set up minimum and maximum size (number of rooms) for the floor
             int minimumSize = Math.toIntExact((long) selectedThemeJSON.get("minimumSize"));
@@ -53,7 +56,7 @@ public class FloorThemeGenerator {
             int deadEndsNeeded = Math.toIntExact((long) selectedThemeJSON.get("deadEndsNeeded"));
             // establish how many enemies will be on the floor (based on difficulty)
             int numEnemies = Math.toIntExact((long) selectedThemeJSON.get("minimumEnemies"));
-            numEnemies += FloorGenerationRNG.rng.nextInt(difficulty * 3);
+            numEnemies += FloorGenerationRNG.rng.nextInt(difficulty);
             // establish how many 'health points' are on the floor (these being some sort of healing spot)
             int healthPoints = Math.toIntExact((long) selectedThemeJSON.get("healthPoints"));
 
@@ -68,6 +71,7 @@ public class FloorThemeGenerator {
                 JSONParser parser = new JSONParser();
                 FileReader reader = new FileReader("json/enemyStats/monsterTypes.json");
                 JSONObject widerJSON = (JSONObject) parser.parse(reader);
+                System.out.print(widerJSON);
                 JSONArray namesArrayJSON = (JSONArray) (((JSONObject) widerJSON.get(Integer.toString(difficulty))).get(commonEnemyType));
                 commonEnemyNames = new String[namesArrayJSON.size()];
                 for (int i = 0; i < namesArrayJSON.size(); i++) {
@@ -104,15 +108,23 @@ public class FloorThemeGenerator {
             // finally, set up the actual enemy feature objects
             for (int i = 0; i < numEnemies; i++) {
                 boolean isCommonEnemy = 3 < FloorGenerationRNG.rng.nextInt(11);
-                //TODO: features are being refactored, change this when that's done
                 if (isCommonEnemy) {
-                    //enemies[i] = new EnemyFeature(null, null, null, null, false, commonEnemyNames[FloorGenerationRNG.rng.nextInt(commonEnemyNames.length)]);
+                    enemies[i] = Enemy.jsonToEnemy(commonEnemyNames[FloorGenerationRNG.rng.nextInt(commonEnemyNames.length)]);
                 } else {
-                    //enemies[i] = new EnemyFeature(null, null, null, null, false, allEnemyNames[FloorGenerationRNG.rng.nextInt(allEnemyNames.length)]);
+                    enemies[i] = Enemy.jsonToEnemy(allEnemyNames[FloorGenerationRNG.rng.nextInt(allEnemyNames.length)]);
                 }
             }
 
+            // set up boss room and midboss rooms
+            RoomTemplate exitRoom = RoomAlias.getTemplate((String) selectedThemeJSON.get("exitRoom"));
+            RoomTemplate keyRoom = RoomAlias.getTemplate((String) selectedThemeJSON.get("keyRoom"));
 
+            String keyName = (String) selectedThemeJSON.get("keyName");
+
+            String bossDoorDescription = (String) selectedThemeJSON.get("bossDoorDescription");
+
+            //new FloorTheme(5,11,2,4,null,null,null,null,null, "meat")
+            return new FloorTheme(minimumSize, maximumSize, deadEndsNeeded, healthPoints, exitRoom, keyRoom, null, null, enemies, keyName, bossDoorDescription);
 
 
         } catch (Exception exception) {

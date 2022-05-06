@@ -16,5 +16,8 @@
   "moveDescriptions": [
     "The placeholder beast does something real bad, and now you take damage",
     "The placeholder beast browses the internet or whatever"
+  ],
+  "goldDrop" : 100,
+  "itemDrop" : [
   ]
 }

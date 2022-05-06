@@ -1,16 +1,19 @@
+
 package rootPackage.Battle.Combatants;
 
 import rootPackage.Battle.Actions.Action;
 import rootPackage.Battle.StatusEffects.StatusEffects;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
- * A class representing a combatant in battle, either a {@link Player Player} or an {@link Enemy Enemy}.
- *
- * @version 1.0
- * @author Jovin Antony-Maria
+ * The Combatant abstract class
+ * This represents the player and enemy
+ * stats,
+ * Battle supervisor uses objects of this class to fight with each other
+ * @author Jovin
  */
 public abstract class Combatant {
 
@@ -35,6 +38,7 @@ public abstract class Combatant {
         this.attack = attack;
         this.block = block;
         this.priority = priority;
+        availableActions = new ArrayList<>();
     }
 
 
@@ -96,7 +100,7 @@ public abstract class Combatant {
     public List<Action> getValidActions() {
         List<Action> validActions = new ArrayList<Action>();
         for (Action action: this.availableActions){
-            if (action.getUsesRemaining() <= 0) {    /**How is it valid when there are no uses available*/
+            if (action.getUsesRemaining() > 0) {    /**How is it valid when there are no uses available*/
                 validActions.add(action);
             }
         }
@@ -114,6 +118,11 @@ public abstract class Combatant {
         }
     }
 
+    public void takeDamage(double damage) {
+        double damageDealt = damage * (1.0 + this.getBlock());
+        this.currentHp -= (int) damageDealt;
+    }
 
+    public abstract Action askForInput();
 
 }

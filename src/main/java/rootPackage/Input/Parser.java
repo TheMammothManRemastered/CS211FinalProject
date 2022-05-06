@@ -33,7 +33,8 @@ public class Parser {
             "\"",
             "with",
             "up",
-            "down"
+            "down",
+            "to"
     ));
 
     private static final ArrayList<String> VERBS = new ArrayList<>(Arrays.asList(
@@ -63,7 +64,18 @@ public class Parser {
             "kill",
             "charge",
             "don",
-            "doff"
+            "doff",
+            "move",
+            "travel",
+            "equip",
+            "wear",
+            "destroy",
+            "decimate",
+            "terminate",
+            "eliminate",
+            "stab",
+            "shoot",
+            "inspect"
     ));
 
     public static PlayerAction getActionFromInput(String input) {
@@ -92,8 +104,9 @@ public class Parser {
             sb.append(' ');
         }
 
-
-        return Main.player.getCurrentRoom().getRoomAsFeature().getChildWithName(sb.toString());
+        Feature output = Main.player.getCurrentRoom().getRoomAsFeature().getChildWithName(sb.toString());
+        sb = null;
+        return output;
     }
 
     private static boolean isFiller(String input) {

@@ -1,0 +1,12 @@
+{
+  "name": "Axe of the Minotaur",
+  "description" : "A blood soaked axe once used by the mighty Minotaur.",
+  "actionsGranted" : [
+    "attack"
+  ],
+  "actionDescriptions" : [
+    "You swing the Axe of the Minotaur with all your might!"
+  ],
+  "type" : "weapon",
+  "value" : 90
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Steel Shield",
+  "description" : "A sold steel shield. Grants 10% damage absorption.",
+  "actionsGranted" :[
+
+  ],
+  "actionDescriptions" : [
+
+  ],
+  "type" : "shield",
+  "value" : 0.1
+}

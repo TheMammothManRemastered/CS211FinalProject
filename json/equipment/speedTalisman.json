@@ -1,0 +1,16 @@
+{
+  "name": "Sacred Talisman",
+  "description" : "A talisman in the shape of the god Hermes. It makes you feel light on your feet.",
+  "statNotification" : "Your priority is now 3.",
+  "actionsGranted" :[
+
+  ],
+  "actionDescriptions" : [
+
+  ],
+  "type" : "accessory",
+  "effects" : [
+    "SacredTalismanEffect"
+  ],
+  "effectDescriptionForStatus" : "This artefact sets your priority stat, how fast you move, to 3."
+}

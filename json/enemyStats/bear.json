@@ -16,5 +16,9 @@
   "moveDescriptions": [
     "The bear snarls and swipes at you with its mighty paws!",
     "The bear roars and rakes its claws across the flagstones, sharpening them in preparation to tear you apart!"
+  ],
+  "goldDrop" : 100,
+  "itemDrop" : [
+
   ]
 }

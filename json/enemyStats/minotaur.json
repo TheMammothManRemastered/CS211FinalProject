@@ -20,5 +20,10 @@
     "The Minotaur raises its bloodstained axe and takes a mighty swing!",
     "The Minotaur crosses its arms before its face, anticipating an attack!",
     "The Minotaur stamps its hooves and growls, glaring straight at you with naught but fury in its blood-red eyes..."
+  ],
+  "goldDrop" : 300,
+  "itemDrop" : [
+    "minotaurAxe",
+    "trapdoorKey"
   ]
 }

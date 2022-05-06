@@ -1,0 +1,16 @@
+{
+  "name": "Defense Talisman",
+  "description" : "A talisman in the shape of a shield. It makes you feel stronger.",
+  "statNotification" : "Your defense is increased by 5%.",
+  "actionsGranted" :[
+
+  ],
+  "actionDescriptions" : [
+
+  ],
+  "type" : "accessory",
+  "effects" : [
+    "DefenseTalismanEffect"
+  ],
+  "effectDescriptionForStatus" : "This talisman improves your damage absorption by 5%."
+}

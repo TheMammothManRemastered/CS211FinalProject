@@ -1,0 +1,12 @@
+{
+  "name": "Steel Sword",
+  "description" : "A well-crafted suit of steel armor. Grants 150 health.",
+  "actionsGranted" :[
+
+  ],
+  "actionDescriptions" : [
+
+  ],
+  "type" : "armor",
+  "value" : 150
+}

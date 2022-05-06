@@ -24,6 +24,14 @@ public class RoomNode {
         isSpawn = false;
     }
 
+    public int getNumNeighbors() {
+        int output = 0;
+        for (RoomNode n : connectedRooms) {
+            if (n != null) output++;
+        }
+        return output;
+    }
+
     public MyPoint2D getCoordinates() {
         return coordinates;
     }

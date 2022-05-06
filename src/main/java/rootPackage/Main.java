@@ -1,17 +1,16 @@
 package rootPackage;
 
-import rootPackage.Level.Features.Equipment.ArmorFeature;
-import rootPackage.Level.Features.TopLevel.PlayerFeature;
-import rootPackage.Level.Features.TopLevel.Room;
+import rootPackage.Battle.BattleSupervisor;
 import rootPackage.Level.Floor;
-import rootPackage.Level.FloorGeneration.Layout.RoomNode;
+import rootPackage.Level.FloorGeneration.FloorGenerator;
+import rootPackage.Level.FloorGeneration.FloorTheme;
+import rootPackage.Level.FloorGeneration.FloorThemeGenerator;
 import rootPackage.Graphics.MainWindow;
 import rootPackage.Input.Parser;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
 
 /**
  * This class will, eventually, be the 'starter' class that launches the whole game.
@@ -26,25 +25,48 @@ public class Main extends JPanel {
     public static MainWindow mainWindow;
     public static Player player;
     public static Parser parser;
+    public static Floor currentFloor;
+    public static boolean gameOver = false;
+    private static int difficulty = 1;
+    public static BattleSupervisor currentBattle = null;
 
-    private Floor floor;
-    private BufferedImage compass;
-    private RoomNode spawnLocation;
+    public static BattleManagerMain battleManagerMain;
 
-    public static void main(String[] args) {
+    public static long timeStart;
+
+    public synchronized static void main(String[] args) {
+        timeStart = System.nanoTime();
+        setup();
+        battleManagerMain = new BattleManagerMain();
+    }
+
+    private static void setup() {
         mainWindow = new MainWindow();
-        RoomNode phRoomNode = new RoomNode();
-        phRoomNode.setRoomAsFeature(new Room("Room", new String[]{"man", "ass"}));
-        phRoomNode.getRoomAsFeature().addChild(new ArmorFeature("Lion Armor", new String[]{"armor"}));
-        player = new Player(phRoomNode);
-        player.setPlayerAsFeature(new PlayerFeature("You", new String[]{"player", "self", "you"}));
-        player.getPlayerAsFeature().updateCurrentRoom(player);
-        player.getPlayerAsFeature().addChild(new ArmorFeature("Diamond Armor", new String[]{"armor"}));
-        mainWindow.getConsoleWindow().addEntryToHistory("You are Halo 3, an accurate and thrifty marksman from McDonalds. You are facing the notorious Man Behind The Slaughter, a horrid criminal from Freddy Fazbear's Pizza, a magical place for kids and grown-ups alike. What do you do?");
+        FloorTheme theme = FloorThemeGenerator.generateFloorTheme(difficulty++);
+        currentFloor = new FloorGenerator().generateFloor(theme);
+        player = new Player(currentFloor.getSpawn());
+        System.out.println("set up?");
+        mainWindow.getConsoleWindow().addEntryToHistory("Welcome to the dungeon. You have been tasked by the gods of Olympus to journey deep into the dungeon and defeat the Titan Lord of Time, Chronos. Good luck, adventurer.");
+        mainWindow.getConsoleWindow().addEntryToHistory("(To play this game, simply type what you want to do into the input box below, and press the ENTER key. For instance, if you were in a room with a door to the north, you might try \"Move to the north\" or \"Travel north\".)");
+        mainWindow.getConsoleWindow().addEntryToHistory("(To see this tutorial again, type \"tutorial\" at any time.)");
+        mainWindow.getConsoleWindow().addEntryToHistory("(And here's a quick hint, you should always examine rooms when you go into them. There could always be something you don't see right away...)");
+        mainWindow.getViewportPanel().drawRoom(player.getCurrentRoom().getRoomAsFeature());
     }
 
     public Player getPlayer() {
         return player;
+    }
+
+    public static void moveToShop() {
+        currentFloor = FloorGenerator.generateShop();
+        player.setCurrentRoom(currentFloor.getSpawn());
+        mainWindow.getViewportPanel().drawRoom(player.getCurrentRoom().getRoomAsFeature());
+    }
+
+    public static void moveToNewFloor() {
+        currentFloor = new FloorGenerator().generateFloor(FloorThemeGenerator.generateFloorTheme(difficulty++));
+        player.setCurrentRoom(currentFloor.getSpawn());
+        mainWindow.getViewportPanel().drawRoom(player.getCurrentRoom().getRoomAsFeature());
     }
 
     /**
@@ -63,3 +85,4 @@ public class Main extends JPanel {
     }
 
 }
+

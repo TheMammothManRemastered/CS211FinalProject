@@ -1,11 +1,18 @@
 package rootPackage.Level.Features.Equipment;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import rootPackage.Graphics.GUI.ConsoleWindow;
 import rootPackage.Input.PlayerAction;
 import rootPackage.Level.Features.Feature;
 import rootPackage.Level.Features.FeatureFlag;
 import rootPackage.Main;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -16,12 +23,23 @@ import java.util.ArrayList;
  * @version 1.0
  * @author William Owens
  */
-public class WeaponFeature extends Feature {
+public class WeaponFeature extends EquipmentFeature {
 
-    public WeaponFeature(String primaryName, String[] allNames) {
+    public WeaponFeature(String primaryName, String[] allNames, String jsonPath) {
         super(primaryName, allNames);
         flags.add(FeatureFlag.WEAPON);
         flags.add(FeatureFlag.EQUIPPABLE);
+        JSONParser parser = new JSONParser();
+        try {
+            FileReader fr = new FileReader("json"+System.getProperty("file.separator")+"equipment"+System.getProperty("file.separator")+jsonPath);
+            JSONObject jsonFile = (JSONObject) parser.parse(fr);
+            value = Math.toIntExact((Long) jsonFile.get("value"));
+            description = (String) jsonFile.get("description");
+            actionsJsonField = (JSONArray) jsonFile.get("actionsGranted");
+            descriptionsJsonField = (JSONArray) jsonFile.get("actionDescriptions");
+        } catch (ParseException | IOException exception) {
+            exception.printStackTrace();
+        }
     }
 
     @Override
@@ -40,10 +58,10 @@ public class WeaponFeature extends Feature {
                     }
                 }
                 this.reparentSelf(playerAsFeature);
-                consoleWindow.addEntryToHistory("You now wield the %s. Your attack is now %d".formatted(this.getPrimaryName(), 666666)); //TODO: load damage stat from json
+                consoleWindow.addEntryToHistory("You now wield the %s. Your attack is now %d".formatted(this.getPrimaryName(), (int)this.value)); //TODO: load damage stat from json
             }
             case EXAMINE -> {
-                Main.mainWindow.getConsoleWindow().addEntryToHistory("placeholder examine text, this should be loaded from json");
+                Main.mainWindow.getConsoleWindow().addEntryToHistory(this.description);
             }
             default -> {
                 this.onActionNotApplicable(playerAction);

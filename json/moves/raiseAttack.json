@@ -1,0 +1,12 @@
+{
+  "targetSelf" : true,
+  "intents" : [
+    {
+      "name" : "raiseAttack",
+      "valueStat" : "attackStat",
+      "targetStat" : "attackStat",
+      "modifier" : "none"
+    }
+  ],
+  "uses" : 101
+}

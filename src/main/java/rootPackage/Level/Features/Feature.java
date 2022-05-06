@@ -1,5 +1,6 @@
 package rootPackage.Level.Features;
 
+import rootPackage.Graphics.Viewport.Sprite;
 import rootPackage.Input.PlayerAction;
 
 import java.util.ArrayList;
@@ -18,6 +19,8 @@ public abstract class Feature {
     protected Feature parent;
     protected ArrayList<Feature> children;
     protected ArrayList<FeatureFlag> flags;
+    protected Sprite sprite;
+    protected String examineText;
 
     public Feature() {
         primaryName = null;
@@ -25,6 +28,8 @@ public abstract class Feature {
         parent = null;
         children = new ArrayList<>();
         flags = new ArrayList<>();
+        sprite = new Sprite();
+        examineText = "";
     }
 
     public Feature(String primaryName, String[] allNames) {
@@ -33,6 +38,8 @@ public abstract class Feature {
         parent = null;
         children = new ArrayList<>();
         flags = new ArrayList<>();
+        sprite = new Sprite();
+        examineText = "";
     }
 
     public Feature(String primaryName, String[] allNames, Feature parent, ArrayList<Feature> children, ArrayList<FeatureFlag> flags) {
@@ -41,6 +48,24 @@ public abstract class Feature {
         this.parent = parent;
         this.children = children;
         this.flags = flags;
+        sprite = new Sprite();
+        examineText = "";
+    }
+
+    public String getExamineText() {
+        return examineText;
+    }
+
+    public void setExamineText(String examineText) {
+        this.examineText = examineText;
+    }
+
+    public Sprite getSprite() {
+        return sprite;
+    }
+
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
     }
 
     public String getPrimaryName() {
@@ -109,6 +134,11 @@ public abstract class Feature {
      * Checks if any of this feature's possible names matches the given input.
      */
     public boolean isNamed(String name) {
+        System.out.println("names of the %s".formatted(primaryName));
+        System.out.println(Arrays.toString(allNames));
+        System.out.println("query is named this? %s".formatted(primaryName.toLowerCase().equals(name)));
+        System.out.println("query is named this at all? %s".formatted(Arrays.asList(allNames).contains(name)));
+        System.out.println();
         if (primaryName.toLowerCase().equals(name)) {
             return true;
         }
@@ -120,19 +150,26 @@ public abstract class Feature {
      * If no such feature exists, returns null.
      */
     public Feature getChildWithName(String name) {
+        System.out.println("beginning getChildWithName in %s".formatted(primaryName));
         name = name.strip();
         if (this.isNamed(name)) {
             return this;
         }
+        System.out.println("%s isn't the child straight up, moving to recursion".formatted(primaryName));
         return getChildWithNameRecursive(name, this.getChildren());
     }
 
     private Feature getChildWithNameRecursive(String name, ArrayList<Feature> featuresToSearch) {
+        System.out.println("checking children of %s. current queue is as follows".formatted(primaryName));
+        System.out.println(Arrays.toString(featuresToSearch.toArray()));
         boolean terminate = true;
         // a combination of all of the features in the next 'level' down from the one currently being checked
         ArrayList<Feature> nextLevel = new ArrayList<>();
         for (Feature feature : featuresToSearch) {
+            System.out.println("checking feature %s, name %s".formatted(feature, feature.primaryName));
             if (feature.isNamed(name)) {
+                System.out.println("echo found!!");
+                System.out.println(feature == null);
                 return feature;
             }
             if (feature.hasChildren()) {
@@ -150,8 +187,15 @@ public abstract class Feature {
      * Reparents a given feature to this one.
      */
     public void addChild(Feature child) {
+        if (child.getParent() != null)
+            child.getParent().removeChild(child);
         child.setParent(this);
         children.add(child);
+    }
+
+    public void removeFromPlay() {
+        this.getParent().removeChild(this);
+        this.setParent(null);
     }
 
     /**

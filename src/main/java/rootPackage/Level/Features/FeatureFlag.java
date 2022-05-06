@@ -13,5 +13,7 @@ public enum FeatureFlag {
     WEAPON,
     ACCESSORY,
     PLAYER,
-    INVISIBLE
+    INVISIBLE,
+    DOOR,
+    ENEMY
 }

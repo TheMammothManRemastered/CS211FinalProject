@@ -1,0 +1,12 @@
+{
+  "targetSelf" : true,
+  "intents" : [
+    {
+      "name" : "raiseDefense",
+      "valueStat" : "blockStat",
+      "targetStat" : "blockStat",
+      "modifier" : "none"
+    }
+  ],
+  "uses" : 101
+}

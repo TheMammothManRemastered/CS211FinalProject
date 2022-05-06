@@ -1,0 +1,16 @@
+{
+  "minimumSize" : 1,
+  "deadEndsNeeded" : 2,
+  "minimumEnemies" : 0,
+  "exitRoom" : "minotaurBoss",
+  "keyRoom" : "minotaurKey",
+  "healthPoints" : 1,
+  "themedRooms" : [
+    "daedelusWorkshop",
+    "zeusStatue"
+  ],
+  "themedFeatures" : [],
+  "commonEnemyType" : "beast",
+  "keyName" : "meat",
+  "bossDoorDescription" : "You see a note etched into the door. \"Think not to enter the chamber of the Beast of Minos without first bringing a worthy tribute. Only then shall the doors grant access.\""
+}

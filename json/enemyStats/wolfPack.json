@@ -1,0 +1,21 @@
+{
+  "name": "Wolf Pack",
+  "description": "A pack of mangy wolves, all slathering at the mouth with hunger in their eyes.",
+  "tags": [
+    "beast"
+  ],
+  "health": 200,
+  "baseAttack": 30,
+  "baseAbsorption": 0.0,
+  "intelligence": 1,
+  "priority": 3,
+  "possibleMoves": [
+    "attack",
+    "pass"
+  ],
+  "moveDescriptions": [
+    "A wolf barks and charges towards you, its fangs ready to taste of your flesh!",
+    "The wolves circles you, waiting for the ideal moment to strike..."
+  ],
+  "goldDrop" : 150
+}

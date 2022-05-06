@@ -10,4 +10,8 @@ public class FloorGenerationRNG {
     //TODO: unseed this
     public static Random rng = new Random(44);
 
+    public static boolean roll() {
+        return rng.nextBoolean();
+    }
+
 }

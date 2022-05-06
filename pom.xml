@@ -45,6 +45,6 @@
             </plugin>
         </plugins>
     </build>
-    <version>b0.4</version>
+    <version>release1.0</version>
     <packaging>jar</packaging>
 </project>

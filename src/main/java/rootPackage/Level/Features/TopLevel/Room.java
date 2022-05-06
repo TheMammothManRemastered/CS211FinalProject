@@ -1,11 +1,14 @@
 package rootPackage.Level.Features.TopLevel;
 
+import rootPackage.Graphics.GUI.RenderLayer;
+import rootPackage.Graphics.Viewport.Sprite;
 import rootPackage.Level.Features.Feature;
 import rootPackage.Input.PlayerAction;
 import rootPackage.Level.Features.FeatureFlag;
 import rootPackage.Main;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * A class representing a room as a top-level feature.
@@ -13,26 +16,27 @@ import java.util.ArrayList;
  * NOTE: This class is NOT to be confused with {@link rootPackage.Level.FloorGeneration.Layout.RoomNode RoomNode}!
  * If {@link rootPackage.Level.FloorGeneration.Layout.RoomNode RoomNode} is to the number of an office room, then {@link Room Room} is to that room's contents.
  *
- * @version 1.1
  * @author William Owens
+ * @version 1.1
  */
 public class Room extends Feature {
 
-    public Room(String primaryName, String[] allNames) {
-        super(primaryName, allNames);
+    public Room() {
+        this("Room", new String[]{"room", "chamber"});
     }
 
-    public Room(String primaryName, String[] allNames, Feature parent, ArrayList<Feature> children, ArrayList<FeatureFlag> flags) {
-        super(primaryName, allNames, parent, children, flags);
+    public Room(String primaryName, String[] allNames) {
+        super(primaryName, allNames);
+        setSprite(new Sprite(RenderLayer.WALLS, "walls.png"));
     }
 
     @Override
     public void react(PlayerAction playerAction) {
         if (playerAction == PlayerAction.EXAMINE) {
-            Main.mainWindow.getConsoleWindow().addEntryToHistory("placeholder room description");
+            Main.mainWindow.getConsoleWindow().addEntryToHistory(examineText);
             if (this.hasChildren()) {
                 for (Feature child : children) {
-                    Main.mainWindow.getConsoleWindow().addEntryToHistory(child.getPrimaryName());
+                    Main.mainWindow.getConsoleWindow().addEntryToHistory(child.getExamineText());
                 }
             }
         } else {

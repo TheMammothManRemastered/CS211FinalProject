@@ -1,14 +1,16 @@
 {
-  "minimumSize" : 15,
+  "minimumSize" : 8,
   "deadEndsNeeded" : 3,
-  "minimumEnemies" : 5,
-  "exitRoom" : "link to boss room template here (minotaur room with the exit leading into a vast maze, you can hear the sounds of a minotaur out there, you should find a way to take care of that before leaving",
-  "keyRoom" : "link to key room template here (a big piece of juicy, raw, aromatic meat with some enemies around it. take the meat to the exit room to draw out the minotaur)",
-  "healthPoints" : 2,
+  "minimumEnemies" : 3,
+  "exitRoom" : "minotaurBoss",
+  "keyRoom" : "minotaurKey",
+  "healthPoints" : 1,
   "themedRooms" : [
-    "link to daedelus room here",
-    "link to god statue of zeus"
+    "daedelusWorkshop",
+    "zeusStatue"
   ],
   "themedFeatures" : [],
-  "commonEnemyType" : "beast"
+  "commonEnemyType" : "beast",
+  "keyName" : "meat",
+  "bossDoorDescription" : "You see a note etched into the door. \"Think not to enter the chamber of the Beast of Minos without first bringing a worthy tribute. Only then shall the doors grant access.\""
 }

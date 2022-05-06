@@ -3,5 +3,17 @@
     "wolf.json",
     "bear.json",
     "placeholderBeast.json"
+  ],
+  "2" : [
+    "wolf.json",
+    "bear.json"
+  ],
+  "3" : [
+    "wolf.json",
+    "bear.json"
+  ],
+  "4" : [
+    "wolf.json",
+    "bear.json"
   ]
 }

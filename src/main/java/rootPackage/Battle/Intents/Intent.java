@@ -1,25 +1,30 @@
 package rootPackage.Battle.Intents;
 
+import org.json.simple.JSONObject;
 import rootPackage.Battle.Combatants.Combatant;
+import rootPackage.Main;
+import rootPackage.Player;
 
 /**
- * Parent ADT of all Intents, a simple effect applied by an action.
- *
- * @version 1.0
- * @author Jovin Antony-Maria
+ * This s the intent class
+ * This determines what effect to do to the enemy/player
+ * And also determines how it is applied
+ * @author jovin
  */
-public abstract class Intent {
+public class Intent {
     protected Combatant target;
     protected double value;
                 //determines how much value will be tinkered with the health of the target
     protected boolean notifyPlayerWhenApplied;
+    private final String targetStat;
 
     //constructor
     //Default constructor is basically non-existent
-    public Intent(Combatant target, double value, boolean notifyPlayerWhenApplied){
+    public Intent(Combatant target, double value, boolean notifyPlayerWhenApplied, String targetStat){
         this.target = target;
         this.value = value;
         this.notifyPlayerWhenApplied = notifyPlayerWhenApplied;
+        this.targetStat = targetStat;
     }
 
 
@@ -36,39 +41,29 @@ public abstract class Intent {
     }
 
 
-
-    //Setter methods
-    public void setNotifyPlayerWhenApplied(boolean notifyPlayerWhenApplied) {
-        this.notifyPlayerWhenApplied = notifyPlayerWhenApplied;
-    }
-    public void setTarget(Combatant target) {
-        this.target = target;
-    }
-    public void setValue(double value) {
-        this.value = value;
-    }
-
-
     //Applying the Action, but this method will prob never be called
     public void apply(Combatant target){
-        if(this.notifyPlayerWhenApplied)
-            this.notifyPlayer();
+        switch (targetStat) {
+            case "hpStat" -> {
+                target.takeDamage(value);
+            }
+            case "attackStat" -> {
+                target.setAttack((int) value);
+            }
+            case "blockStat" -> {
+                target.setBlock(value);
+            }
+        }
+        if (notifyPlayerWhenApplied) {
+            notifyPlayer();
+        }
     }
 
 
-    public abstract void notifyPlayer();
+    public void notifyPlayer() {
+        Main.mainWindow.getConsoleWindow().addEntryToHistory(((target instanceof rootPackage.Battle.Combatants.Player) ? "Your " : "The foe's ") + "HP is now " + target.getCurrentHp());
+    }
                 //Got an error saying cannot override final notify of object
                 //So renamed it
-
-
-    //need to come back to when boost defense or any other additions Intents are added
-    public static Intent parseToIntent(Combatant target, String name, double value){
-        return switch (name) {
-            case "DealDamage" -> new DealDamageIntent(target, value, true);
-            case "RaiseAttack" -> new RaiseAttackIntent(target, value, true);
-            default -> null;
-        };
-    }
-
 
 }
