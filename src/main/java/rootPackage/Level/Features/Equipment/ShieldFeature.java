@@ -1,5 +1,6 @@
 package rootPackage.Level.Features.Equipment;
 
+import org.json.simple.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -19,8 +20,8 @@ import java.util.ArrayList;
  * <p></p>
  * Shields are responsible for setting the player's defence stat.
  *
- * @version 1.0
  * @author William Owens
+ * @version 1.0
  */
 public class ShieldFeature extends EquipmentFeature {
 
@@ -30,7 +31,7 @@ public class ShieldFeature extends EquipmentFeature {
         flags.add(FeatureFlag.EQUIPPABLE);
         JSONParser parser = new JSONParser();
         try {
-            FileReader fr = new FileReader("json"+System.getProperty("file.separator")+"equipment"+System.getProperty("file.separator")+jsonPath);
+            FileReader fr = new FileReader("json" + System.getProperty("file.separator") + "equipment" + System.getProperty("file.separator") + jsonPath);
             JSONObject jsonFile = (JSONObject) parser.parse(fr);
             value = ((double) jsonFile.get("value"));
             description = (String) jsonFile.get("description");

@@ -1,7 +1,6 @@
 package rootPackage.Level.Features.Enemy;
 
-import rootPackage.Battle.BattleSupervisor;
-import rootPackage.Battle.Combatants.Player;
+import org.json.simple.*;
 import rootPackage.Level.Features.Enemy.Bosses.Minotaur;
 import rootPackage.Level.Features.Enemy.Enemies.Bear;
 import rootPackage.Level.Features.Enemy.Enemies.Wolf;
@@ -12,6 +11,12 @@ import rootPackage.Main;
 
 import java.util.ArrayList;
 
+/**
+ * Parent ADT of all enemy {@link Feature Feature}s.
+ *
+ * @author William Owens
+ * @version 2.2
+ */
 public abstract class Enemy extends Feature {
 
     protected String jsonFile;
@@ -31,14 +36,12 @@ public abstract class Enemy extends Feature {
 
     public Enemy(String primaryName, String[] allNames, String jsonFile) {
         super(primaryName, allNames);
-        this.jsonFile = "json"+System.getProperty("file.separator")+"enemyStats"+System.getProperty("file.separator")+jsonFile;
+        this.jsonFile = "json" + System.getProperty("file.separator") + "enemyStats" + System.getProperty("file.separator") + jsonFile;
     }
 
-    public void fight() {
-        System.out.println("going with file "+this.jsonFile);
-        Main.battleManagerMain.go(jsonFile);
-    }
-
+    /**
+     * Converts a json file to a given enemy.
+     */
     public static Enemy jsonToEnemy(String jsonFile) {
         switch (jsonFile) {
             case "bear.json" -> {
@@ -54,5 +57,12 @@ public abstract class Enemy extends Feature {
                 return new Wolf();
             }
         }
+    }
+
+    /**
+     * Starts combat with this enemy.
+     */
+    public void fight() {
+        Main.battleManagerMain.go(jsonFile);
     }
 }

@@ -1,6 +1,7 @@
 package rootPackage.Level.Features.Enemy.Bosses;
 
-import rootPackage.Graphics.GUI.RenderLayer;
+import org.json.simple.*;
+import rootPackage.Graphics.Viewport.RenderLayer;
 import rootPackage.Graphics.Viewport.Sprite;
 import rootPackage.Input.PlayerAction;
 import rootPackage.Level.Features.Enemy.Enemy;

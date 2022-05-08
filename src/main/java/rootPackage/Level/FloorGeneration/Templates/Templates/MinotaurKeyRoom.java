@@ -1,9 +1,8 @@
 package rootPackage.Level.FloorGeneration.Templates.Templates;
 
-import rootPackage.Level.Features.Enemy.Bosses.Minotaur;
+import org.json.simple.*;
 import rootPackage.Level.Features.Enemy.Enemies.WolfPack;
 import rootPackage.Level.Features.Feature;
-import rootPackage.Level.Features.Features.Bloodstain;
 import rootPackage.Level.Features.Features.Meat;
 import rootPackage.Level.Features.Features.Pedestal;
 import rootPackage.Level.FloorGeneration.Templates.RoomTemplate;

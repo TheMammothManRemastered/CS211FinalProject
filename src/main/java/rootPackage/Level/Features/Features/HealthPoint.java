@@ -1,6 +1,7 @@
 package rootPackage.Level.Features.Features;
 
-import rootPackage.Graphics.GUI.RenderLayer;
+import org.json.simple.*;
+import rootPackage.Graphics.Viewport.RenderLayer;
 import rootPackage.Graphics.Viewport.Sprite;
 import rootPackage.Input.PlayerAction;
 import rootPackage.Level.Features.Feature;
@@ -35,7 +36,7 @@ public class HealthPoint extends Feature {
                     Main.mainWindow.getConsoleWindow().addEntryToHistory("You've already used this statue, it will have no effect.");
                 } else {
                     Main.mainWindow.getConsoleWindow().addEntryToHistory("You kneel in prayer in front of the statue. You can feel a glorious light enveloping you. The pain in your body vanishes!");
-                    Main.player.setCurrentHP(Main.player.getCurrentHP()+50);
+                    Main.player.setCurrentHP(Main.player.getCurrentHP() + 50);
                     used = true;
                     Main.mainWindow.getConsoleWindow().addEntryToHistory("As you get up again, you see the light from the statue fade away.");
                     this.sprite = new Sprite(RenderLayer.OTHER, "healthPointUsed.png");

@@ -1,10 +1,16 @@
 package rootPackage.Graphics.Viewport;
 
-import rootPackage.Graphics.GUI.RenderLayer;
+import org.json.simple.*;
 
+/**
+ * Class representing the sprite of a feature. Contains the feature's rendering layer and the image that will be drawn to the screen.
+ *
+ * @author William Owens
+ * @version 1.0
+ */
 public class Sprite implements Comparable<Sprite>{
     private RenderLayer renderLayer;
-    private String imageName;
+    private final String imageName;
 
     public Sprite() {
         this.renderLayer = RenderLayer.NOT_DRAWN;
@@ -20,16 +26,12 @@ public class Sprite implements Comparable<Sprite>{
         return renderLayer;
     }
 
-    public void setRenderLayer(RenderLayer renderLayer) {
-        this.renderLayer = renderLayer;
-    }
-
     public String getImageName() {
         return imageName;
     }
 
-    public void setImageName(String imageName) {
-        this.imageName = imageName;
+    public void setRenderLayer(RenderLayer renderLayer) {
+        this.renderLayer = renderLayer;
     }
 
     @Override

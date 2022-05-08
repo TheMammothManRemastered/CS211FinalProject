@@ -1,5 +1,6 @@
 package rootPackage.Battle.Combatants;
 
+import org.json.simple.*;
 import rootPackage.Battle.Actions.Action;
 import rootPackage.Main;
 
@@ -18,28 +19,12 @@ public class Player extends Combatant {
 
     private int chosenAction;
 
-    // Will here, I wrote this bit. this is DEFINITELY not how threads are supposed to be used, look into that
-    public Thread thread = new Thread() {
-        @Override
-        public void run() {
-            try {
-                this.wait();
-            } catch (InterruptedException e) {
-                System.out.println("lego city");
-            }
-        }
-    };
-
     //Constructors
     public Player(){
         this(500,450,60,0.2,2);
     }
     public Player(int maxHp, int currentHp, int attack, double block, int priority){
         super(maxHp,currentHp,attack,block,priority);
-    }
-
-    public int getChosenAction() {
-        return chosenAction;
     }
 
     public void setChosenAction(int chosenAction) {
@@ -54,13 +39,10 @@ public class Player extends Combatant {
             Main.mainWindow.getConsoleWindow().addEntryToHistory("%d) %s".formatted(i, action.getName()));
         }
         try {
-            System.out.println("waiting");
             wait();
-            System.out.println("finished waiting");
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println(chosenAction);
         if (chosenAction < 0 || chosenAction >= availableActions.size()) {
             Main.mainWindow.getConsoleWindow().addEntryToHistory("Using %s".formatted(availableActions.get(0).getName()));
             return availableActions.get(0);
@@ -68,8 +50,8 @@ public class Player extends Combatant {
         return availableActions.get(chosenAction);
     }
 
+    // this probably shouldn't be here, but it makes sense for readability
     public synchronized void wakeUp() {
-        System.out.println("wake up call");
         notifyAll();
     }
 

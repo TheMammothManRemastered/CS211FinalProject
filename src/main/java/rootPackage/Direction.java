@@ -1,37 +1,19 @@
 package rootPackage;
 
-import rootPackage.Level.Features.Equipment.WeaponFeature;
+import org.json.simple.*;
 import rootPackage.Level.FloorGeneration.Layout.Connection;
 
 /**
- * An enum representing one of the four cardinal directions, as well as a CENTER direction, representing no direction at all.
+ * An enum representing one of the four cardinal directions.
  *
- * @version 2.4
  * @author William Owens
+ * @version 3.0
  */
 public enum Direction {
     NORTH,
     SOUTH,
     EAST,
-    WEST,
-    CENTER;
-
-    /**
-     * Returns an array of all Directions, except for CENTER.
-     */
-    public static Direction[] allButCenter() {
-        return new Direction[] {Direction.NORTH,Direction.SOUTH,Direction.EAST,Direction.WEST};
-    }
-
-    public Direction opposite() {
-        return switch (this) {
-            case NORTH -> SOUTH;
-            case SOUTH -> NORTH;
-            case EAST -> WEST;
-            case WEST -> EAST;
-            case CENTER -> CENTER;
-        };
-    }
+    WEST;
 
     /**
      * Converts the degree measurement outputted via {@link rootPackage.Level.FloorGeneration.Layout.Connection Connection}'s {@link Connection#getRelativeDegrees() getRelativeDegrees} method into a Direction.
@@ -43,19 +25,24 @@ public enum Direction {
         // -45 to -135 is west
         if (-45 <= angle && angle < 45) {
             return NORTH;
-        }
-        if (45 <= angle && angle < 135) {
+        } else if (45 <= angle && angle < 135) {
             return EAST;
-        }
-        if ((135 <= angle && angle <= 180) || (-180 <= angle && angle <= -135)) {
+        } else if ((135 <= angle && angle <= 180) || (-180 <= angle && angle <= -135)) {
             return SOUTH;
-        }
-        if (-135 < angle && angle < -45) {
+        } else if (-135 < angle && angle < -45) {
             return WEST;
         }
-        return CENTER;
+        return null;
     }
 
+    /**
+     * Converts an int number to a direction.
+     *
+     * @param i 0, 1, 2 or 3.
+     * @return NORTH, SOUTH, EAST, or WEST respectively.
+     *
+     * @throws IndexOutOfBoundsException If the input is less than 0 or greater than 3.
+     */
     public static Direction numToDirection(int i) {
         switch (i) {
             case 0 -> {
@@ -71,11 +58,16 @@ public enum Direction {
                 return WEST;
             }
             default -> {
-                return CENTER;
+                throw new IndexOutOfBoundsException("numToDirection does not accept numbers less than 0 or greater than 3");
             }
         }
     }
 
+    /**
+     * Returns a direction's 'offset', the 2d 'vector' representing the orientation this direction represents in terms of graphics.
+     *
+     * @return An array of two ints, the first element is the horizontal component, and the second is the vertical component.
+     */
     public int[] toOffset() {
         switch (this) {
             case NORTH -> {
@@ -90,7 +82,7 @@ public enum Direction {
             case EAST -> {
                 return new int[]{1, 0};
             }
-            default-> {
+            default -> {
                 return new int[]{0, 0};
             }
         }

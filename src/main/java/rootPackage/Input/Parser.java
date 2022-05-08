@@ -1,5 +1,6 @@
 package rootPackage.Input;
 
+import org.json.simple.*;
 import rootPackage.Level.Features.Feature;
 import rootPackage.Main;
 
@@ -10,7 +11,7 @@ import java.util.Arrays;
  * Class responsible for parsing player input into a game command.
  * Uses purely static methods.
  *
- * @version 1.2
+ * @version 1.22
  * @author William Owens
  */
 public class Parser {
@@ -37,6 +38,7 @@ public class Parser {
             "to"
     ));
 
+    //TODO: this data is *basically* implemented twice, here and in playerActionAlias, try and remove that redundancy
     private static final ArrayList<String> VERBS = new ArrayList<>(Arrays.asList(
             "take",
             "grab",
@@ -75,9 +77,14 @@ public class Parser {
             "eliminate",
             "stab",
             "shoot",
-            "inspect"
+            "inspect",
+            "fight",
+            "battle"
     ));
 
+    /**
+     * Parses a player's input to get the user's selected action.
+     */
     public static PlayerAction getActionFromInput(String input) {
         input = input.toLowerCase();
         String[] words = input.split(" ");
@@ -85,6 +92,9 @@ public class Parser {
         return PlayerActionAlias.aliasToAction(verbAlias);
     }
 
+    /**
+     * Parses a player's input to get the object the user has indicated. Checks just the room the player is in.
+     */
     public static Feature getObjectFromInput(String input) {
         input = input.toLowerCase();
         String[] words = input.split(" ");

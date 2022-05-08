@@ -1,9 +1,10 @@
 package rootPackage.Level.FloorGeneration.Layout;
 
+import org.json.simple.*;
 import rootPackage.FloatEquivalence;
 
-import java.awt.geom.Point2D;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * A class to generate a Minimum-Spanning Tree (MST) from the mesh returned by a Delaunay Triangulation of a point cloud.
@@ -17,37 +18,12 @@ import java.util.*;
  */
 public class MSTMaker {
 
-    private int numNodes;
-    private AdjacencyMatrix graph;
-
-    public static void main(String[] args) {
-        // seeded demonstration of level gen (10 points between (1,1) and (10,10), seed 44)
-        Random rng = new Random(44);
-        Point2D.Double[] inputs = new Point2D.Double[10];
-        for (int i = 0; i < 10; i++) {
-            Point2D.Double point = new Point2D.Double(rng.nextInt(10) + 1, rng.nextInt(10) + 1);
-            boolean exist = false;
-            for (Point2D.Double pointInArray : inputs) {
-                if (point.equals(pointInArray)) {
-                    exist = true;
-                }
-            }
-            if (!exist) {
-                inputs[i] = point;
-                continue;
-            }
-            i--;
-
-        }
-        DelaunayTriangulation del = new DelaunayTriangulation(inputs);
-        Triangulation triangulation = del.triangulate(); // triangulate the inputs
-        MSTMaker mst = new MSTMaker(triangulation);
-        MinimumSpanningTree minimumSpanningTree = mst.generateMST();
-
-    }
+    private final int numNodes;
+    private final AdjacencyMatrix graph;
 
     /**
      * Constructor. Sets up this MSTMaker with a given triangulation.
+     *
      * @param delaunayTriangulation The output of a DelaunayTriangulation's .triangulate() method.
      */
     public MSTMaker(Triangulation delaunayTriangulation) {
@@ -73,14 +49,8 @@ public class MSTMaker {
     }
 
     /**
-     * Getter for this MSTMaker's adjacency matrix.
-     */
-    public AdjacencyMatrix getGraph() {
-        return graph;
-    }
-
-    /**
      * Generates an MST for the supplied graph using Prim's algorithm.
+     *
      * @return An arraylist of Connections that, together, form the MST.
      *
      * @see <a href="https://youtu.be/jsmMtJpPnhU">Video on MSTs and Prim's Algorithm by YouTube user WilliamFiset</a>
@@ -89,7 +59,7 @@ public class MSTMaker {
         ArrayList<MSTEdge> priorityQueue = new ArrayList<>();
         ArrayList<MSTEdge> minimumSpanningTree = new ArrayList<>();
         boolean[] visited = new boolean[numNodes];
-        int numEdgesInMST = numNodes-1;
+        int numEdgesInMST = numNodes - 1;
         int currentNode = 0;
         // while the MST isn't finished, and the priorityqueue isn't empty, do the logic
         do {
@@ -102,7 +72,7 @@ public class MSTMaker {
                 if (visited[i] || connections[i] == 0) {
                     continue;
                 }
-                priorityQueue.add(new MSTEdge(currentNode,i,connections[i]));
+                priorityQueue.add(new MSTEdge(currentNode, i, connections[i]));
             }
             // if new edges have been added, logic can be done normally
             // if no new edges get added, more must be done
@@ -128,7 +98,7 @@ public class MSTMaker {
             FloorLayoutGenerator.MSTSb.append("\n");
             MyPoint2D origin = graph.getNode(ed.getStart());
             MyPoint2D destination = graph.getNode(ed.getEnd());
-            output.add(new Connection(origin,destination));
+            output.add(new Connection(origin, destination));
         }
 
         MinimumSpanningTree MST = new MinimumSpanningTree(output.toArray(new Connection[output.size()]), minimumSpanningTree.toArray(new MSTEdge[minimumSpanningTree.size()]), graph);
@@ -139,12 +109,12 @@ public class MSTMaker {
 
 /**
  * Class representing a connection between nodes of an adjacency matrix.
- * Very similar to a Connection, but stores data in a form more convenient for this class' logic.
+ * Very similar to a Connection, but stores data in a form more convenient for this class' logic specifically.
  *
  * @author William Owens
  * @version 1.0
  */
-class MSTEdge implements Comparable<MSTEdge>{
+class MSTEdge implements Comparable<MSTEdge> {
 
     private int start;
     private int end;
@@ -170,19 +140,17 @@ class MSTEdge implements Comparable<MSTEdge>{
 
     @Override
     public int compareTo(MSTEdge o) {
-        if (FloatEquivalence.equals(o.weight,this.weight)) {
+        if (FloatEquivalence.equals(o.weight, this.weight)) {
             return 0;
-        }
-        else if (o.weight>this.weight) {
+        } else if (o.weight > this.weight) {
             return -1;
-        }
-        else {
+        } else {
             return 1;
         }
     }
 
     @Override
     public String toString() {
-        return "\\operatorname{polygon}\\left(p_{%d},p_{%d}\\right)".formatted(start,end);
+        return "\\operatorname{polygon}\\left(p_{%d},p_{%d}\\right)".formatted(start, end);
     }
 }

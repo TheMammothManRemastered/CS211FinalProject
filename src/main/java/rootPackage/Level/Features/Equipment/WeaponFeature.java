@@ -1,5 +1,6 @@
 package rootPackage.Level.Features.Equipment;
 
+import org.json.simple.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -10,7 +11,6 @@ import rootPackage.Level.Features.Feature;
 import rootPackage.Level.Features.FeatureFlag;
 import rootPackage.Main;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,8 +20,8 @@ import java.util.ArrayList;
  * <p></p>
  * Weapons are responsible for setting the player's attack stat.
  *
- * @version 1.0
  * @author William Owens
+ * @version 1.0
  */
 public class WeaponFeature extends EquipmentFeature {
 
@@ -31,7 +31,7 @@ public class WeaponFeature extends EquipmentFeature {
         flags.add(FeatureFlag.EQUIPPABLE);
         JSONParser parser = new JSONParser();
         try {
-            FileReader fr = new FileReader("json"+System.getProperty("file.separator")+"equipment"+System.getProperty("file.separator")+jsonPath);
+            FileReader fr = new FileReader("json" + System.getProperty("file.separator") + "equipment" + System.getProperty("file.separator") + jsonPath);
             JSONObject jsonFile = (JSONObject) parser.parse(fr);
             value = Math.toIntExact((Long) jsonFile.get("value"));
             description = (String) jsonFile.get("description");
@@ -58,7 +58,7 @@ public class WeaponFeature extends EquipmentFeature {
                     }
                 }
                 this.reparentSelf(playerAsFeature);
-                consoleWindow.addEntryToHistory("You now wield the %s. Your attack is now %d".formatted(this.getPrimaryName(), (int)this.value)); //TODO: load damage stat from json
+                consoleWindow.addEntryToHistory("You now wield the %s. Your attack is now %d".formatted(this.getPrimaryName(), (int) this.value)); //TODO: load damage stat from json
             }
             case EXAMINE -> {
                 Main.mainWindow.getConsoleWindow().addEntryToHistory(this.description);

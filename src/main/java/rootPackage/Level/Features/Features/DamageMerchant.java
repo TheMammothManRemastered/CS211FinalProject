@@ -1,6 +1,7 @@
 package rootPackage.Level.Features.Features;
 
-import rootPackage.Graphics.GUI.RenderLayer;
+import org.json.simple.*;
+import rootPackage.Graphics.Viewport.RenderLayer;
 import rootPackage.Graphics.Viewport.Sprite;
 import rootPackage.Input.PlayerAction;
 import rootPackage.Level.Features.Equipment.EquipmentAlias;
@@ -10,8 +11,9 @@ import rootPackage.Main;
 import rootPackage.Player;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
-public class DamageMerchant extends Feature{
+public class DamageMerchant extends Feature {
 
     public DamageMerchant() {
         primaryName = "Attack Merchant";
@@ -27,7 +29,7 @@ public class DamageMerchant extends Feature{
                 mult++;
             }
         }
-        return (70 + ((70 * mult)/3));
+        return (70 + ((70 * mult) / 3));
     }
 
     @Override
@@ -40,7 +42,7 @@ public class DamageMerchant extends Feature{
                 if (Main.player.getGold() >= calcGold(Main.player)) {
                     Main.mainWindow.getConsoleWindow().addEntryToHistory("You hand over %d gold. An attack talisman appears in your hands!".formatted(calcGold(Main.player)));
                     Main.player.addGold(-calcGold(Main.player));
-                    Main.player.getPlayerAsFeature().addChild(EquipmentAlias.getEquipment("attackTalisman"));
+                    Main.player.getPlayerAsFeature().addChild(Objects.requireNonNull(EquipmentAlias.getEquipment("attackTalisman")));
                 } else {
                     Main.mainWindow.getConsoleWindow().addEntryToHistory("You don't have enough gold! In other words, you don't have the right!");
                 }

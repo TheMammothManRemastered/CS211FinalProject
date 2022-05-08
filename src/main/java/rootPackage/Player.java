@@ -1,73 +1,86 @@
 package rootPackage;
 
-import rootPackage.Battle.Actions.Action;
-import rootPackage.Battle.Combatants.Combatant;
-import rootPackage.Level.Features.Equipment.*;
 import rootPackage.Level.Features.Equipment.AccessoryEffects.AccessoryEffect;
+import rootPackage.Level.Features.Equipment.*;
 import rootPackage.Level.Features.Feature;
 import rootPackage.Level.Features.FeatureFlag;
-import rootPackage.Level.Features.Features.Meat;
-import rootPackage.Level.Features.Features.TrapdoorKey;
 import rootPackage.Level.Features.TopLevel.PlayerFeature;
 import rootPackage.Level.FloorGeneration.Layout.RoomNode;
 
+import org.json.simple.*;
+
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
- * Represents the player. Currently only holds the player's location.
+ * A class representing the player.
+ * Stores current player HP between battles, as well as their gold, current location on the map in terms of a {@link rootPackage.Level.FloorGeneration.Layout.RoomNode}, and their associated {@link rootPackage.Level.Features.TopLevel.PlayerFeature PlayerFeature} object.
+ * <p></p>
+ * NOTE: This class should not be confused with {@link rootPackage.Level.Features.TopLevel.PlayerFeature PlayerFeature}, which is used primarily to manage player inventory and stat modifiers, or {@link rootPackage.Battle.Combatants.Player Player}, which is a {@link rootPackage.Battle.Combatants.Combatant Combatant} to be used in the battle system.
  *
  * @author William Owens
- * @version 0.2
+ * @version 1.3
  */
 public class Player {
 
     private RoomNode currentRoom;
     private PlayerFeature playerAsFeature;
     private int currentHP;
-    private Combatant currentEnemy;
     private int gold;
-
-    public PlayerFeature getPlayerAsFeature() {
-        return playerAsFeature;
-    }
-
-    public Player() {
-        this(null);
-    }
 
     public Player(RoomNode currentRoom) {
         this.currentRoom = currentRoom;
         playerAsFeature = new PlayerFeature("You", new String[]{"self", "player", "yourself"});
-        WeaponFeature weaponFeature = (WeaponFeature) EquipmentAlias.getEquipment("steelSword");
-        ArmorFeature armorFeature = (ArmorFeature) EquipmentAlias.getEquipment("steelArmor");
-        ShieldFeature shieldFeature = (ShieldFeature) EquipmentAlias.getEquipment("steelShield");
-        playerAsFeature.addChild(weaponFeature);
-        playerAsFeature.addChild(armorFeature);
-        playerAsFeature.addChild(shieldFeature);
-        //debug
-        playerAsFeature.addChild(new TrapdoorKey());
-        playerAsFeature.addChild(new Meat());
         currentHP = 150;
+        setup();
+    }
+
+    /**
+     * Sets up player's starting equipment.
+     */
+    private void setup() {
+        // default loadout is steel sword, shield and armor, and no gold
+        // objects requireNonNull isn't required here, we know these inputs will always work, but it stops the IDE from yelling and it can't really hurt either
+        playerAsFeature.addChild(Objects.requireNonNull(EquipmentAlias.getEquipment("steelSword")));
+        playerAsFeature.addChild(Objects.requireNonNull(EquipmentAlias.getEquipment("steelArmor")));
+        playerAsFeature.addChild(Objects.requireNonNull(EquipmentAlias.getEquipment("steelShield")));
         gold = 0;
     }
+
+    // getters
 
     public RoomNode getCurrentRoom() {
         return currentRoom;
     }
 
-    public void setCurrentRoom(RoomNode currentRoom) {
-        this.currentRoom = currentRoom;
+    public PlayerFeature getPlayerAsFeature() {
+        return playerAsFeature;
     }
 
     public int getCurrentHP() {
         return currentHP;
     }
 
+    public int getGold() {
+        return gold;
+    }
+
+    // setters
+
+    public void setCurrentRoom(RoomNode currentRoom) {
+        this.currentRoom = currentRoom;
+    }
+
     public void setCurrentHP(int currentHP) {
         this.currentHP = currentHP;
     }
 
-    public Combatant generateStats() {
+    // methods
+
+    /**
+     * Creates a {@link rootPackage.Battle.Combatants.Player Player Combatant} based on the player's current equipment and stats.
+     */
+    public rootPackage.Battle.Combatants.Player generateStats() {
         // first, get all the equipment features and put them in a list
         ArrayList<Feature> equipment = playerAsFeature.getChildren(FeatureFlag.EQUIPPABLE);
         int maxHP = 0;
@@ -155,6 +168,9 @@ public class Player {
         return new rootPackage.Battle.Combatants.Player(maxHP, currentHP, attack, block, priority);
     }
 
+    /**
+     * Gets the player's current stats and prints them to the current {@link rootPackage.Graphics.GUI.ConsoleWindow ConsoleWindow}.
+     */
     public void printStatsToConsole() {
         // first, get all the equipment features and put them in a list
         ArrayList<Feature> equipment = playerAsFeature.getChildren(FeatureFlag.EQUIPPABLE);
@@ -244,19 +260,26 @@ public class Player {
         Main.mainWindow.getConsoleWindow().addEntryToHistory("Your current HP is %d.".formatted(currentHP));
         Main.mainWindow.getConsoleWindow().addEntryToHistory("Your current max HP is %d.".formatted(maxHP));
         Main.mainWindow.getConsoleWindow().addEntryToHistory("Your current damage is %d.".formatted(attack));
-        Main.mainWindow.getConsoleWindow().addEntryToHistory("Your current damage absorption is %.2f%%.".formatted(block*100));
+        Main.mainWindow.getConsoleWindow().addEntryToHistory("Your current damage absorption is %.2f%%.".formatted(block * 100));
         Main.mainWindow.getConsoleWindow().addEntryToHistory("Your current priority, or speed, is %d.".formatted(priority));
     }
 
-    public int getGold() {
-        return gold;
+    /**
+     * Checks if the player can afford something with a given price.
+     */
+    public boolean canAfford(int price) {
+        return price <= gold;
     }
 
-    public void setGold(int gold) {
-        this.gold = gold;
-    }
-
+    /**
+     * Adds a given amount to the player's gold (or removes it, if the parameter is negative). Will never make the player's gold negative.
+     *
+     * @param gold Integer amount of gold to give the player.
+     */
     public void addGold(int gold) {
         this.gold += gold;
+        if (this.gold < 0) {
+            this.gold = 0;
+        }
     }
 }

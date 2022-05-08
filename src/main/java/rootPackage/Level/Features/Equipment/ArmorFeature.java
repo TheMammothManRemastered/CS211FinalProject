@@ -1,5 +1,6 @@
 package rootPackage.Level.Features.Equipment;
 
+import org.json.simple.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -19,8 +20,8 @@ import java.util.ArrayList;
  * <p></p>
  * Armor is responsible for setting the player's HP stat.
  *
- * @version 1.5
  * @author William Owens
+ * @version 1.5
  */
 public class ArmorFeature extends EquipmentFeature {
 
@@ -30,7 +31,7 @@ public class ArmorFeature extends EquipmentFeature {
         flags.add(FeatureFlag.EQUIPPABLE);
         JSONParser parser = new JSONParser();
         try {
-            FileReader fr = new FileReader("json"+System.getProperty("file.separator")+"equipment"+System.getProperty("file.separator")+jsonPath);
+            FileReader fr = new FileReader("json" + System.getProperty("file.separator") + "equipment" + System.getProperty("file.separator") + jsonPath);
             JSONObject jsonFile = (JSONObject) parser.parse(fr);
             value = Math.toIntExact((Long) jsonFile.get("value"));
             description = (String) jsonFile.get("description");

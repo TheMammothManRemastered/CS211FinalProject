@@ -1,5 +1,6 @@
 package rootPackage.Battle.Combatants;
 
+import org.json.simple.*;
 import rootPackage.Battle.AI.AI;
 import rootPackage.Battle.AI.AILevel1;
 import rootPackage.Battle.Actions.Action;

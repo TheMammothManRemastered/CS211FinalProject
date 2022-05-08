@@ -1,11 +1,10 @@
 
 package rootPackage.Battle.Combatants;
 
+import org.json.simple.*;
 import rootPackage.Battle.Actions.Action;
-import rootPackage.Battle.StatusEffects.StatusEffects;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -22,7 +21,6 @@ public abstract class Combatant {
     //Data fields
     protected int maxHp, currentHp, attack, priority;
     protected double block;
-    protected List<StatusEffects> statusEffects;
     protected List<Action> availableActions;
 
 
@@ -60,9 +58,6 @@ public abstract class Combatant {
     public double getBlock(){
         return this.block;
     }
-    public List<StatusEffects> getStatusEffects(){
-        return this.statusEffects;
-    }
     public List<Action> getAvailableActions() {
         return this.availableActions;
     }
@@ -86,9 +81,6 @@ public abstract class Combatant {
     public void setPriority(int priority) {
         this.priority = priority;
     }
-    public void setStatusEffects(List<StatusEffects> statusEffects){
-        this.statusEffects = statusEffects;
-    }
     public void setAvailableActions(List<Action> availableActions){
         this.availableActions = availableActions;
     }
@@ -110,13 +102,6 @@ public abstract class Combatant {
 
     //public abstract Action askingForInput(List<Actions> validActions);
                     //Call it with getValidActions()
-
-    public void applyStatusEffects() {
-        for (StatusEffects effect: statusEffects) {
-            effect.applyStatusEffect(this); //this refers to the object calling the method
-                                            //Due to polymorphism can be player or enemy
-        }
-    }
 
     public void takeDamage(double damage) {
         double damageDealt = damage * (1.0 + this.getBlock());

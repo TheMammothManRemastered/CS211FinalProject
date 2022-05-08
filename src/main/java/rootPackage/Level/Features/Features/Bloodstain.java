@@ -1,11 +1,10 @@
 package rootPackage.Level.Features.Features;
 
-import rootPackage.Graphics.GUI.RenderLayer;
+import org.json.simple.*;
+import rootPackage.Graphics.Viewport.RenderLayer;
 import rootPackage.Graphics.Viewport.Sprite;
 import rootPackage.Input.PlayerAction;
 import rootPackage.Level.Features.Feature;
-import rootPackage.Level.Features.FeatureFlag;
-import rootPackage.Main;
 
 public class Bloodstain extends Feature {
 
@@ -19,6 +18,7 @@ public class Bloodstain extends Feature {
         this.examineText = "The floor is caked in blood.";
     }
 
+    //TODO: implement these
     @Override
     public void react(PlayerAction playerAction) {
 

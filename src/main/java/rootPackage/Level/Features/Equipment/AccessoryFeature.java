@@ -1,5 +1,6 @@
 package rootPackage.Level.Features.Equipment;
 
+import org.json.simple.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -21,8 +22,8 @@ import java.util.ArrayList;
  * <p></p>
  * Accessories can have any effect, such as a bonus to HP or a higher attack stat when fighting beasts.
  *
- * @version 1.0
  * @author William Owens
+ * @version 1.6
  */
 public class AccessoryFeature extends EquipmentFeature {
 
@@ -36,7 +37,7 @@ public class AccessoryFeature extends EquipmentFeature {
         flags.add(FeatureFlag.ACCESSORY);
         JSONParser parser = new JSONParser();
         try {
-            FileReader fr = new FileReader("json"+System.getProperty("file.separator")+"equipment"+System.getProperty("file.separator")+jsonPath);
+            FileReader fr = new FileReader("json" + System.getProperty("file.separator") + "equipment" + System.getProperty("file.separator") + jsonPath);
             JSONObject jsonFile = (JSONObject) parser.parse(fr);
             description = (String) jsonFile.get("description");
             statNotification = (String) jsonFile.get("statNotification");

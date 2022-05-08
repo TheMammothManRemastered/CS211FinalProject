@@ -1,11 +1,13 @@
 package rootPackage.Level.Features.Equipment;
 
-import rootPackage.Level.Features.Features.TrapdoorKey;
-import rootPackage.Level.FloorGeneration.Templates.RoomTemplate;
-import rootPackage.Level.FloorGeneration.Templates.Templates.GenericTreasureRoom;
-import rootPackage.Level.FloorGeneration.Templates.Templates.MinotaurBossRoom;
-import rootPackage.Level.FloorGeneration.Templates.Templates.MinotaurKeyRoom;
+import org.json.simple.*;
 
+/**
+ * Class responsible for mapping a name to a specific equipment feature.
+ *
+ * @author William Owens
+ * @version 1.04
+ */
 public class EquipmentAlias {
 
     public static EquipmentFeature getEquipment(String name) {
@@ -26,13 +28,13 @@ public class EquipmentAlias {
                 return new WeaponFeature("Axe of the Minotaur", new String[]{"axe", "minotaur axe", "blood axe", "bloody axe"}, "minotaurAxe.json");
             }
             case "healthTalisman" -> {
-                return new AccessoryFeature("Health Talisman",new String[]{"talisman"}, "healthTalisman.json");
+                return new AccessoryFeature("Health Talisman", new String[]{"talisman"}, "healthTalisman.json");
             }
             case "attackTalisman" -> {
-                return new AccessoryFeature("Attack Talisman",new String[]{"talisman"}, "attackTalisman.json");
+                return new AccessoryFeature("Attack Talisman", new String[]{"talisman"}, "attackTalisman.json");
             }
             case "defenseTalisman" -> {
-                return new AccessoryFeature("Defense Talisman",new String[]{"talisman"}, "defenseTalisman.json");
+                return new AccessoryFeature("Defense Talisman", new String[]{"talisman"}, "defenseTalisman.json");
             }
         }
         return null;

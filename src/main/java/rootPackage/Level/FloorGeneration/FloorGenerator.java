@@ -1,43 +1,37 @@
 package rootPackage.Level.FloorGeneration;
 
+import org.json.simple.*;
 import rootPackage.Direction;
-import rootPackage.Graphics.GUI.RenderLayer;
+import rootPackage.Graphics.Viewport.RenderLayer;
 import rootPackage.Graphics.Viewport.Sprite;
-import rootPackage.Level.Features.Enemy.Enemy;
 import rootPackage.Level.Features.Feature;
 import rootPackage.Level.Features.FeatureFlag;
 import rootPackage.Level.Features.Features.Door;
 import rootPackage.Level.Features.Features.HealthPoint;
 import rootPackage.Level.Features.Features.Moss;
 import rootPackage.Level.Features.TopLevel.Room;
-import rootPackage.Level.FloorGeneration.Layout.*;
 import rootPackage.Level.Floor;
+import rootPackage.Level.FloorGeneration.Layout.*;
 import rootPackage.Level.FloorGeneration.Templates.RoomAlias;
 import rootPackage.Level.FloorGeneration.Templates.Templates.IntraFloorShop;
 
 import java.awt.geom.Point2D;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * The floor generator class is responsible for generating the Floor objects for each level.
  *
  * @author William Owens
- * @version 2.0
+ * @version 2.8
  */
 public class FloorGenerator {
 
-    private RoomNode[] layout;
-    private Floor floor;
-    private RoomNode spawnNode;
-
-    public FloorGenerator() {
-        layout = null;
-    }
-
     /**
-     * Generates the floor. If there is no layout set already (which will usually be the case) one will be generated here.
+     * Generates a floor using the given theme.
      */
-    public Floor generateFloor(FloorTheme theme) {
+    public static Floor generateFloor(FloorTheme theme) {
+        //TODO: not the cleanest code in the world, refactor this so it's broken into more private methods.
 
         // generate the layout
         // first, generate a valid MST with no sharp connections
@@ -99,13 +93,8 @@ public class FloorGenerator {
 
         // generate the floor's layout
         FloorLayoutGenerator flg = new FloorLayoutGenerator(minimumSpanningTree);
-        this.layout = flg.generateFloor();
-        this.floor = new Floor(new ArrayList<>(Arrays.asList(layout)));
-
-        // debug
-        for (RoomNode r : layout) {
-            r.printRoomAndConnections();
-        }
+        RoomNode[] layout = flg.generateFloor();
+        Floor floor = new Floor(new ArrayList<>(Arrays.asList(layout)));
 
         // attach roomAsFeatures to each node
         for (RoomNode roomNode : floor.getRooms()) {
@@ -148,7 +137,6 @@ public class FloorGenerator {
         int bossRoomIndex = FloorGenerationRNG.rng.nextInt(deadEndNodes.size());
         deadEndsUsed.add(bossRoomIndex);
         RoomNode bossRoomNode = deadEndNodes.get(bossRoomIndex);
-        System.out.println("boss is in "+bossRoomNode.getCoordinates());
         theme.getExitRoomFeatures().applyTo((Room) bossRoomNode.getRoomAsFeature());
         ((Door) bossRoomNode.getRoomAsFeature().getChildren(FeatureFlag.DOOR).get(0)).getOtherSide().setLocked(true);
         ((Door) bossRoomNode.getRoomAsFeature().getChildren(FeatureFlag.DOOR).get(0)).getOtherSide().setNameOfKey(theme.getKeyName());
@@ -161,7 +149,6 @@ public class FloorGenerator {
         }
         deadEndsUsed.add(keyRoomIndex);
         RoomNode keyRoomNode = deadEndNodes.get(keyRoomIndex);
-        System.out.println("key is in "+keyRoomNode.getCoordinates());
         theme.getKeyRoomFeatures().applyTo((Room) keyRoomNode.getRoomAsFeature());
 
         // if there are any remaining dead ends, put stuff in them
@@ -177,13 +164,13 @@ public class FloorGenerator {
 
         // now, start picking stuff from the theme
         //if (deadEndsUsed.size() != deadEndNodes.size()) {
-            //it's a priority to always have a treasure room, otherwise the player may be stuck with starting gear
-            //int indexOfTreasureRoom = FloorGenerationRNG.rng.nextInt(deadEndsUsed.size());
-            //while (deadEndsUsed.contains(indexOfTreasureRoom)) {
-            //    indexOfTreasureRoom = FloorGenerationRNG.rng.nextInt(deadEndsUsed.size());
-            //}
-            //deadEndsUsed.add(indexOfTreasureRoom);
-            //RoomAlias.getTemplate("treasureRoomGeneric").applyTo((Room) deadEndNodes.get(indexOfTreasureRoom).getRoomAsFeature());
+        //it's a priority to always have a treasure room, otherwise the player may be stuck with starting gear
+        //int indexOfTreasureRoom = FloorGenerationRNG.rng.nextInt(deadEndsUsed.size());
+        //while (deadEndsUsed.contains(indexOfTreasureRoom)) {
+        //    indexOfTreasureRoom = FloorGenerationRNG.rng.nextInt(deadEndsUsed.size());
+        //}
+        //deadEndsUsed.add(indexOfTreasureRoom);
+        //RoomAlias.getTemplate("treasureRoomGeneric").applyTo((Room) deadEndNodes.get(indexOfTreasureRoom).getRoomAsFeature());
         //}
 
         // spawn enemies in the non-dead-end rooms
@@ -210,13 +197,12 @@ public class FloorGenerator {
         // put decorative features in non-dead-end rooms
         for (RoomNode node : nonDeadEndNodes) {
             int roll = FloorGenerationRNG.rng.nextInt(101);
-            if ( roll > 20) {
+            if (roll > 20) {
                 if (roll > 75) {
                     Feature moss = new Moss();
                     node.getRoomAsFeature().addChild(moss);
-                }
-                else if (roll > 30) {
-                    node.getRoomAsFeature().setSprite(new Sprite(RenderLayer.WALLS, "crack%d.png".formatted(FloorGenerationRNG.rng.nextInt(3)+1)));
+                } else if (roll > 30) {
+                    node.getRoomAsFeature().setSprite(new Sprite(RenderLayer.WALLS, "crack%d.png".formatted(FloorGenerationRNG.rng.nextInt(3) + 1)));
                     node.getRoomAsFeature().setExamineText("The walls in this room are rather badly cracked.");
                 }
             }
@@ -225,15 +211,18 @@ public class FloorGenerator {
         return floor;
     }
 
+    /**
+     * Creates a shop floor. The shop floor only has one room, which is the same every time.
+     */
     public static Floor generateShop() {
         RoomNode room = new RoomNode();
         room.setSpawn(true);
         room.setRoomAsFeature(new Room());
         room.getRoomAsFeature().setSprite(new Sprite(RenderLayer.WALLS, "void.png"));
-        room.setCoordinates(new MyPoint2D(25,25));
+        room.setCoordinates(new MyPoint2D(25, 25));
         IntraFloorShop ifs = new IntraFloorShop();
         ifs.applyTo((Room) room.getRoomAsFeature());
-        return new Floor(new ArrayList<RoomNode>(Arrays.asList(room)));
+        return new Floor(new ArrayList<>(Arrays.asList(room)));
     }
 
 

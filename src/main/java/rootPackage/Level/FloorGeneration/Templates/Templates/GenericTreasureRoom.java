@@ -1,5 +1,6 @@
 package rootPackage.Level.FloorGeneration.Templates.Templates;
 
+import org.json.simple.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;

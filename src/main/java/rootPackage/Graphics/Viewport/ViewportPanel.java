@@ -1,14 +1,8 @@
 package rootPackage.Graphics.Viewport;
 
-import rootPackage.Direction;
-import rootPackage.Graphics.GUI.RenderLayer;
+import org.json.simple.*;
 import rootPackage.Level.Features.Feature;
-import rootPackage.Level.Features.FeatureFlag;
-import rootPackage.Level.Features.Features.Door;
-import rootPackage.Level.Features.TopLevel.Room;
 import rootPackage.Level.Floor;
-import rootPackage.Level.FloorGeneration.Layout.MyPoint2D;
-import rootPackage.Level.FloorGeneration.Layout.RoomNode;
 import rootPackage.Main;
 
 import javax.imageio.ImageIO;
@@ -18,7 +12,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.function.Consumer;
 
@@ -26,16 +19,14 @@ import java.util.function.Consumer;
  * The ViewportPanel class is a JPanel container holding whatever graphical component is being displayed to the screen.
  *
  * @author William Owens
- * @version 0.1
+ * @version 2.0
  */
 public class ViewportPanel extends JPanel {
 
     private final int WIDTH = 1280;
     private final int HEIGHT = 520;
 
-    private JScrollPane scrollPane;
     private JPanel canvas;
-    private ImageIcon icon;
 
     public ViewportPanel() {
         start();
@@ -49,13 +40,13 @@ public class ViewportPanel extends JPanel {
         setLayout(new BorderLayout());
 
         // to make an image scrollable, make an ImageIcon, make a JLabel holding the icon, add that to a scrollpane
-        icon = new ImageIcon("img" + System.getProperty("file.separator") + "test_viewport_image.png");
-        JLabel jLabel = new JLabel(icon);
+        //ImageIcon icon = new ImageIcon("img" + System.getProperty("file.separator") + "test_viewport_image.png");
+        //JLabel jLabel = new JLabel(icon);
 
         canvas = new JPanel();
         canvas.setBackground(Color.BLACK);
 
-        scrollPane = new JScrollPane(canvas);
+        JScrollPane scrollPane = new JScrollPane(canvas);
         scrollPane.setPreferredSize(new Dimension(WIDTH, HEIGHT));
 
         this.add(scrollPane, BorderLayout.CENTER);
@@ -72,11 +63,6 @@ public class ViewportPanel extends JPanel {
 
     public void drawImageOnCanvas(Image image, int xOffset) {
         this.canvas.getGraphics().drawImage(image, xOffset, 0, null);
-    }
-
-    public void clearCanvas() {
-        this.canvas.paint(this.canvas.getGraphics());
-        canvas.createImage(WIDTH, HEIGHT);
     }
 
     public void drawRoom(Feature room) {
@@ -106,8 +92,8 @@ public class ViewportPanel extends JPanel {
 
         //TODO: draw an image into the scrollpane and have it be usable, not sure how to do that just yet without things breaking, look into the cardLayout layout manager
         this.canvas.setBackground(Color.BLACK);
-        this.canvas.getGraphics().clearRect(0,0,WIDTH, HEIGHT);
-        drawImageOnCanvas(floor.createFloorMap(), WIDTH/4);
+        this.canvas.getGraphics().clearRect(0, 0, WIDTH, HEIGHT);
+        drawImageOnCanvas(floor.createFloorMap(), WIDTH / 4);
         drawImageOnCanvas("greatest_compass_ever_made.png");
     }
 

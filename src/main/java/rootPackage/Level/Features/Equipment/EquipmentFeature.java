@@ -1,20 +1,11 @@
 package rootPackage.Level.Features.Equipment;
 
+import org.json.simple.*;
 import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import rootPackage.Battle.Actions.Action;
-import rootPackage.Battle.BattleSupervisor;
-import rootPackage.Battle.Combatants.Combatant;
-import rootPackage.Battle.Intents.Intent;
 import rootPackage.Level.Features.Feature;
 import rootPackage.Level.Features.FeatureFlag;
-import rootPackage.Main;
-import rootPackage.Player;
 
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -25,7 +16,7 @@ import java.util.ArrayList;
  */
 public abstract class EquipmentFeature extends Feature {
 
-    //TODO: this should also have a list of Actions it grants to the player
+    //TODO: the actionsGranted should be refreshed on battle start and every action execution
 
     protected double value;
     protected String jsonPath;
@@ -36,11 +27,6 @@ public abstract class EquipmentFeature extends Feature {
 
     public EquipmentFeature(String primaryName, String[] allNames) {
         super(primaryName, allNames);
-        actions = new ArrayList<>();
-    }
-
-    public EquipmentFeature(String primaryName, String[] allNames, Feature parent, ArrayList<Feature> children, ArrayList<FeatureFlag> flags) {
-        super(primaryName, allNames, parent, children, flags);
         actions = new ArrayList<>();
     }
 

@@ -1,16 +1,13 @@
 package rootPackage.Battle.Actions;
 
-import java.io.*;
 import org.json.simple.*;
+import java.io.*;
+
 import org.json.simple.parser.*;
 import rootPackage.Battle.Combatants.Combatant;
-import rootPackage.Battle.Combatants.Enemy;
-import rootPackage.Battle.Intents.Intent;
 import rootPackage.Main;
 
-import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This is the action class

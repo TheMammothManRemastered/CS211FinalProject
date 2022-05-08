@@ -1,14 +1,15 @@
 package rootPackage.Level.Features.TopLevel;
 
+import org.json.simple.*;
 import rootPackage.Input.PlayerAction;
 import rootPackage.Level.Features.Feature;
 import rootPackage.Level.Features.FeatureFlag;
-import rootPackage.Player;
 
 import java.util.ArrayList;
 
 public class PlayerFeature extends Feature {
 
+    //TODO: refactor this. it will always have the same names
     public PlayerFeature(String primaryName, String[] allNames) {
         super(primaryName, allNames);
         this.parent = null;
@@ -17,9 +18,7 @@ public class PlayerFeature extends Feature {
         flags.add(FeatureFlag.PLAYER);
     }
 
-    public void updateCurrentRoom(Player player) {
-        this.parent = player.getCurrentRoom().getRoomAsFeature();
-    }
+    // these are needed, but never used
 
     @Override
     public void react(PlayerAction playerAction) {

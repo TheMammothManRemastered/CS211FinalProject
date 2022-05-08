@@ -1,5 +1,6 @@
 package rootPackage.Battle.AI;
 
+import org.json.simple.*;
 import rootPackage.Battle.Actions.Action;
 import rootPackage.Battle.Combatants.Enemy;
 

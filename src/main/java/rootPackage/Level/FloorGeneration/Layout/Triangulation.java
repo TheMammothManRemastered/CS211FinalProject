@@ -1,5 +1,6 @@
 package rootPackage.Level.FloorGeneration.Layout;
 
+import org.json.simple.*;
 import java.util.ArrayList;
 
 /**
@@ -21,16 +22,12 @@ public class Triangulation {
         return points;
     }
 
-    public void setPoints(ArrayList<MyPoint2D> points) {
-        this.points = points;
-    }
-
     public ArrayList<Connection> getConnections() {
         return connections;
     }
 
-    public void setConnections(ArrayList<Connection> connections) {
-        this.connections = connections;
+    public void setPoints(ArrayList<MyPoint2D> points) {
+        this.points = points;
     }
 
     private void removeDuplicates() {
@@ -46,11 +43,5 @@ public class Triangulation {
             }
         }
         return seen;
-    }
-
-    public void printTriangulation() {
-        for (Connection c : connections) {
-            System.out.println(c);
-        }
     }
 }

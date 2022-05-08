@@ -1,5 +1,6 @@
 package rootPackage.Level.FloorGeneration;
 
+import org.json.simple.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -18,17 +19,18 @@ import java.util.Arrays;
  * Class responsible for generating a floor theme from a given difficulty.
  *
  * @author William Owens
+ * @version 2.5
  */
 public class FloorThemeGenerator {
 
+    // path to where floor theme jsons are stored
     private static final String FLOOR_THEMES_PATH = "json" + System.getProperty("file.separator") + "floorGeneration" + System.getProperty("file.separator") + "floorThemes" + System.getProperty("file.separator");
 
-    public static void main(String[] args) {
-        generateFloorTheme(1);
-    }
-
+    /**
+     * Generates a floor theme that exists for the given difficulty level.
+     */
     public static FloorTheme generateFloorTheme(int difficulty) {
-        String[] floorThemeNames = getFloorNamesForGivenDifficulty(difficulty);
+        String[] floorThemeNames = getThemeNamesForGivenDifficulty(difficulty);
 
         try {
             // pick a theme at random
@@ -124,7 +126,7 @@ public class FloorThemeGenerator {
             String bossDoorDescription = (String) selectedThemeJSON.get("bossDoorDescription");
 
             //new FloorTheme(5,11,2,4,null,null,null,null,null, "meat")
-            return new FloorTheme(minimumSize, maximumSize, deadEndsNeeded, healthPoints, exitRoom, keyRoom, null, null, enemies, keyName, bossDoorDescription);
+            return new FloorTheme(minimumSize, maximumSize, deadEndsNeeded, healthPoints, exitRoom, keyRoom, enemies, keyName, bossDoorDescription);
 
 
         } catch (Exception exception) {
@@ -135,9 +137,9 @@ public class FloorThemeGenerator {
     }
 
     /**
-     * Generates the names of all floors matching the given difficulty value.
+     * Generates the names of all themes matching the given difficulty value.
      */
-    private static String[] getFloorNamesForGivenDifficulty(int difficulty) {
+    private static String[] getThemeNamesForGivenDifficulty(int difficulty) {
         // declare a parser
         JSONParser parser = new JSONParser();
         // declare this here as well, since it gets used outside of the try catch

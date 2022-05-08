@@ -1,12 +1,13 @@
 package rootPackage.Level.FloorGeneration.Layout;
 
+import org.json.simple.*;
 import rootPackage.Direction;
 
 /**
- * This class is responsible for generating a FloorLayout object from a MinimumSpanningTree, which can then be processed into a proper Floor later.
+ * This class is responsible for generating a list of {@link RoomNode RoomNode}s, which can then be processed into a proper Floor later.
  *
  * @author William Owens
- * @version 2.0
+ * @version 3.0
  */
 public class FloorLayoutGenerator {
 
@@ -14,15 +15,13 @@ public class FloorLayoutGenerator {
     static StringBuilder delaunayStagesSb = new StringBuilder(); // holds the stages of the delaunay triangulation in string form
     static StringBuilder MSTSb = new StringBuilder(); // holds the minimum spanning tree in string form
 
-    private MinimumSpanningTree mst;
-    private int numDeadEnds;
+    private final MinimumSpanningTree mst;
 
     /**
      * Constructor.
      */
     public FloorLayoutGenerator(MinimumSpanningTree mst) {
         this.mst = mst;
-        this.numDeadEnds = mst.getDeadEnds().length;
     }
 
     /**
@@ -31,7 +30,7 @@ public class FloorLayoutGenerator {
      */
     public RoomNode[] generateFloor() {
 
-        RoomNode[] rooms = new RoomNode[mst.getSize()];
+        RoomNode[] rooms = new RoomNode[mst.size()];
 
         for (int i = 0; i < rooms.length; i++) {
             RoomNode room = new RoomNode();

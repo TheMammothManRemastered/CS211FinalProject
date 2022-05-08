@@ -1,9 +1,9 @@
 package rootPackage.Level.Features.Features;
 
-import rootPackage.Graphics.GUI.RenderLayer;
+import org.json.simple.*;
+import rootPackage.Graphics.Viewport.RenderLayer;
 import rootPackage.Graphics.Viewport.Sprite;
 import rootPackage.Input.PlayerAction;
-import rootPackage.Level.Features.Equipment.AccessoryFeature;
 import rootPackage.Level.Features.Equipment.EquipmentAlias;
 import rootPackage.Level.Features.Feature;
 import rootPackage.Level.Features.FeatureFlag;
@@ -11,6 +11,7 @@ import rootPackage.Main;
 import rootPackage.Player;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class HealthMerchant extends Feature {
 
@@ -41,7 +42,7 @@ public class HealthMerchant extends Feature {
                 if (Main.player.getGold() >= calcGold(Main.player)) {
                     Main.mainWindow.getConsoleWindow().addEntryToHistory("You hand over %d gold. A health talisman appears in your hands!".formatted(calcGold(Main.player)));
                     Main.player.addGold(-calcGold(Main.player));
-                    Main.player.getPlayerAsFeature().addChild(EquipmentAlias.getEquipment("healthTalisman"));
+                    Main.player.getPlayerAsFeature().addChild(Objects.requireNonNull(EquipmentAlias.getEquipment("healthTalisman")));
                 } else {
                     Main.mainWindow.getConsoleWindow().addEntryToHistory("You don't have enough gold! In other words, you don't have the right!");
                 }

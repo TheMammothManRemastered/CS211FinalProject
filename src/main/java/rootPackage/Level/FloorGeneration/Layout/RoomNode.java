@@ -1,5 +1,6 @@
 package rootPackage.Level.FloorGeneration.Layout;
 
+import org.json.simple.*;
 import rootPackage.Level.Features.Feature;
 
 /**
@@ -12,7 +13,8 @@ import rootPackage.Level.Features.Feature;
  * @version 3.0
  */
 public class RoomNode {
-    private RoomNode[] connectedRooms;
+
+    private final RoomNode[] connectedRooms;
     private Feature roomAsFeature;
     private MyPoint2D coordinates;
     private boolean isSpawn;
@@ -24,22 +26,6 @@ public class RoomNode {
         isSpawn = false;
     }
 
-    public int getNumNeighbors() {
-        int output = 0;
-        for (RoomNode n : connectedRooms) {
-            if (n != null) output++;
-        }
-        return output;
-    }
-
-    public MyPoint2D getCoordinates() {
-        return coordinates;
-    }
-
-    public void setCoordinates(MyPoint2D coordinates) {
-        this.coordinates = coordinates;
-    }
-
     public RoomNode[] getConnectedRooms() {
         return connectedRooms;
     }
@@ -48,24 +34,32 @@ public class RoomNode {
         return roomAsFeature;
     }
 
-    public void setRoomAsFeature(Feature roomAsFeature) {
-        this.roomAsFeature = roomAsFeature;
+    public MyPoint2D getCoordinates() {
+        return coordinates;
     }
 
     public boolean isSpawn() {
         return isSpawn;
     }
 
+    public void setRoomAsFeature(Feature roomAsFeature) {
+        this.roomAsFeature = roomAsFeature;
+    }
+
+    public void setCoordinates(MyPoint2D coordinates) {
+        this.coordinates = coordinates;
+    }
+
     public void setSpawn(boolean spawn) {
         isSpawn = spawn;
     }
 
-    public void printRoomAndConnections() {
-        System.out.println(coordinates);
-        for (RoomNode room : connectedRooms) {
-            if (room == null) continue;
-            System.out.println(new Connection(coordinates, room.coordinates));
+    public int getNumNeighbors() {
+        int output = 0;
+        for (RoomNode n : connectedRooms) {
+            if (n != null) output++;
         }
+        return output;
     }
 
 }

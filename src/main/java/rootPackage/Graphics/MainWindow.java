@@ -1,5 +1,6 @@
 package rootPackage.Graphics;
 
+import org.json.simple.*;
 import rootPackage.Graphics.GUI.ConsoleWindow;
 import rootPackage.Graphics.Viewport.ViewportPanel;
 
@@ -7,10 +8,10 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * This class handles the main window for the game. On an upper level, this class basically is doing everything.
+ * This class handles the main window for the game.
  *
  * @author William Owens
- * @version 0.2
+ * @version 1.0
  */
 public class MainWindow {
 
@@ -28,7 +29,7 @@ public class MainWindow {
         window.setTitle("Game Time Started"); // TODO: come up with a title for this lol
         window.setLayout(new BorderLayout()); // manages the way components are laid out on the window
         // borderLayout has components connected to the borders of the window
-        window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // kills the whole program when closing
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // kills the whole program when closing
         window.setSize(1280, 820);
         window.setResizable(false);
         window.setLocationRelativeTo(null); // this centers the window by default

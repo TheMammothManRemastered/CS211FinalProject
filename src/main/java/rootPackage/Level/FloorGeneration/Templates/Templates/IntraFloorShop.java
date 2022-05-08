@@ -1,8 +1,11 @@
 package rootPackage.Level.FloorGeneration.Templates.Templates;
 
-import rootPackage.Level.Features.Enemy.Bosses.Minotaur;
+import org.json.simple.*;
 import rootPackage.Level.Features.Feature;
-import rootPackage.Level.Features.Features.*;
+import rootPackage.Level.Features.Features.DamageMerchant;
+import rootPackage.Level.Features.Features.DefenseMerchant;
+import rootPackage.Level.Features.Features.Entry;
+import rootPackage.Level.Features.Features.HealthMerchant;
 import rootPackage.Level.FloorGeneration.Templates.RoomTemplate;
 
 public class IntraFloorShop extends RoomTemplate {

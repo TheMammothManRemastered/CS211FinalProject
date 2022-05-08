@@ -1,14 +1,11 @@
 package rootPackage.Level.Features.TopLevel;
 
-import rootPackage.Graphics.GUI.RenderLayer;
+import org.json.simple.*;
+import rootPackage.Graphics.Viewport.RenderLayer;
 import rootPackage.Graphics.Viewport.Sprite;
-import rootPackage.Level.Features.Feature;
 import rootPackage.Input.PlayerAction;
-import rootPackage.Level.Features.FeatureFlag;
+import rootPackage.Level.Features.Feature;
 import rootPackage.Main;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * A class representing a room as a top-level feature.

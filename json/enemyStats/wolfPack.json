@@ -17,5 +17,7 @@
     "A wolf barks and charges towards you, its fangs ready to taste of your flesh!",
     "The wolves circles you, waiting for the ideal moment to strike..."
   ],
-  "goldDrop" : 150
+  "goldDrop" : 150,
+  "itemDrop" : [
+   ]
 }

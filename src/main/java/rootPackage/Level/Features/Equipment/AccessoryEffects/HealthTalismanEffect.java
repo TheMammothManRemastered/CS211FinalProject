@@ -1,5 +1,7 @@
 package rootPackage.Level.Features.Equipment.AccessoryEffects;
 
+import org.json.simple.*;
+
 public class HealthTalismanEffect extends AccessoryEffect{
 
     public HealthTalismanEffect() {

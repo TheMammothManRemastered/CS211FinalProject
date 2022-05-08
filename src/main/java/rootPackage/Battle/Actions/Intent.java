@@ -1,5 +1,6 @@
-package rootPackage.Battle.Intents;
+package rootPackage.Battle.Actions;
 
+import org.json.simple.*;
 import org.json.simple.JSONObject;
 import rootPackage.Battle.Combatants.Combatant;
 import rootPackage.Main;

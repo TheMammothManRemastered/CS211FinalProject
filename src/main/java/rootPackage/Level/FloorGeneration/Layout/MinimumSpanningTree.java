@@ -1,5 +1,6 @@
 package rootPackage.Level.FloorGeneration.Layout;
 
+import org.json.simple.*;
 import rootPackage.Direction;
 
 import java.util.ArrayList;
@@ -9,61 +10,63 @@ import java.util.List;
  * A class representing an MST.
  *
  * @author William Owens
- * @version 1.0
+ * @version 1.5
  */
 public class MinimumSpanningTree {
 
-    private Connection[] connections;
-    private MSTEdge[] edges;
-    private MyPoint2D[] points;
-    private AdjacencyMatrix mstGraph;
+    private final Connection[] connections;
+    private final MyPoint2D[] points;
+    private final AdjacencyMatrix mstGraph;
+
+    public Connection[] getConnections() {
+        return connections;
+    }
+
+    public AdjacencyMatrix getMstGraph() {
+        return mstGraph;
+    }
 
     public MinimumSpanningTree(Connection[] connections, MSTEdge[] edges, AdjacencyMatrix rawGraph) {
         this.connections = connections;
-        this.edges = edges;
-        points = new MyPoint2D[rawGraph.getSize()];
+        points = new MyPoint2D[rawGraph.size()];
         for (int i = 0; i < points.length; i++) {
             points[i] = rawGraph.getNode(i);
         }
         this.mstGraph = new AdjacencyMatrix(points);
-        MSTEdge[] mstEdges = this.edges;
-        for (MSTEdge edge : mstEdges) {
+        for (MSTEdge edge : edges) {
             mstGraph.addConnection(edge.getStart(), edge.getEnd(), edge.getWeight());
             mstGraph.addConnection(edge.getEnd(), edge.getStart(), edge.getWeight());
         }
 
     }
 
+    public int size() {
+        return mstGraph.size();
+    }
+
     public MyPoint2D[] getDeadEnds() {
         ArrayList<MyPoint2D> outputList = new ArrayList<>();
-        for (int i = 0; i < mstGraph.getSize(); i++) {
+        for (int i = 0; i < mstGraph.size(); i++) {
             if (mstGraph.getCountOfNodeConnections(i) == 1) {
                 outputList.add(mstGraph.getNode(i));
             }
         }
-        return outputList.toArray(new MyPoint2D[outputList.size()]);
-    }
-
-    public MyPoint2D[] getConnectedPoints(MyPoint2D origin) {
-        ArrayList<MyPoint2D> outputList = new ArrayList<>();
-        int index = mstGraph.getIndexOfNode(origin);
-        double[] connectionsArray = mstGraph.getNodeConnectionIndexes(index);
-
-        for (int i = 0; i < connectionsArray.length; i++) {
-            if (connectionsArray[i] > 0) {
-                outputList.add(mstGraph.getNode(i));
-            }
-        }
-        return outputList.toArray(new MyPoint2D[outputList.size()]);
+        return outputList.toArray(new MyPoint2D[0]);
     }
 
     public MyPoint2D getPointByIndex(int index) {
         return points[index];
     }
 
+    /**
+     * Checks if the MST is 'valid'.
+     * An MST is valid if:
+     *      no single point has more than 4 connections
+     *      none of the connections coming off a single node are too close to one another
+     */
     public boolean isMSTValid() {
         // check, for each point, if connections are valid
-        int numPoints = mstGraph.getSize();
+        int numPoints = mstGraph.size();
         for (int i = 0; i < numPoints; i++) {
             // does this point have more than 4 connections?
             int numConnectionsFromCurrentNode = mstGraph.getCountOfNodeConnections(i);
@@ -91,28 +94,6 @@ public class MinimumSpanningTree {
         }
 
         return true;
-    }
-
-    public Connection[] getConnections() {
-        return connections;
-    }
-
-    public boolean containsConnection(Connection con) {
-        return List.of(connections).contains(con);
-    }
-
-    public int getSize() {
-        return mstGraph.getSize();
-    }
-
-    public AdjacencyMatrix getMstGraph() {
-        return mstGraph;
-    }
-
-    public void printMST() {
-        for (Connection con : connections) {
-            System.out.println(con);
-        }
     }
 
 

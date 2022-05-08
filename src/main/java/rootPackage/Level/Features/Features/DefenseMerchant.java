@@ -1,6 +1,7 @@
 package rootPackage.Level.Features.Features;
 
-import rootPackage.Graphics.GUI.RenderLayer;
+import org.json.simple.*;
+import rootPackage.Graphics.Viewport.RenderLayer;
 import rootPackage.Graphics.Viewport.Sprite;
 import rootPackage.Input.PlayerAction;
 import rootPackage.Level.Features.Equipment.EquipmentAlias;
@@ -30,7 +31,7 @@ public class DefenseMerchant extends Feature {
         if (mult == 0) {
             return 120;
         }
-        return (int) (120 + (100*(Math.pow(mult,2))));
+        return (int) (120 + (100 * (Math.pow(mult, 2))));
     }
 
     @Override

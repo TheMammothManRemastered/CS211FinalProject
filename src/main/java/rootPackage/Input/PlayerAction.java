@@ -1,8 +1,15 @@
 package rootPackage.Input;
 
+import org.json.simple.*;
 import rootPackage.Main;
 import rootPackage.Player;
 
+/**
+ * Enum representing all of the possible player actions.
+ *
+ * @author William Owens
+ * @version 1.0
+ */
 public enum PlayerAction {
     PICKUP,
     DROP,

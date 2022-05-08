@@ -1,7 +1,8 @@
 package rootPackage.Level.Features.Features;
 
+import org.json.simple.*;
 import rootPackage.Direction;
-import rootPackage.Graphics.GUI.RenderLayer;
+import rootPackage.Graphics.Viewport.RenderLayer;
 import rootPackage.Graphics.Viewport.Sprite;
 import rootPackage.Input.PlayerAction;
 import rootPackage.Level.Features.Feature;
@@ -11,7 +12,6 @@ import rootPackage.Main;
 import rootPackage.Player;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Door extends Feature {
 

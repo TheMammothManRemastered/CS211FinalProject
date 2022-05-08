@@ -1,5 +1,6 @@
 package rootPackage.Level.Features;
 
+import org.json.simple.*;
 import rootPackage.Graphics.Viewport.Sprite;
 import rootPackage.Input.PlayerAction;
 
@@ -13,6 +14,8 @@ import java.util.Arrays;
  * @version 3.0
  */
 public abstract class Feature {
+
+    // features are a bit too complex to be easily implemented as JSON files unfortunately
 
     protected String primaryName;
     protected String[] allNames;
@@ -104,10 +107,6 @@ public abstract class Feature {
 
     public void setParent(Feature parent) {
         this.parent = parent;
-    }
-
-    public void setChildren(ArrayList<Feature> children) {
-        this.children = children;
     }
 
     public void setFlags(ArrayList<FeatureFlag> flags) {
@@ -204,6 +203,10 @@ public abstract class Feature {
      */
     public abstract void react(PlayerAction playerAction);
 
+    /**
+     * The onActionNotApplicable method is functionally identical to {@link #react(PlayerAction) react}, but should be
+     * used for actions that a features shouldn't respond to very much (ie. trying to pick up a doorframe).
+     */
     public abstract void onActionNotApplicable(PlayerAction playerAction);
 
 }

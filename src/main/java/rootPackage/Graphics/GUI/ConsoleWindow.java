@@ -1,7 +1,6 @@
 package rootPackage.Graphics.GUI;
 
-import rootPackage.Battle.Intents.Intent;
-import rootPackage.Graphics.MainWindow;
+import org.json.simple.*;
 import rootPackage.Input.Parser;
 import rootPackage.Input.PlayerAction;
 import rootPackage.Level.Features.Equipment.*;
@@ -14,22 +13,28 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * The ConsoleWindow class is a JPanel container holding the 'console' system.
  * This class is responsible for taking user input, showing the user's input history, and showing the user the result of their actions.
- * This class is NOT responsible for actually interpreting the user's input. Another class handles that. This is just the frontend.
  *
  * @author William Owens
- * @version 1.0
+ * @version 2.2
  */
 public class ConsoleWindow extends JPanel {
+
+    public static final String TUTORIAL = """
+            (To play this game, simply type what you want to do into the input box below, and press the ENTER key. For instance, if you were in a room with a door to the north, you might try "Move to the north" or "Travel north".)(
+            There are also a few special commands that do not follow that verb-noun structure.)
+            ("Tutorial" brings up this dialogue, in case you need a refresher.)
+            ("Map" brings up a map of the floor.)
+            ("Status" displays some information about yourself.)""";
 
     private final int WIDTH = 1280;
     private final int INPUT_HEIGHT = 20;
 
     private final JTextArea textHistory;
+    public boolean playerGivenBattleInput = false;
 
     public ConsoleWindow() {
         setupThisWindow();
@@ -124,8 +129,6 @@ public class ConsoleWindow extends JPanel {
 
     }
 
-    public boolean playerGivenBattleInput = false;
-
     public void getPlayerInput(OnEnterAction onEnterAction, int chosenMove) {
         onEnterAction.chosenAction = chosenMove;
         playerGivenBattleInput = true;
@@ -140,11 +143,6 @@ public class ConsoleWindow extends JPanel {
  */
 class OnEnterAction extends AbstractAction {
 
-    private final String TUTORIAL = "(To play this game, simply type what you want to do into the input box below, and press the ENTER key. For instance, if you were in a room with a door to the north, you might try \"Move to the north\" or \"Travel north\".)" +
-            "(\nThere are also a few special commands that do not follow that verb-noun structure.)" +
-            "\n(\"Tutorial\" brings up this dialogue, in case you need a refresher.)" +
-            "\n(\"Map\" brings up a map of the floor.)" +
-            "\n(\"Status\" displays some information about yourself.)";
     private final JTextArea textHistory;
     private final JTextField textInput;
 
@@ -172,20 +170,19 @@ class OnEnterAction extends AbstractAction {
         try {
             int chosenMove = Integer.parseInt(inputString);
             if (Main.currentBattle != null) {
-                    battle = true;
-                    Main.mainWindow.getConsoleWindow().getPlayerInput(this, chosenMove);
-                    Main.currentBattle.player.setChosenAction(chosenMove);
-                    Main.currentBattle.player.wakeUp();
-                    //TODO: all of the thread stuff is kind of a horrible mess, it works though. clean it all up at some point
-            }
-            else {
+                battle = true;
+                Main.mainWindow.getConsoleWindow().getPlayerInput(this, chosenMove);
+                Main.currentBattle.player.setChosenAction(chosenMove);
+                Main.currentBattle.player.wakeUp();
+                // all of the thread stuff is kind of a horrible mess, it works though. clean it all up at some point
+            } else {
                 battle = false;
             }
 
         } catch (NumberFormatException exception) {
             if (Main.currentBattle != null) {
-            Main.mainWindow.getConsoleWindow().addEntryToHistory("Nothing recognized in this input. Did you type everything correctly?");
-            return;
+                Main.mainWindow.getConsoleWindow().addEntryToHistory("Nothing recognized in this input. Did you type everything correctly?");
+                return;
             }
         }
 
@@ -194,48 +191,53 @@ class OnEnterAction extends AbstractAction {
             return;
         }
 
-        if (inputString.toLowerCase().equals("tutorial")) {
-            Main.mainWindow.getConsoleWindow().addEntryToHistory(TUTORIAL);
-            return;
-        } else if (inputString.toLowerCase().equals("map")) {
-            Main.mainWindow.getViewportPanel().drawFloorMap(Main.currentFloor);
-            Main.mainWindow.getConsoleWindow().addEntryToHistory("Your player's position is represented by the cyan square.");
-            Main.mainWindow.getConsoleWindow().addEntryToHistory("Close the map with the \"close map\" command.");
-            return;
-        } else if (inputString.toLowerCase().equals("status")) {
-            Main.mainWindow.getConsoleWindow().addEntryToHistory("---Your Status---");
-            Main.player.printStatsToConsole();
-            ArrayList<Feature> equipmentFeatures = Main.player.getPlayerAsFeature().getChildren(FeatureFlag.EQUIPPABLE);
-            Main.mainWindow.getConsoleWindow().addEntryToHistory("Gold: %d".formatted(Main.player.getGold()));
-            for (Feature feature : equipmentFeatures) {
-                EquipmentFeature equipmentFeature = ((EquipmentFeature) feature);
-                if (equipmentFeature instanceof ArmorFeature) {
-                    Main.mainWindow.getConsoleWindow().addEntryToHistory("You wear the %s, granting you a base max HP of %d.".formatted(equipmentFeature.getPrimaryName(), (long) (equipmentFeature).getValue()));
-                } else if (equipmentFeature instanceof ShieldFeature) {
-                    Main.mainWindow.getConsoleWindow().addEntryToHistory("You bear the %s, granting you a base damage absorption of %.2f%%.".formatted(equipmentFeature.getPrimaryName(), (equipmentFeature).getValue() * 100));
-                } else if (equipmentFeature instanceof WeaponFeature) {
-                    Main.mainWindow.getConsoleWindow().addEntryToHistory("You wield the %s, granting you a base damage of %d.".formatted(equipmentFeature.getPrimaryName(), (long) equipmentFeature.getValue()));
-                }
+        switch (inputString.toLowerCase()) {
+            case "tutorial" -> {
+                Main.mainWindow.getConsoleWindow().addEntryToHistory(ConsoleWindow.TUTORIAL);
+                return;
             }
-            for (Feature feature : equipmentFeatures) {
-                EquipmentFeature equipmentFeature = ((EquipmentFeature) feature);
-                if (equipmentFeature instanceof AccessoryFeature) {
-                    AccessoryFeature accessoryFeature = (AccessoryFeature) feature;
-                    Main.mainWindow.getConsoleWindow().addEntryToHistory("You posses the %s. %s".formatted(accessoryFeature.getPrimaryName(), accessoryFeature.getEffectDescriptionForStatus()));
-                }
+            case "map" -> {
+                Main.mainWindow.getViewportPanel().drawFloorMap(Main.currentFloor);
+                Main.mainWindow.getConsoleWindow().addEntryToHistory("Your player's position is represented by the cyan square.");
+                Main.mainWindow.getConsoleWindow().addEntryToHistory("Close the map with the \"close map\" command.");
+                return;
             }
-            for (Feature feature : Main.player.getPlayerAsFeature().getChildren()) {
-                if (feature instanceof EquipmentFeature) {
-                    continue;
+            case "status" -> {
+                Main.mainWindow.getConsoleWindow().addEntryToHistory("---Your Status---");
+                Main.player.printStatsToConsole();
+                ArrayList<Feature> equipmentFeatures = Main.player.getPlayerAsFeature().getChildren(FeatureFlag.EQUIPPABLE);
+                Main.mainWindow.getConsoleWindow().addEntryToHistory("Gold: %d".formatted(Main.player.getGold()));
+                for (Feature feature : equipmentFeatures) {
+                    EquipmentFeature equipmentFeature = ((EquipmentFeature) feature);
+                    if (equipmentFeature instanceof ArmorFeature) {
+                        Main.mainWindow.getConsoleWindow().addEntryToHistory("You wear the %s, granting you a base max HP of %d.".formatted(equipmentFeature.getPrimaryName(), (long) (equipmentFeature).getValue()));
+                    } else if (equipmentFeature instanceof ShieldFeature) {
+                        Main.mainWindow.getConsoleWindow().addEntryToHistory("You bear the %s, granting you a base damage absorption of %.2f%%.".formatted(equipmentFeature.getPrimaryName(), (equipmentFeature).getValue() * 100));
+                    } else if (equipmentFeature instanceof WeaponFeature) {
+                        Main.mainWindow.getConsoleWindow().addEntryToHistory("You wield the %s, granting you a base damage of %d.".formatted(equipmentFeature.getPrimaryName(), (long) equipmentFeature.getValue()));
+                    }
                 }
-                Main.mainWindow.getConsoleWindow().addEntryToHistory("You have a %s.".formatted(feature.getPrimaryName()));
+                for (Feature feature : equipmentFeatures) {
+                    EquipmentFeature equipmentFeature = ((EquipmentFeature) feature);
+                    if (equipmentFeature instanceof AccessoryFeature) {
+                        AccessoryFeature accessoryFeature = (AccessoryFeature) feature;
+                        Main.mainWindow.getConsoleWindow().addEntryToHistory("You posses the %s. %s".formatted(accessoryFeature.getPrimaryName(), accessoryFeature.getEffectDescriptionForStatus()));
+                    }
+                }
+                for (Feature feature : Main.player.getPlayerAsFeature().getChildren()) {
+                    if (feature instanceof EquipmentFeature) {
+                        continue;
+                    }
+                    Main.mainWindow.getConsoleWindow().addEntryToHistory("You have a %s.".formatted(feature.getPrimaryName()));
+                }
+                double elapsed = (System.nanoTime() - Main.timeStart) * 0.000000000017;
+                Main.mainWindow.getConsoleWindow().addEntryToHistory("You've been playing for about %.2f minutes.".formatted(elapsed));
+                return;
             }
-            double elapsed = (System.nanoTime() - Main.timeStart) * 0.000000000017;
-            Main.mainWindow.getConsoleWindow().addEntryToHistory("You've been playing for about %.2f minutes.".formatted(elapsed));
-            return;
-        } else if (inputString.toLowerCase().equals("map close") || inputString.toLowerCase().equals("close map")) {
-            Main.mainWindow.getViewportPanel().drawRoom(Main.player.getCurrentRoom().getRoomAsFeature());
-            return;
+            case "map close", "close map" -> {
+                Main.mainWindow.getViewportPanel().drawRoom(Main.player.getCurrentRoom().getRoomAsFeature());
+                return;
+            }
         }
 
         PlayerAction pa = Parser.getActionFromInput(inputString);

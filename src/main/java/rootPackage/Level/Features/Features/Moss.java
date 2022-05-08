@@ -1,10 +1,10 @@
 package rootPackage.Level.Features.Features;
 
-import rootPackage.Graphics.GUI.RenderLayer;
+import org.json.simple.*;
+import rootPackage.Graphics.Viewport.RenderLayer;
 import rootPackage.Graphics.Viewport.Sprite;
 import rootPackage.Input.PlayerAction;
 import rootPackage.Level.Features.Feature;
-import rootPackage.Level.Features.FeatureFlag;
 
 public class Moss extends Feature {
 
@@ -18,6 +18,7 @@ public class Moss extends Feature {
         this.examineText = "Soft, green moss is growing out of the walls.";
     }
 
+    //TODO: implement these
     @Override
     public void react(PlayerAction playerAction) {
 

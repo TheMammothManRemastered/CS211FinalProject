@@ -1,7 +1,10 @@
 package rootPackage.Level.FloorGeneration.Layout;
 
+import org.json.simple.*;
 import java.awt.geom.Point2D;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
 
 /**
  * A class containing methods to convert an array of unconnected points into a mesh of triangles.
@@ -25,11 +28,6 @@ public class DelaunayTriangulation {
     private double yMin;
     private double deltaMax;
 
-    /**
-     * Constructor.
-     *
-     * @param inputPoints The point cloud this DelaunayTriangulation will work with.
-     */
     public DelaunayTriangulation(Point2D... inputPoints) {
         this.inputPoints = inputPoints;
 
@@ -45,6 +43,7 @@ public class DelaunayTriangulation {
      * Finds a delaunay triangulation of a given array of points using the method described in S. W. Sloan's paper.
      *
      * @return An array of the triangles making up the triangulation.
+     *
      * @see <a href="https://www.newcastle.edu.au/__data/assets/pdf_file/0017/22508/13_A-fast-algorithm-for-constructing-Delaunay-triangulations-in-the-plane.pdf">Sloan's paper on this algorithm</a>
      */
     public Triangulation triangulate() {
@@ -257,20 +256,6 @@ public class DelaunayTriangulation {
         return parseTriangulation(finalVerticesOfTriangles);
     }
 
-    /**
-     * Prints the results of the triangulation as polygons to be entered into desmos.
-     */
-    private void printTriangulationForDesmos(int[][] finalVerticesOfTriangles) {
-        FloorLayoutGenerator.delaunayStagesSb.append("Final Delaunay Triangulation\n");
-        for (int[] finalVerticesOfTriangle : finalVerticesOfTriangles) {
-            MyPoint2D point1 = points[finalVerticesOfTriangle[0]];
-            MyPoint2D point2 = points[finalVerticesOfTriangle[1]];
-            MyPoint2D point3 = points[finalVerticesOfTriangle[2]];
-            FloorLayoutGenerator.delaunayStagesSb.append("\\operatorname{polygon}\\left(\\left(%f,%f\\right),\\left(%f,%f\\right),\\left(%f,%f\\right)\\right)%n".formatted(point1.x, point1.y, point2.x, point2.y, point3.x, point3.y));
-        }
-        FloorLayoutGenerator.delaunayStagesSb.append("\n");
-    }
-
     private int[][] removeSuperTriangleFromPointsSet(int numTriangles) {
         int numDeadTriangles = 0;
         int[] deadTriangles = new int[numTriangles]; // 0 if triangle is alive, 1 if it's dead
@@ -299,6 +284,7 @@ public class DelaunayTriangulation {
 
     /**
      * Splits a given triangle into 3, dealing with adjacencies and the like
+     *
      * @param splitPoint the point about which the triangle is split
      */
     private void splitTriangle(int numTriangles, int indexOfSplitTriangle, int splitPoint) {
@@ -332,10 +318,11 @@ public class DelaunayTriangulation {
 
     /**
      * Updates the adjacencies of a given triangle that was just split into multiple
-     * @param numTriangles the current value of numTriangles
+     *
+     * @param numTriangles         the current value of numTriangles
      * @param indexOfSplitTriangle the index of the triangle that was recently split
-     * @param adjacency the index of the triangle that needs its adjacencies updated
-     * @param offset an offset used in calculating which triangle this one is now next to (2 for adjacency 2, 1 for adjacency 3)
+     * @param adjacency            the index of the triangle that needs its adjacencies updated
+     * @param offset               an offset used in calculating which triangle this one is now next to (2 for adjacency 2, 1 for adjacency 3)
      */
     private void updateSurroundingTriangleAdjacencies(int numTriangles, int indexOfSplitTriangle, int adjacency, int offset) {
         // if it's -1, then there was no triangle next to it anyway. there certainly won't be one now.

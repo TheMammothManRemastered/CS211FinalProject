@@ -1,5 +1,13 @@
 package rootPackage.Input;
 
+import org.json.simple.*;
+
+/**
+ * Class responsible for mapping a name to a specific player action.
+ *
+ * @author William Owens
+ * @version 1.04
+ */
 public class PlayerActionAlias {
 
     public static PlayerAction aliasToAction(String alias) {
@@ -20,7 +28,7 @@ public class PlayerActionAlias {
             case "interact", "use", "activate", "press", "open", "travel", "move" -> {
                 action = PlayerAction.USE;
             }
-            case "attack", "engage", "kill", "charge", "destroy", "decimate", "terminate", "eliminate", "stab", "shoot" -> {
+            case "attack", "engage", "kill", "charge", "destroy", "decimate", "terminate", "eliminate", "stab", "shoot", "fight", "battle" -> {
                 action = PlayerAction.ATTACK;
             }
         }

@@ -1,5 +1,6 @@
 package rootPackage.Battle;
 
+import org.json.simple.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -9,7 +10,7 @@ import rootPackage.Battle.Actions.Action;
 import rootPackage.Battle.Combatants.Combatant;
 import rootPackage.Battle.Combatants.Enemy;
 import rootPackage.Battle.Combatants.Player;
-import rootPackage.Battle.Intents.Intent;
+import rootPackage.Battle.Actions.Intent;
 import rootPackage.Level.Features.Equipment.*;
 import rootPackage.Level.Features.Feature;
 import rootPackage.Level.Features.FeatureFlag;
@@ -57,12 +58,10 @@ public class BattleSupervisor {
     it might be better if he doesn't
      */
 
-    public BattleSupervisor(String EnemyJson, Player player) {
+    public BattleSupervisor(String EnemyJson) {
         try {
             settingUp(EnemyJson);
-        } catch (IOException exception) {
-            exception.printStackTrace();
-        } catch (ParseException exception) {
+        } catch (IOException | ParseException exception) {
             exception.printStackTrace();
         }
     }
@@ -73,7 +72,7 @@ public class BattleSupervisor {
         /*
          * Setting up player
          */
-        player = (Player) Main.player.generateStats();
+        player = Main.player.generateStats();
 
         /*
          * Setting up the Enemy

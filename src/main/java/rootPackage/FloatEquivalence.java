@@ -1,10 +1,12 @@
 package rootPackage;
 
+import org.json.simple.*;
+
 /**
  * A class containing methods to compare two floats for equivalence.
  *
- * @version 1.1
  * @author William Owens (and every other person who's ever had to compare floats)
+ * @version 1.1
  */
 public class FloatEquivalence {
 
