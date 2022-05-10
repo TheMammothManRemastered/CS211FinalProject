@@ -1,10 +1,8 @@
 package rootPackage.Level.Features.Equipment;
 
-import org.json.simple.*;
 import org.json.simple.JSONArray;
 import rootPackage.Battle.Actions.Action;
 import rootPackage.Level.Features.Feature;
-import rootPackage.Level.Features.FeatureFlag;
 
 import java.util.ArrayList;
 

@@ -1,10 +1,8 @@
 package rootPackage.Level.FloorGeneration.Layout;
 
-import org.json.simple.*;
 import rootPackage.Direction;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A class representing an MST.
@@ -18,14 +16,6 @@ public class MinimumSpanningTree {
     private final MyPoint2D[] points;
     private final AdjacencyMatrix mstGraph;
 
-    public Connection[] getConnections() {
-        return connections;
-    }
-
-    public AdjacencyMatrix getMstGraph() {
-        return mstGraph;
-    }
-
     public MinimumSpanningTree(Connection[] connections, MSTEdge[] edges, AdjacencyMatrix rawGraph) {
         this.connections = connections;
         points = new MyPoint2D[rawGraph.size()];
@@ -38,6 +28,14 @@ public class MinimumSpanningTree {
             mstGraph.addConnection(edge.getEnd(), edge.getStart(), edge.getWeight());
         }
 
+    }
+
+    public Connection[] getConnections() {
+        return connections;
+    }
+
+    public AdjacencyMatrix getMstGraph() {
+        return mstGraph;
     }
 
     public int size() {
@@ -61,8 +59,8 @@ public class MinimumSpanningTree {
     /**
      * Checks if the MST is 'valid'.
      * An MST is valid if:
-     *      no single point has more than 4 connections
-     *      none of the connections coming off a single node are too close to one another
+     * no single point has more than 4 connections
+     * none of the connections coming off a single node are too close to one another
      */
     public boolean isMSTValid() {
         // check, for each point, if connections are valid

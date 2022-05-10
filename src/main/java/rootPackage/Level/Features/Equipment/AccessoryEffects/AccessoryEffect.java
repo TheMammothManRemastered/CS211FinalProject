@@ -1,12 +1,10 @@
 package rootPackage.Level.Features.Equipment.AccessoryEffects;
 
-import org.json.simple.*;
-
 /**
  * A class representing any one of the stat changes granted by an accessory.
  *
- * @version 1.0
  * @author William Owens
+ * @version 1.0
  */
 public class AccessoryEffect {
 

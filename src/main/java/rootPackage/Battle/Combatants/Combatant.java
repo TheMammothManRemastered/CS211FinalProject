@@ -1,7 +1,5 @@
-
 package rootPackage.Battle.Combatants;
 
-import org.json.simple.*;
 import rootPackage.Battle.Actions.Action;
 
 import java.util.ArrayList;
@@ -12,10 +10,10 @@ import java.util.List;
  * This represents the player and enemy
  * stats,
  * Battle supervisor uses objects of this class to fight with each other
+ *
  * @author Jovin
  */
 public abstract class Combatant {
-
 
 
     //Data fields
@@ -24,13 +22,12 @@ public abstract class Combatant {
     protected List<Action> availableActions;
 
 
-
-
     //Constructors
-    public Combatant(){
-        this(500,450,60,0.2,2);
+    public Combatant() {
+        this(500, 450, 60, 0.2, 2);
     }
-    public Combatant(int maxHp, int currentHp, int attack, double block, int priority){
+
+    public Combatant(int maxHp, int currentHp, int attack, double block, int priority) {
         this.maxHp = maxHp;
         this.currentHp = currentHp;
         this.attack = attack;
@@ -40,58 +37,63 @@ public abstract class Combatant {
     }
 
 
-
-
     //Getter methods
     public int getAttack() {
         return this.attack;
     }
-    public int getMaxHp(){
+
+    public int getMaxHp() {
         return this.maxHp;
     }
-    public int getCurrentHp(){
+
+    public int getCurrentHp() {
         return this.currentHp;
     }
-    public int getPriority(){
+
+    public int getPriority() {
         return this.priority;
     }
-    public double getBlock(){
+
+    public double getBlock() {
         return this.block;
     }
+
     public List<Action> getAvailableActions() {
         return this.availableActions;
     }
 
 
-
-
     //Setter methods
-    public void setBlock(double block){
+    public void setBlock(double block) {
         this.block = block;
     }
+
     public void setAttack(int attack) {
         this.attack = attack;
     }
+
     public void setCurrentHp(int currentHp) {
         this.currentHp = currentHp;
     }
+
     public void setMaxHp(int maxHp) {
         this.maxHp = maxHp;
     }
+
     public void setPriority(int priority) {
         this.priority = priority;
     }
-    public void setAvailableActions(List<Action> availableActions){
+
+    public void setAvailableActions(List<Action> availableActions) {
         this.availableActions = availableActions;
     }
-
 
 
     //Returns a list of all the actions that are valid, from all available actions
     //Don't know how they are determined as valid
     public List<Action> getValidActions() {
         List<Action> validActions = new ArrayList<Action>();
-        for (Action action: this.availableActions){
+        for (Action action : this.availableActions) {
             if (action.getUsesRemaining() > 0) {    /**How is it valid when there are no uses available*/
                 validActions.add(action);
             }
@@ -99,12 +101,12 @@ public abstract class Combatant {
         return validActions;
     }
 
-
     //public abstract Action askingForInput(List<Actions> validActions);
-                    //Call it with getValidActions()
+    //Call it with getValidActions()
 
     public void takeDamage(double damage) {
-        double damageDealt = damage * (1.0 + this.getBlock());
+        double damageDealt = damage * (1.0 - this.getBlock());
+        System.out.println("dealing damage: %d".formatted((int) damageDealt));
         this.currentHp -= (int) damageDealt;
     }
 

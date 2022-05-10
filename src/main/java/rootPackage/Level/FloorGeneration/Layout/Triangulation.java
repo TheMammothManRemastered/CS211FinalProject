@@ -1,6 +1,5 @@
 package rootPackage.Level.FloorGeneration.Layout;
 
-import org.json.simple.*;
 import java.util.ArrayList;
 
 /**

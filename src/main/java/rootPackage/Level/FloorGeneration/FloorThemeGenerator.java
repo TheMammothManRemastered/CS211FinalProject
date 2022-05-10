@@ -1,6 +1,5 @@
 package rootPackage.Level.FloorGeneration;
 
-import org.json.simple.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -53,7 +52,7 @@ public class FloorThemeGenerator {
             // parse the selected theme into a FloorTheme object
             // set up minimum and maximum size (number of rooms) for the floor
             int minimumSize = Math.toIntExact((long) selectedThemeJSON.get("minimumSize"));
-            int maximumSize = minimumSize + FloorGenerationRNG.rng.nextInt(difficulty * 3);
+            int maximumSize = minimumSize + FloorGenerationRNG.rng.nextInt(difficulty * 3) + 1;
             // establish how many dead ends at least need to exist
             int deadEndsNeeded = Math.toIntExact((long) selectedThemeJSON.get("deadEndsNeeded"));
             // establish how many enemies will be on the floor (based on difficulty)

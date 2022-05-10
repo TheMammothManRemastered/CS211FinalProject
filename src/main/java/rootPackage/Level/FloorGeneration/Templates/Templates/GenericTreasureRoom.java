@@ -1,6 +1,5 @@
 package rootPackage.Level.FloorGeneration.Templates.Templates;
 
-import org.json.simple.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -22,7 +21,7 @@ public class GenericTreasureRoom extends RoomTemplate {
         JSONParser parser = new JSONParser();
         JSONObject genericJsonObject = null;
         try {
-            genericJsonObject = (JSONObject) parser.parse(new FileReader("json"+System.getProperty("file.separator")+"equipment"+System.getProperty("file.separator")+"genericTreasure.json"));
+            genericJsonObject = (JSONObject) parser.parse(new FileReader("json" + System.getProperty("file.separator") + "equipment" + System.getProperty("file.separator") + "genericTreasure.json"));
         } catch (IOException | ParseException exception) {
             exception.printStackTrace();
         }

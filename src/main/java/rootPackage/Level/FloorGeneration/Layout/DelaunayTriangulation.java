@@ -1,6 +1,5 @@
 package rootPackage.Level.FloorGeneration.Layout;
 
-import org.json.simple.*;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;

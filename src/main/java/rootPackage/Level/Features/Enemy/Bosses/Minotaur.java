@@ -1,6 +1,5 @@
 package rootPackage.Level.Features.Enemy.Bosses;
 
-import org.json.simple.*;
 import rootPackage.Graphics.Viewport.RenderLayer;
 import rootPackage.Graphics.Viewport.Sprite;
 import rootPackage.Input.PlayerAction;
@@ -13,7 +12,7 @@ public class Minotaur extends Enemy {
         super("Minotaur", new String[]{"minotaur", "foe", "enemy"});
         sprite = new Sprite(RenderLayer.ENEMY, "minotaur.png");
         examineText = "A horrifying thing stands in the middle of the room, snacking on a piece of raw meat. It looks like a man, but it's head is that of a bull. This must be the legendary Minotaur! It hasn't noticed you yet... perfect opportunity for a sneak attack!";
-        jsonFile = "json"+System.getProperty("file.separator")+"enemyStats"+System.getProperty("file.separator")+"minotaur.json";
+        jsonFile = "json" + System.getProperty("file.separator") + "enemyStats" + System.getProperty("file.separator") + "minotaur.json";
     }
 
     @Override

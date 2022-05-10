@@ -1,6 +1,5 @@
 package rootPackage.Level.FloorGeneration.Layout;
 
-import org.json.simple.*;
 import java.util.Arrays;
 import java.util.List;
 
@@ -12,8 +11,8 @@ import java.util.List;
  */
 public class AdjacencyMatrix {
 
-    private double[][] matrix;
-    private MyPoint2D[] nodes;
+    private final double[][] matrix;
+    private final MyPoint2D[] nodes;
 
     /**
      * Constructor. Creates an empty adjacency matrix of the correct size for the number of nodes being used.

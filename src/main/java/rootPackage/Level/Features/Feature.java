@@ -1,6 +1,5 @@
 package rootPackage.Level.Features;
 
-import org.json.simple.*;
 import rootPackage.Graphics.Viewport.Sprite;
 import rootPackage.Input.PlayerAction;
 

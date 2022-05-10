@@ -1,6 +1,5 @@
 package rootPackage.Graphics;
 
-import org.json.simple.*;
 import rootPackage.Graphics.GUI.ConsoleWindow;
 import rootPackage.Graphics.Viewport.ViewportPanel;
 

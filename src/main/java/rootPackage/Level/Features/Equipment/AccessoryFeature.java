@@ -1,6 +1,5 @@
 package rootPackage.Level.Features.Equipment;
 
-import org.json.simple.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -28,7 +27,7 @@ import java.util.ArrayList;
 public class AccessoryFeature extends EquipmentFeature {
 
     private String statNotification;
-    private ArrayList<AccessoryEffect> effects = new ArrayList<>();
+    private final ArrayList<AccessoryEffect> effects = new ArrayList<>();
     private String effectDescriptionForStatus;
 
     public AccessoryFeature(String primaryName, String[] allNames, String jsonPath) {

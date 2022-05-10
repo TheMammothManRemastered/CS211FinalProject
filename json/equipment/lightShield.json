@@ -1,0 +1,12 @@
+{
+  "name": "Kite Shield",
+  "description" : "A small kite shield made from a light, but unyielding alloy. Grants 10% damage absorption.",
+  "actionsGranted" :[
+
+  ],
+  "actionDescriptions" : [
+
+  ],
+  "type" : "shield",
+  "value" : 0.1
+}

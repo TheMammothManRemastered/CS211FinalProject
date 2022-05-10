@@ -5,7 +5,7 @@
       "name" : "raiseDefense",
       "valueStat" : "blockStat",
       "targetStat" : "blockStat",
-      "modifier" : "none"
+      "modifier" : "+0.1"
     }
   ],
   "uses" : 101

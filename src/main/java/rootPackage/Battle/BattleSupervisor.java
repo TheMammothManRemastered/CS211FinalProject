@@ -1,17 +1,20 @@
 package rootPackage.Battle;
 
-import org.json.simple.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import rootPackage.Battle.AI.*;
+import rootPackage.Battle.AI.AI;
+import rootPackage.Battle.AI.AILevel1;
+import rootPackage.Battle.AI.AILevel2;
+import rootPackage.Battle.AI.AILevel3;
 import rootPackage.Battle.Actions.Action;
+import rootPackage.Battle.Actions.Intent;
 import rootPackage.Battle.Combatants.Combatant;
 import rootPackage.Battle.Combatants.Enemy;
 import rootPackage.Battle.Combatants.Player;
-import rootPackage.Battle.Actions.Intent;
-import rootPackage.Level.Features.Equipment.*;
+import rootPackage.Level.Features.Equipment.EquipmentAlias;
+import rootPackage.Level.Features.Equipment.EquipmentFeature;
 import rootPackage.Level.Features.Feature;
 import rootPackage.Level.Features.FeatureFlag;
 import rootPackage.Level.Features.Features.TrapdoorKey;
@@ -38,17 +41,16 @@ public class BattleSupervisor {
      * So need help
      */
 
-    public boolean battleClosed;
-
     private final String actionAttack = "attack.json";
     //TODO: make these
     private final String actionDefense = "";
     private final String actionReduceAttack = "";
-
+    public boolean battleClosed;
     public Enemy enemy;
     public Player player; // this gets accessed somewhere else
 
     private Combatant current;
+    private String enemyJSONName;
 
     //private final String run = "";//This run action should be a file without anything in it; all values should be default but they don't do anything
     //Since the intent will do all the work
@@ -59,6 +61,7 @@ public class BattleSupervisor {
      */
 
     public BattleSupervisor(String EnemyJson) {
+        enemyJSONName = EnemyJson;
         try {
             settingUp(EnemyJson);
         } catch (IOException | ParseException exception) {
@@ -94,8 +97,6 @@ public class BattleSupervisor {
             EquipmentFeature equipmentFeature = ((EquipmentFeature) feature);
             JSONArray movesAsJson = equipmentFeature.getActionsJsonField();
             JSONArray descriptions = equipmentFeature.getDescriptionsJsonField();
-            System.out.println(movesAsJson);
-            System.out.println(descriptions);
             for (int i = 0; i < movesAsJson.size(); i++) {
                 Object child = movesAsJson.get(i);
                 String moveName = (String) child;
@@ -138,6 +139,8 @@ public class BattleSupervisor {
 
     public void battle(Combatant player, Combatant enemy) {
 
+        JSONParser parser = new JSONParser();
+
         current = enemy;
         if (player.getPriority() >= enemy.getPriority()) {
             current = player;
@@ -146,6 +149,25 @@ public class BattleSupervisor {
         boolean run = false; //flag variable for the run fuction
 
         while (!run) {
+            // update player's and enemy's actions so the numbers add up properly
+            boolean currentIsPlayer = current instanceof Player;
+            if (currentIsPlayer) {
+                try {
+                    updatePlayer(parser);
+                } catch (IOException | ParseException exception) {
+                    exception.printStackTrace();
+                }
+            } else {
+                try {
+                    updateEnemy(parser);
+                    if (!(((Enemy) enemy).getEnemyAI() instanceof AILevel1 || ((Enemy) enemy).getEnemyAI() instanceof AILevel2)) {
+                        updatePlayer(parser);
+                    }
+                } catch (IOException | ParseException exception) {
+                    exception.printStackTrace();
+                }
+            }
+
             Action selectedMove = null;
             Main.battleManagerMain.readyInput();
             selectedMove = current.askForInput();
@@ -153,12 +175,13 @@ public class BattleSupervisor {
                 break;
             }
             selectedMove.execute();
-            if (current instanceof Player) {
+            // swap active player
+            if (currentIsPlayer) {
                 current = enemy;
             } else {
                 current = player;
             }
-            System.out.println("player current HP: "+player.getCurrentHp());
+            // is the battle over?
             if (enemy.getCurrentHp() <= 0) {
                 Main.mainWindow.getConsoleWindow().addEntryToHistory("The enemy died, YOU WIN");
                 Main.mainWindow.getConsoleWindow().addEntryToHistory("-*-*-*-*-*-*-");
@@ -207,12 +230,8 @@ public class BattleSupervisor {
             ai = new AILevel1();
         else if (level == 2)
             ai = new AILevel2();
-        else if (level == 3)
-            //ai = new AILevel3();
-            ;
         else
-            //ai = new AILevel4(); //TODO: reimplement these
-            ;
+            ai = new AILevel3();
 
         int hp = Math.toIntExact((long) jsonEnemy.get("health"));
         int attack = Math.toIntExact((long) jsonEnemy.get("baseAttack"));
@@ -280,11 +299,120 @@ public class BattleSupervisor {
         } else if (modifier.contains("+") || modifier.contains("-")) {
             if (modifier.contains("%")) {
                 modifier = modifier.replace("%", "");
-                value *= 1.0 - (Double.parseDouble(modifier) / 100.0);
+                value *= 1.0 + (Double.parseDouble(modifier) / 100.0);
             } else {
-                value += Integer.parseInt(modifier);
+                value += Double.parseDouble(modifier);
             }
         }
         return value;
+    }
+
+    private void updatePlayer(JSONParser parser) throws IOException, ParseException {
+        ArrayList<Feature> equipment = Main.player.getPlayerAsFeature().getChildren(FeatureFlag.EQUIPPABLE);
+        ArrayList<Action> actions = new ArrayList<>(player.getValidActions());
+        actions.removeIf(Action::outOfMoves);
+        for (Feature feature : equipment) {
+            EquipmentFeature equipmentFeature = ((EquipmentFeature) feature);
+            JSONArray movesAsJson = equipmentFeature.getActionsJsonField();
+            JSONArray descriptions = equipmentFeature.getDescriptionsJsonField();
+            for (int i = 0; i < movesAsJson.size(); i++) {
+                Object child = movesAsJson.get(i);
+                String moveName = (String) child;
+                JSONObject moveJson = (JSONObject) parser.parse(new FileReader("json" + System.getProperty("file.separator") + "moves" + System.getProperty("file.separator") + moveName + ".json"));
+                Combatant target = ((boolean) moveJson.get("targetSelf")) ? player : enemy;
+                JSONArray intentsJsonArray = (JSONArray) moveJson.get("intents");
+                ArrayList<Intent> intentsToApply = new ArrayList<>();
+                for (Object intentJson : intentsJsonArray) {
+                    String intentName = (String) ((JSONObject) intentJson).get("name");
+                    String valueStat = (String) ((JSONObject) intentJson).get("valueStat");
+                    String modifier = (String) ((JSONObject) intentJson).get("modifier");
+                    String targetStat = (String) ((JSONObject) intentJson).get("targetStat");
+                    double value = 0.0;
+                    switch (valueStat) {
+                        case "hpStat" -> {
+                            value = player.getCurrentHp();
+                            value = applyModifier(value, modifier);
+                        }
+                        case "attackStat" -> {
+                            value = player.getAttack();
+                            value = applyModifier(value, modifier);
+                        }
+                        case "blockStat" -> {
+                            value = player.getBlock();
+                            value = applyModifier(value, modifier);
+                        }
+                    }
+                    Intent intent = new Intent(target, value, intentName.equals("dealDamage"), targetStat);
+                    intentsToApply.add(intent);
+                }
+                int uses = 101;
+                for (int j = 0; j < actions.size(); j++) {
+                    Action action = actions.get(j);
+                    if (action.getName().equals(moveName)) {
+                        uses = action.getUsesRemaining();
+                        actions.remove(action);
+                    }
+                }
+                Action action = new Action(moveName, target, uses, intentsToApply);
+                action.setMessage((String) descriptions.get(i));
+                actions.add(action);
+            }
+        }
+        player.setAvailableActions(actions);
+    }
+
+    private void updateEnemy(JSONParser parser) throws IOException, ParseException {
+        JSONObject jsonEnemy = (JSONObject) parser.parse(new FileReader(enemyJSONName));
+
+        JSONArray movesAsJson = (JSONArray) jsonEnemy.get("possibleMoves");
+        JSONArray moveDescriptionsAsJson = (JSONArray) jsonEnemy.get("moveDescriptions");
+        ArrayList<Action> possibleActions = new ArrayList<>(enemy.getValidActions());
+        possibleActions.removeIf(Action::outOfMoves);
+        for (Object child : movesAsJson) {
+            String moveName = (String) child;
+            JSONObject moveJson = (JSONObject) parser.parse(new FileReader("json" + System.getProperty("file.separator") + "moves" + System.getProperty("file.separator") + moveName + ".json"));
+            Combatant target = ((boolean) moveJson.get("targetSelf")) ? enemy : player;
+            JSONArray intentsJsonArray = (JSONArray) moveJson.get("intents");
+            ArrayList<Intent> intentsToApply = new ArrayList<>();
+            for (Object intentJson : intentsJsonArray) {
+                String intentName = (String) ((JSONObject) intentJson).get("name");
+                String valueStat = (String) ((JSONObject) intentJson).get("valueStat");
+                String modifier = (String) ((JSONObject) intentJson).get("modifier");
+                String targetStat = (String) ((JSONObject) intentJson).get("targetStat");
+                double value = 0.0;
+                switch (valueStat) {
+                    case "hpStat" -> {
+                        value = enemy.getCurrentHp();
+                        value = applyModifier(value, modifier);
+                    }
+                    case "attackStat" -> {
+                        value = enemy.getAttack();
+                        value = applyModifier(value, modifier);
+                    }
+                    case "blockStat" -> {
+                        value = enemy.getBlock();
+                        value = applyModifier(value, modifier);
+                    }
+                }
+                Intent intent = new Intent(target, value, intentName.equals("dealDamage"), targetStat);
+                intentsToApply.add(intent);
+            }
+
+            int uses = 101;
+            for (int j = 0; j < possibleActions.size(); j++) {
+                Action action = possibleActions.get(j);
+                if (action.getName().equals(moveName)) {
+                    uses = action.getUsesRemaining();
+                    possibleActions.remove(action);
+                }
+            }
+
+            possibleActions.add(new Action(moveName, target, uses, intentsToApply));
+        }
+        for (int i = 0; i < possibleActions.size(); i++) {
+            Action action = possibleActions.get(i);
+            action.setMessage((String) moveDescriptionsAsJson.get(i));
+        }
+        enemy.setAvailableActions(possibleActions);
     }
 }

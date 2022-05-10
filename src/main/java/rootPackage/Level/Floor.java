@@ -1,6 +1,5 @@
 package rootPackage.Level;
 
-import org.json.simple.*;
 import rootPackage.Direction;
 import rootPackage.Level.Features.Feature;
 import rootPackage.Level.Features.FeatureFlag;
@@ -22,7 +21,7 @@ import java.util.ArrayList;
 public class Floor {
 
     private static final int PIXELS_PER_CARTESIAN_POINT = 10;
-    private ArrayList<RoomNode> rooms;
+    private final ArrayList<RoomNode> rooms;
 
     public Floor(ArrayList<RoomNode> rooms) {
         this.rooms = rooms;

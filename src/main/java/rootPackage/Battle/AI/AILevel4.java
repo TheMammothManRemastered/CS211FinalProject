@@ -1,12 +1,5 @@
 package rootPackage.Battle.AI;
 
-import org.json.simple.*;
-import rootPackage.Battle.Actions.Action;
-import rootPackage.Battle.Combatants.Enemy;
-import rootPackage.Battle.Combatants.Player;
-
-import java.util.List;
-
 /**
  * Work in progresss
  * Don't know how to get the status effects from player and enemy

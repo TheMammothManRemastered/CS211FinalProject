@@ -1,6 +1,6 @@
 {
   "name": "Axe of the Minotaur",
-  "description" : "A blood soaked axe once used by the mighty Minotaur.",
+  "description" : "A blood soaked axe once used by the mighty Minotaur. Does 90 base damage.",
   "actionsGranted" : [
     "attack"
   ],

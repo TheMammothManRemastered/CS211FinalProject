@@ -1,6 +1,5 @@
 package rootPackage.Level.Features.Enemy.Enemies;
 
-import org.json.simple.*;
 import rootPackage.Graphics.Viewport.RenderLayer;
 import rootPackage.Graphics.Viewport.Sprite;
 import rootPackage.Input.PlayerAction;
@@ -13,7 +12,7 @@ public class Bear extends Enemy {
         super("Bear", new String[]{""});
         sprite = new Sprite(RenderLayer.ENEMY, "bear.png");
         examineText = "A large and very intimidating bear sits on the floor.";
-        jsonFile = "json"+System.getProperty("file.separator")+"enemyStats"+System.getProperty("file.separator")+"bear.json";
+        jsonFile = "json" + System.getProperty("file.separator") + "enemyStats" + System.getProperty("file.separator") + "bear.json";
     }
 
     @Override

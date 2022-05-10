@@ -1,16 +1,14 @@
 package rootPackage.Graphics.Viewport;
 
-import org.json.simple.*;
-
 /**
  * Class representing the sprite of a feature. Contains the feature's rendering layer and the image that will be drawn to the screen.
  *
  * @author William Owens
  * @version 1.0
  */
-public class Sprite implements Comparable<Sprite>{
-    private RenderLayer renderLayer;
+public class Sprite implements Comparable<Sprite> {
     private final String imageName;
+    private RenderLayer renderLayer;
 
     public Sprite() {
         this.renderLayer = RenderLayer.NOT_DRAWN;

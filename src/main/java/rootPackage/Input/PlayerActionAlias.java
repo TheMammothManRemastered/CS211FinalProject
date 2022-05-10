@@ -1,7 +1,5 @@
 package rootPackage.Input;
 
-import org.json.simple.*;
-
 /**
  * Class responsible for mapping a name to a specific player action.
  *

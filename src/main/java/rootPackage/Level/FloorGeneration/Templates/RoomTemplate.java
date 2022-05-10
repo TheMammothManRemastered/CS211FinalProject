@@ -1,6 +1,5 @@
 package rootPackage.Level.FloorGeneration.Templates;
 
-import org.json.simple.*;
 import rootPackage.Level.Features.Feature;
 import rootPackage.Level.Features.TopLevel.Room;
 

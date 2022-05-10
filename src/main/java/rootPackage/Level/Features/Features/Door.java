@@ -1,6 +1,5 @@
 package rootPackage.Level.Features.Features;
 
-import org.json.simple.*;
 import rootPackage.Direction;
 import rootPackage.Graphics.Viewport.RenderLayer;
 import rootPackage.Graphics.Viewport.Sprite;

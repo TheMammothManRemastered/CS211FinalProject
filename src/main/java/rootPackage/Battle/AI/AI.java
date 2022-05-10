@@ -1,6 +1,5 @@
 package rootPackage.Battle.AI;
 
-import org.json.simple.*;
 import rootPackage.Battle.Actions.Action;
 
 import java.util.List;
@@ -10,6 +9,7 @@ import java.util.List;
  * THis takes in a list of actions,
  * which then determines the best move for the enemy
  * to make
+ *
  * @author jovin
  */
 //Bases of all AI, helps with polymorphism

@@ -1,7 +1,5 @@
 package rootPackage.Level.Features.Equipment.AccessoryEffects;
 
-import org.json.simple.*;
-
 /**
  * Class responsible for mapping a name to a specific accessory effect.
  *

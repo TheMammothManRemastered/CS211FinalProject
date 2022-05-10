@@ -1,7 +1,5 @@
 package rootPackage.Level.Features.Equipment;
 
-import org.json.simple.*;
-
 /**
  * Class responsible for mapping a name to a specific equipment feature.
  *
@@ -35,6 +33,9 @@ public class EquipmentAlias {
             }
             case "defenseTalisman" -> {
                 return new AccessoryFeature("Defense Talisman", new String[]{"talisman"}, "defenseTalisman.json");
+            }
+            case "lightShield" -> {
+                return new ShieldFeature("Kite Shield", new String[]{"shield", "kite shield"}, "lightShield.json");
             }
         }
         return null;

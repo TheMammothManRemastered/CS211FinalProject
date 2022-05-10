@@ -1,6 +1,6 @@
 {
   "name": "Steel Sword",
-  "description" : "A well-crafted steel sword. Does 50 damage.",
+  "description" : "A well-crafted steel sword. Does 50 base damage.",
   "actionsGranted" : [
     "attack",
     "pass"

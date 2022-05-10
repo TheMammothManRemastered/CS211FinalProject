@@ -1,6 +1,5 @@
 package rootPackage.Level.Features.Enemy.Enemies;
 
-import org.json.simple.*;
 import rootPackage.Graphics.Viewport.RenderLayer;
 import rootPackage.Graphics.Viewport.Sprite;
 import rootPackage.Input.PlayerAction;
@@ -13,7 +12,7 @@ public class WolfPack extends Enemy {
         super("Wolf Pack", new String[]{"pack", "wolves", "wolfs", "pack wolves", "pack wolf", "pack wolfs"});
         sprite = new Sprite(RenderLayer.ENEMY, "wolfPack.png");
         examineText = "A pack of hungry wolves circle in the room. It seems they've seen you!";
-        jsonFile = "json"+System.getProperty("file.separator")+"enemyStats"+System.getProperty("file.separator")+"wolfPack.json";
+        jsonFile = "json" + System.getProperty("file.separator") + "enemyStats" + System.getProperty("file.separator") + "wolfPack.json";
     }
 
     @Override

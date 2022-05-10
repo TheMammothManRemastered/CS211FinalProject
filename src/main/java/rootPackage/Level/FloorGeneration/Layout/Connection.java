@@ -1,6 +1,5 @@
 package rootPackage.Level.FloorGeneration.Layout;
 
-import org.json.simple.*;
 import rootPackage.FloatEquivalence;
 
 import java.awt.geom.Point2D;

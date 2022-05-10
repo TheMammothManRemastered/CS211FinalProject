@@ -15,6 +15,7 @@ rootPackage\Level\Features\Features\Exit$1.class
 rootPackage\Battle\Actions\Action.class
 rootPackage\Level\Features\Features\Door$1.class
 rootPackage\Graphics\MainWindow.class
+rootPackage\Battle\AI\AILevel3.class
 rootPackage\Player$1.class
 rootPackage\Level\Features\Equipment\AccessoryFeature$1.class
 rootPackage\Level\Features\Equipment\AccessoryFeature.class

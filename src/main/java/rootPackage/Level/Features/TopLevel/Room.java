@@ -1,11 +1,14 @@
 package rootPackage.Level.Features.TopLevel;
 
-import org.json.simple.*;
 import rootPackage.Graphics.Viewport.RenderLayer;
 import rootPackage.Graphics.Viewport.Sprite;
 import rootPackage.Input.PlayerAction;
 import rootPackage.Level.Features.Feature;
 import rootPackage.Main;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.function.Consumer;
 
 /**
  * A class representing a room as a top-level feature.
@@ -25,6 +28,31 @@ public class Room extends Feature {
     public Room(String primaryName, String[] allNames) {
         super(primaryName, allNames);
         setSprite(new Sprite(RenderLayer.WALLS, "walls.png"));
+    }
+
+    public void draw() {
+        ArrayList<Feature> features = new ArrayList<>(this.getChildren());
+        features.add(this);
+        ArrayList<Sprite> toDraw = new ArrayList<>();
+        for (int i = 0; i < features.size(); i++) {
+            Feature feature = features.get(i);
+            if (feature.getSprite().getRenderLayer() != RenderLayer.NOT_DRAWN) {
+                toDraw.add(feature.getSprite());
+            }
+            if (!features.containsAll(feature.getChildren())) {
+                features.addAll(feature.getChildren());
+            }
+        }
+        Collections.sort(toDraw); // sorts by render layer
+        for (Sprite s : toDraw) {
+            System.out.println(s.getImageName());
+        }
+
+        // draw each sprite in the queue
+        Consumer<Sprite> spriteConsumer = (Sprite sprite) -> {
+            Main.mainWindow.getViewportPanel().drawImageOnCanvas(sprite.getImageName());
+        };
+        toDraw.forEach(spriteConsumer);
     }
 
     @Override

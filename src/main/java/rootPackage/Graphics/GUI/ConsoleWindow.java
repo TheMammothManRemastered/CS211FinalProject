@@ -1,6 +1,5 @@
 package rootPackage.Graphics.GUI;
 
-import org.json.simple.*;
 import rootPackage.Input.Parser;
 import rootPackage.Input.PlayerAction;
 import rootPackage.Level.Features.Equipment.*;

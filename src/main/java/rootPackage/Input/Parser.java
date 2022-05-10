@@ -1,6 +1,5 @@
 package rootPackage.Input;
 
-import org.json.simple.*;
 import rootPackage.Level.Features.Feature;
 import rootPackage.Main;
 
@@ -11,8 +10,8 @@ import java.util.Arrays;
  * Class responsible for parsing player input into a game command.
  * Uses purely static methods.
  *
- * @version 1.22
  * @author William Owens
+ * @version 1.22
  */
 public class Parser {
 

@@ -1,6 +1,5 @@
 package rootPackage.Level.Features.Enemy;
 
-import org.json.simple.*;
 import rootPackage.Level.Features.Enemy.Bosses.Minotaur;
 import rootPackage.Level.Features.Enemy.Enemies.Bear;
 import rootPackage.Level.Features.Enemy.Enemies.Wolf;

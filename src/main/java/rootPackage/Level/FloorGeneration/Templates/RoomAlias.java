@@ -1,6 +1,5 @@
 package rootPackage.Level.FloorGeneration.Templates;
 
-import org.json.simple.*;
 import rootPackage.Level.FloorGeneration.Templates.Templates.GenericTreasureRoom;
 import rootPackage.Level.FloorGeneration.Templates.Templates.IntraFloorShop;
 import rootPackage.Level.FloorGeneration.Templates.Templates.MinotaurBossRoom;

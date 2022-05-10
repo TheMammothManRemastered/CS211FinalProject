@@ -1,7 +1,5 @@
 package rootPackage;
 
-import org.json.simple.*;
-
 /**
  * A class containing methods to compare two floats for equivalence.
  *

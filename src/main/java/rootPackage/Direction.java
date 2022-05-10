@@ -1,6 +1,5 @@
 package rootPackage;
 
-import org.json.simple.*;
 import rootPackage.Level.FloorGeneration.Layout.Connection;
 
 /**

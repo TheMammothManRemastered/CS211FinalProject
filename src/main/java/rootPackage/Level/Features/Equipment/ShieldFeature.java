@@ -1,6 +1,5 @@
 package rootPackage.Level.Features.Equipment;
 
-import org.json.simple.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -58,7 +57,7 @@ public class ShieldFeature extends EquipmentFeature {
                     }
                 }
                 this.reparentSelf(playerAsFeature);
-                consoleWindow.addEntryToHistory("You strap the %s securely to your arm. Your defense is now %d".formatted(this.getPrimaryName(), value)); //TODO: load damage stat from json
+                consoleWindow.addEntryToHistory("You strap the %s securely to your arm. Your damage absorption is now %.2f".formatted(this.getPrimaryName(), value*100)); //TODO: load damage stat from json
             }
             case EXAMINE -> {
                 Main.mainWindow.getConsoleWindow().addEntryToHistory(description);

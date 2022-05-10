@@ -8,8 +8,6 @@ import rootPackage.Level.FloorGeneration.FloorGenerator;
 import rootPackage.Level.FloorGeneration.FloorTheme;
 import rootPackage.Level.FloorGeneration.FloorThemeGenerator;
 
-import org.json.simple.*;
-
 import javax.swing.*;
 
 /**

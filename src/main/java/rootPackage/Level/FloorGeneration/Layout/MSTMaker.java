@@ -1,6 +1,5 @@
 package rootPackage.Level.FloorGeneration.Layout;
 
-import org.json.simple.*;
 import rootPackage.FloatEquivalence;
 
 import java.util.ArrayList;
@@ -34,14 +33,14 @@ public class MSTMaker {
         this.numNodes = pointsOfTriangulation.size();
         MyPoint2D[] nodes = new MyPoint2D[numNodes];
         for (int i = 0; i < numNodes; i++) {
-            nodes[i] = (MyPoint2D) pointsOfTriangulation.get(i);
+            nodes[i] = pointsOfTriangulation.get(i);
         }
         this.graph = new AdjacencyMatrix(nodes);
 
         // propagate the adjacency matrix
         Connection[] connections = new Connection[connectionssOfTriangulation.size()];
         for (int i = 0; i < connections.length; i++) {
-            connections[i] = (Connection) connectionssOfTriangulation.get(i);
+            connections[i] = connectionssOfTriangulation.get(i);
         }
         for (Connection connection : connections) {
             graph.addConnection(connection.getOrigin(), connection.getDestination(), connection.getWeight());
@@ -116,9 +115,9 @@ public class MSTMaker {
  */
 class MSTEdge implements Comparable<MSTEdge> {
 
-    private int start;
-    private int end;
-    private double weight;
+    private final int start;
+    private final int end;
+    private final double weight;
 
     public MSTEdge(int start, int end, double weight) {
         this.start = start;

@@ -1,0 +1,24 @@
+Game's core is done, aside from a few relatively minor tweaks all the logic is already implemented and a framework exists to easily add more content
+
+'Major' goals:
+    Implement optional locked chests, doors, and keys:
+        add a generic key feature, all optional chests and doors use these generic keys
+        every floor is guaranteed to have at least one key that you can access without another key
+        there is no such restriction on chests and locked rooms
+        this makes keys a more interesting resource. what will you use your key on? this locked temple door, or the golden chest?
+    Implement into Feature a method that is called when the player enters the room:
+        this is particularly designed for enemies, so that they can attack the player when they enter the room
+        it can be reused for certain other features as well, should it become necessary
+    Implement into the parser the ability to look at the player for action prompts:
+        this doesn't currently exist because the status command gives the player everything they really need to know
+        player's inventory should always be checked after the room's children
+        player can specify they want their inventory to be checked first with the use of "my" or "player's" or "self" in their input
+    Refactor AccessoryEffects into all equipment:
+        allows non-accessory equipment to grant effects
+        will require rewriting of equipment json template
+
+'Minor' goals:
+    Add more enemies, themes, features, etc.:
+    Add more room templates:
+        statue rooms:
+            has a statue of a god, will ask something of the player

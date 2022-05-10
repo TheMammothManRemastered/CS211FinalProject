@@ -1,6 +1,5 @@
 package rootPackage.Input;
 
-import org.json.simple.*;
 import rootPackage.Main;
 import rootPackage.Player;
 

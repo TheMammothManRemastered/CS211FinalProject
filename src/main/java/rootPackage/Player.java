@@ -7,8 +7,6 @@ import rootPackage.Level.Features.FeatureFlag;
 import rootPackage.Level.Features.TopLevel.PlayerFeature;
 import rootPackage.Level.FloorGeneration.Layout.RoomNode;
 
-import org.json.simple.*;
-
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -23,15 +21,15 @@ import java.util.Objects;
  */
 public class Player {
 
+    private final PlayerFeature playerAsFeature;
     private RoomNode currentRoom;
-    private PlayerFeature playerAsFeature;
     private int currentHP;
     private int gold;
 
     public Player(RoomNode currentRoom) {
         this.currentRoom = currentRoom;
         playerAsFeature = new PlayerFeature("You", new String[]{"self", "player", "yourself"});
-        currentHP = 150;
+        currentHP = 225; // obv needs balancing, 225 seems a reasonable starting value for the labyrinth
         setup();
     }
 

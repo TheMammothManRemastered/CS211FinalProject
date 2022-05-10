@@ -1,6 +1,5 @@
 package rootPackage.Graphics.Viewport;
 
-import org.json.simple.*;
 import rootPackage.Level.Features.Feature;
 import rootPackage.Level.Floor;
 import rootPackage.Main;

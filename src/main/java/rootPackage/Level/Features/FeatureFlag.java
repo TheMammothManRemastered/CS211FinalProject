@@ -1,7 +1,5 @@
 package rootPackage.Level.Features;
 
-import org.json.simple.*;
-
 /**
  * Enum containing 'flags' that a {@link Feature Feature} might have.
  *
@@ -17,5 +15,7 @@ public enum FeatureFlag {
     PLAYER,
     INVISIBLE,
     DOOR,
-    ENEMY
+    ENEMY,
+    PEDESTAL_ITEM,
+    FLOOR_ITEM
 }

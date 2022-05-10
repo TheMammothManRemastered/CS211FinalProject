@@ -1,6 +1,5 @@
 package rootPackage.Logic;
 
-import org.json.simple.*;
 import rootPackage.Input.PlayerAction;
 import rootPackage.Level.Features.Feature;
 import rootPackage.Main;

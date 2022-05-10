@@ -1,8 +1,9 @@
 package rootPackage.Battle.AI;
 
-import org.json.simple.*;
 import rootPackage.Battle.Actions.Action;
 import rootPackage.Battle.Combatants.Enemy;
+import rootPackage.Battle.Combatants.Player;
+import rootPackage.Main;
 
 import java.util.List;
 import java.util.Random;
@@ -10,43 +11,61 @@ import java.util.Random;
 /**
  * this ai is a little more competent
  * decides if it has to attack or defend based on what the player damage is
+ *
  * @author jovin
  */
-/*
 public class AILevel3 extends AI{
+
     @Override
     public Action determineBestMove(List<Action> validActions) {
 
-        Action dealDamage = new Action();
-        Enemy currentEnemy = new Enemy();
-        Action raiseAttack = new Action();
+        Enemy enemy = Main.currentBattle.enemy;
+        Player player = Main.currentBattle.player;
 
-        //This loop initializes all the actions possible with the specific modifier
-        for(Action action: validActions){
-            if(!(action.getIntentsToApply() instanceof DealDamageIntent)) {
-                currentEnemy = (Enemy) action.getIntentsToApply().getTarget();
-                if(action.getIntentsToApply() instanceof RaiseAttackIntent)
-                    raiseAttack = action;
-            }
-            if(action.getIntentsToApply() instanceof DealDamageIntent) {
-                dealDamage = action;
-                break;
-            }
+        int damageThreshold = (int) (enemy.getMaxHp()/2.0);
+        boolean isVeryDamaged = enemy.getCurrentHp() <= damageThreshold;
+
+        // determine which action of the player's does the most damage
+        int playerDamageOutput = 0;
+        for (Action action : player.getValidActions()) {
+            playerDamageOutput += action.doesDamage();
         }
 
         Random rand = new Random();
-        int random = rand.nextInt(2);
 
-        //Choses if it wants to defend or attack
-        if(dealDamage.getIntentsToApply().getTarget().getAttack() >= currentEnemy.getCurrentHp()/2){
-            if(random == 1)
-                return raiseAttack;
-            else
-                return dealDamage;
+        // almost dead anyway, no point in defending any further. prioritize attacking
+        if (isVeryDamaged) {
+            return new AILevel2().determineBestMove(validActions);
+        }
+        if (playerDamageOutput > damageThreshold) {
+            // player does too much damage in one hit, try to defend
+            Action defAction = null;
+            for (Action action : validActions) {
+                //TODO: implement a json file to hold all defense-raising actions, since there may eventually be more than one
+                if (action.getName().equals("defend")) {
+                    defAction = action;
+                    break;
+                }
+            }
+            // if defense is an option, much more likely to go for it
+            if (defAction != null) {
+                if (rand.nextInt(101) > 25) {
+                    return defAction;
+                }
+                // might choose the wrong one, so just attack
+                return new AILevel2().determineBestMove(validActions);
+            } else {
+                return new AILevel2().determineBestMove(validActions);
+            }
+        } else {
+            // unconcerned with player damage output, likely to choose an attack
+            if (rand.nextInt(101) > 20) {
+                return new AILevel2().determineBestMove(validActions);
+            }
+            // or pick one at random
+            return validActions.get(rand.nextInt(validActions.size()));
         }
 
-    //default value
-        return dealDamage;
+
     }
 }
- */
